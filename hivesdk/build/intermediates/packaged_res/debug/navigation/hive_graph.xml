@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hive_graph"
+    app:startDestination="@id/emojiFragment">
+    <fragment
+        android:id="@+id/npsFragment"
+        android:name="com.istnetworks.hivesdk.presentation.nps.NpsFragment"
+        tools:layout="@layout/fragment_nps">
+        <action
+            android:id="@+id/action_nps_to_emojie"
+            app:destination="@id/emojiFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/emojiFragment"
+        android:name="com.istnetworks.hivesdk.presentation.emojis.EmojiFragment"
+        tools:layout="@layout/fragment_emoji">
+        <action
+            android:id="@+id/action_emoji_to_nps"
+            app:destination="@id/npsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <!--    <fragment-->
+    <!--        android:id="@+id/articlesDetailsFragment"-->
+    <!--        android:name="com.articlesapp.features.details.ArticleDetailsFragment"-->
+    <!--        tools:layout="@layout/fragment_article_details" >-->
+    <!--        <argument-->
+    <!--            android:name="articleDetails"-->
+    <!--            app:argType="com.articlesapp.model.Result" />-->
+
+    <!--    </fragment>-->
+
+</navigation>

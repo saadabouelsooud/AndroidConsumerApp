@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="size5">5dp</dimen>
+    <dimen name="size20">20dp</dimen>
+    <dimen name="size30">30dp</dimen>
+    <dimen name="unselected_size">41dp</dimen>
+    <dimen name="selected_size">65dp</dimen>
+    <dimen name="size60">60dp</dimen>
+    <dimen name="hiveArrowDimens">30dp</dimen>
+</resources>

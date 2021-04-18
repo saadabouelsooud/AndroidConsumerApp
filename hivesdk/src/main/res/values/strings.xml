@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">HiveSDK</string>
+    <string name="nps_10">10</string>
+    <string name="nps_9">9</string>
+    <string name="nps_8">8</string>
+    <string name="nps_7">7</string>
+    <string name="nps_6">6</string>
+    <string name="nps_5">5</string>
+    <string name="nps_4">4</string>
+    <string name="nps_3">3</string>
+    <string name="nps_2">2</string>
+    <string name="nps_1">1</string>
+    <string name="nps_0">0</string>
+    <string name="bad">Bad</string>
+    <string name="great">Great</string>
+    <string name="good">Good</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="required">this field is required</string>
+</resources>

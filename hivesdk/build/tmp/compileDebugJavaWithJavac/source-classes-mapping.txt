@@ -1,0 +1,2 @@
+com/istnetworks/hivesdk/BuildConfig.java
+ com.istnetworks.hivesdk.BuildConfig

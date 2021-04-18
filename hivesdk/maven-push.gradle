@@ -1,0 +1,28 @@
+apply plugin: 'maven'
+
+//https://instabug.com/blog/create-and-distribute-android-library/
+//nexus repository url http://localhost:8081/#admin/repository/repositories
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+               pom.groupId = GROUP
+               pom.artifactId = POM_ARTIFACT_ID
+               pom.version = VERSION_NAME
+
+                repository(url: MAVEN_REPOSITORY_URL) {
+                    authentication(userName: USERNAME, password: PASSWORD)
+                }
+
+                pom.project {
+                    name POM_NAME
+                    packaging POM_PACKAGING
+
+                }
+            }
+
+        }
+
+    }
+
+}
