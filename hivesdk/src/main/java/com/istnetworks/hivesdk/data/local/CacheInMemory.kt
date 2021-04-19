@@ -1,6 +1,6 @@
 package com.istnetworks.hivesdk.data.local
 
-import com.istnetworks.hivesdk.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 
 
 class CacheInMemory {

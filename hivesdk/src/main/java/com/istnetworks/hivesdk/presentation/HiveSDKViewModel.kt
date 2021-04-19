@@ -1,19 +1,14 @@
 package com.istnetworks.hivesdk.presentation
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.istnetworks.hivesdk.*
-import com.istnetworks.hivesdk.data.network.ApiService
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyBody
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.TokenResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class HiveSDKViewModel : ViewModel(
@@ -31,8 +26,10 @@ class HiveSDKViewModel : ViewModel(
     fun getSurvey(username :String , password :String) = viewModelScope.launch {
         val servayBody = RelevantWebSurveyBody()
         servayBody.language="en"
-        servayBody.channel="MOBILE_SDK"
-        servayBody.customerCIC="MOBILE_SDK"
+        servayBody.channel="InApp"
+        servayBody.customerName="saad"
+        servayBody.customerEmail="ss@ss.com"
+        servayBody.customerPhone="01234567890"
 
         val surveyResult = hiveSDKRepository.getRelevantWebSurveyResource(username,password,servayBody)
         getSurveyResponse.value = surveyResult.data

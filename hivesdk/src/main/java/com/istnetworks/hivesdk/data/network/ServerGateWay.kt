@@ -14,7 +14,7 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLSession
 
 
-private const val SERVER_BASE_URL = "http://13.69.99.146:8070/api/"
+private const val SERVER_BASE_URL = "http://13.69.99.146:7050/api/"
 
 fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
     val interceptor = HttpLoggingInterceptor()

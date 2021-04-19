@@ -56,7 +56,7 @@ class EmojiFragment : Fragment(), RatingSelectListener {
         val surveyResponse = CacheInMemory.getSurveyResponse()
         if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
             bar.visibility = View.VISIBLE
-        tvSurveyTitle.text = surveyResponse.survey?.name
+        tvSurveyTitle.text = surveyResponse.survey?.title
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey?.questions?.get(i)?.questionType == QuestionType.Emoji.value) {
                 tvQuestionTitle.text = surveyResponse.survey.questions[i].title

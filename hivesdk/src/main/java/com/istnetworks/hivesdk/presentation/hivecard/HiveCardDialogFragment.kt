@@ -7,18 +7,12 @@ import android.view.View
 import android.view.Window
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.daasuu.ahp.AnimateHorizontalProgressBar
-import com.istnetworks.hivesdk.Question
+import com.istnetworks.hivesdk.data.models.Question
 import com.istnetworks.hivesdk.R
-import com.istnetworks.hivesdk.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.emojis.SmileyRatingBar
-import com.istnetworks.hivesdk.presentation.nps.NpsAdapter
-import com.istnetworks.hivesdk.presentation.nps.NpsModel
 
 
 private var tvSurveyTitle: TextView? = null

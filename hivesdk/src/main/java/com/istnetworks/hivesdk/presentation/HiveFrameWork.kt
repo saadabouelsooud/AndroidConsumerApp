@@ -1,11 +1,9 @@
 package com.istnetworks.hivesdk.presentation
 
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.istnetworks.hivesdk.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 import com.istnetworks.hivesdk.presentation.hivecard.HiveCardDialogFragment
 
 class HiveFrameWork private constructor(private val builder: Builder) {

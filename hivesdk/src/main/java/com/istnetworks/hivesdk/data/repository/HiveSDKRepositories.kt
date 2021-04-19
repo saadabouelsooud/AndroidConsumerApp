@@ -2,9 +2,8 @@ package com.istnetworks.hivesdk.data.repository
 
 import com.istnetworks.hivesdk.*
 import com.istnetworks.hivesdk.data.local.CacheInMemory
-import com.istnetworks.hivesdk.data.models.Resource
+import com.istnetworks.hivesdk.data.models.*
 import com.istnetworks.hivesdk.data.models.Resource.Companion.success
-import com.istnetworks.hivesdk.data.models.Status
 import com.istnetworks.hivesdk.data.network.ApiService
 import com.istnetworks.hivesdk.data.network.apiService
 import com.istnetworks.hivesdk.data.utils.Constants.Companion.PASSWORD
@@ -12,7 +11,6 @@ import com.istnetworks.hivesdk.data.utils.Constants.Companion.REFRESH_TOKEN
 import com.istnetworks.hivesdk.data.utils.Constants.Companion.checkTokenTime
 import com.istnetworks.hivesdk.data.utils.Preferences
 import com.istnetworks.hivesdk.data.utils.Preferences.Companion.updateTokenResponse
-import com.istnetworks.hivesdk.presentation.AppContainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -55,7 +53,8 @@ class HiveSDKRepositoryImpl (
             Resource<RelevantWebSurveyResponse> = withContext(Dispatchers.IO) {
        try {
            var grantType:String = PASSWORD
-           if(!checkTokenTime(Preferences.getTokenResponse().expiresIn))
+
+           if( Preferences.getTokenResponse().expiresIn!= 0 &&!checkTokenTime(Preferences.getTokenResponse().expiresIn))
                grantType = REFRESH_TOKEN
            val tokenBody = getTokenResource(userName,grantType ,password)
            updateTokenResponse(tokenResponse = tokenBody.data)

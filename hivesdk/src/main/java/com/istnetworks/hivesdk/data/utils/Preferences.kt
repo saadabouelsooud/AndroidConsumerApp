@@ -1,9 +1,8 @@
 package com.istnetworks.hivesdk.data.utils
 
-import android.app.Activity
 import android.content.Context
 import com.google.gson.Gson
-import com.istnetworks.hivesdk.TokenResponse
+import com.istnetworks.hivesdk.data.models.TokenResponse
 import com.istnetworks.hivesdk.data.utils.Constants.Companion.TOKEN_OBJECT
 import com.istnetworks.hivesdk.data.utils.Constants.Companion.TOKEN_PREFERENCE
 import com.istnetworks.hivesdk.presentation.AppContainer

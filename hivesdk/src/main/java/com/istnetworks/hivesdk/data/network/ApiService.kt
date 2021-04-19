@@ -1,8 +1,10 @@
 package com.istnetworks.hivesdk.data.network
 
-import com.istnetworks.hivesdk.*
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyBody
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.SaveWebSurveyBody
+import com.istnetworks.hivesdk.data.models.TokenResponse
 import com.istnetworks.hivesdk.data.utils.Constants
-import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.*
 

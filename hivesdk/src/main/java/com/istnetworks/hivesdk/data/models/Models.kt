@@ -1,4 +1,4 @@
-package com.istnetworks.hivesdk
+package com.istnetworks.hivesdk.data.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -46,16 +46,16 @@ data class RelevantWebSurveyBody(
         var language: String? = "",
         @SerializedName("DispositionCodes")
         @Expose
-        val dispositionCodes: String? = "",
+        var dispositionCodes: List<String>? = listOf(),
         @SerializedName("CustomerName")
         @Expose
-        val customerName: String? = "",
+        var customerName: String? = "",
         @SerializedName("CustomerEmail")
         @Expose
-        val customerEmail: String? = "",
+        var customerEmail: String? = "",
         @SerializedName("CustomerPhone")
         @Expose
-        val customerPhone: String? = ""
+        var customerPhone: String? = ""
 ):Serializable
 
 data class RelevantWebSurveyResponse(
@@ -77,6 +77,9 @@ data class Survey(
         @SerializedName("InvitationGuid")
         @Expose
         val invitationGuid: String? = "",
+        @SerializedName("Title")
+        @Expose
+        val title: String? = "",
         @SerializedName("SurveyGuid")
         @Expose
         val surveyGuid: String? = "",
