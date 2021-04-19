@@ -1,5 +1,7 @@
 package com.istnetworks.hivesdk.presentation.emojis
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -49,6 +51,7 @@ class EmojiFragment : Fragment(), RatingSelectListener {
         ivNextQuestion.setOnClickListener {
             validateNextButton()
         }
+
         return viewOfLayout
     }
 

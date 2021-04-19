@@ -1,5 +1,7 @@
 package com.istnetworks.hivesdk.presentation
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -48,6 +50,7 @@ class HiveFrameWork private constructor(private val builder: Builder) {
 
         private fun showCardDialog(data: RelevantWebSurveyResponse) {
             val hiveCardDialogFragment = HiveCardDialogFragment(context)
+            hiveCardDialogFragment.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             hiveCardDialogFragment.show()
             hiveCardDialogFragment.setData(data)
         }
