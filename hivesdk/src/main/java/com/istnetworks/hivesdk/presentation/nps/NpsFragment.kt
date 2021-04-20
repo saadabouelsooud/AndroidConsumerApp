@@ -49,6 +49,14 @@ class NpsFragment : Fragment() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
+        viewModel.isLoading.observe(viewLifecycleOwner, {
+           if(it){
+               binding.animateProgressBar.visibility=View.VISIBLE
+           }else {
+               binding.animateProgressBar.visibility=View.GONE
+           }
+
+        })
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()

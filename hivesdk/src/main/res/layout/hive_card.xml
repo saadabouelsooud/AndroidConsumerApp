@@ -4,7 +4,7 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="530dp"
-    android:background="@android:color/transparent"
+    android:background="#E6F4FD"
     android:layout_gravity="center">
 
     <fragment
