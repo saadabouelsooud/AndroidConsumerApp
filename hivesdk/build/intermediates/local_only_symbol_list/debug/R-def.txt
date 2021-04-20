@@ -65,6 +65,7 @@ id action_nps_to_emojie
 id animate_progress_bar
 id emojiFragment
 id hive_graph
+id hve_btn_submit
 id iv_emoji
 id iv_next_question
 id iv_prev_question

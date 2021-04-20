@@ -1,10 +1,10 @@
 package com.istnetworks.hivesdk.presentation
 
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 import com.istnetworks.hivesdk.presentation.hivecard.HiveCardDialogFragment
+import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 
 class HiveFrameWork private constructor(private val builder: Builder) {
 
@@ -37,20 +37,7 @@ class HiveFrameWork private constructor(private val builder: Builder) {
         }
 
 
-        fun build(): HiveFrameWork {
-            val viewModel = ViewModelProviders.of(context).get(HiveSDKViewModel::class.java)
-            userName?.let { password?.let { pass -> viewModel.getSurvey(it, pass) } }
-            viewModel.getSurveyResponse.observe(context, Observer { it ->
-                showCardDialog(it)
-            })
-            return HiveFrameWork(this)
-        }
 
-        private fun showCardDialog(data: RelevantWebSurveyResponse) {
-            val hiveCardDialogFragment = HiveCardDialogFragment(context)
-            hiveCardDialogFragment.show()
-            hiveCardDialogFragment.setData(data)
-        }
     }
 
 }

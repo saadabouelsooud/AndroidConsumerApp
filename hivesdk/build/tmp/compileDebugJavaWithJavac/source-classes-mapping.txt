@@ -1,2 +1,14 @@
+com/istnetworks/hivesdk/databinding/HiveCardBinding.java
+ com.istnetworks.hivesdk.databinding.HiveCardBinding
 com/istnetworks/hivesdk/BuildConfig.java
  com.istnetworks.hivesdk.BuildConfig
+com/istnetworks/hivesdk/databinding/FragmentNpsBinding.java
+ com.istnetworks.hivesdk.databinding.FragmentNpsBinding
+com/istnetworks/hivesdk/databinding/FragmentEmojiBinding.java
+ com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
+com/istnetworks/hivesdk/databinding/ActivityMainBinding.java
+ com.istnetworks.hivesdk.databinding.ActivityMainBinding
+com/istnetworks/hivesdk/databinding/RatingEmojiLayoutBinding.java
+ com.istnetworks.hivesdk.databinding.RatingEmojiLayoutBinding
+com/istnetworks/hivesdk/databinding/NpsItemBinding.java
+ com.istnetworks.hivesdk.databinding.NpsItemBinding

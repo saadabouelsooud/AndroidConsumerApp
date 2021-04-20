@@ -18,7 +18,7 @@ interface ApiService {
     suspend fun getRelevantWebSurvey(@Body body: RelevantWebSurveyBody): Response<RelevantWebSurveyResponse>
 
     @POST(Constants.SAVE_WEB_SURVEY)
-    suspend fun saveWebSurvey(@Body body: SaveWebSurveyBody): Response<RelevantWebSurveyResponse>
+    suspend fun saveWebSurvey(@Body body: SaveWebSurveyBody?): RelevantWebSurveyResponse
 
 
 }

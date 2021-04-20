@@ -3,7 +3,7 @@ package com.istnetworks.hivesdk.data.usecases
 import com.istnetworks.hivesdk.*
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
 import com.istnetworks.hivesdk.data.repository.hiveRepository
-import io.reactivex.Single
+
 /*
 
 val getTokenUseCase: GetTokenUseCase by lazy { GetTokenUseCase() }

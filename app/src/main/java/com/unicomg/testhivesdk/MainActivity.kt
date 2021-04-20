@@ -3,9 +3,7 @@ package com.unicomg.testhivesdk
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import androidx.lifecycle.ViewModelProvider
-import com.istnetworks.hivesdk.presentation.HiveFrameWork
-import com.istnetworks.hivesdk.presentation.HiveSDKViewModel
+import com.istnetworks.hivesdk.presentation.SurveyActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +11,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
-            HiveFrameWork.Builder(this).setPassword("InApp2021").setUserName("InAppUser").build()
+         SurveyActivity.startSurvey(this,"InAppUser","InApp2021")
+
         }
 
     }

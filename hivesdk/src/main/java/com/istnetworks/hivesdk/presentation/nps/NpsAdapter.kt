@@ -15,7 +15,7 @@ var row_index: Int = -1
 
 class NpsAdapter(
     private val npsItems: List<NpsModel>,
-
+    private val onClick :(selectedValue:Int?)-> Unit
     ) : RecyclerView.Adapter<NpsViewHolder>() {
 
 
@@ -31,6 +31,7 @@ class NpsAdapter(
         viewHolder.itemView.setOnClickListener {
             row_index = position
             notifyDataSetChanged()
+            onClick(npsItems[position].npsText?.toInt())
         }
     }
 
@@ -62,6 +63,7 @@ class NpsViewHolder(private val view: View) :
             lp.height = npsItem.npsUnselectedHeight
             tvTitle.layoutParams = lp
         }
+
     }
 
 

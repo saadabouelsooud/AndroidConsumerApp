@@ -16,32 +16,60 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 val hiveRepository: HiveSDKRepository by lazy { HiveSDKRepositoryImpl() }
+
 interface HiveSDKRepository {
-    suspend fun getToken( userName:String, grantType:String, password:String): Response<TokenResponse>
-    suspend fun getRelevantWebSurvey( body: RelevantWebSurveyBody): Response<RelevantWebSurveyResponse>
-    suspend fun saveWebSurvey( body: SaveWebSurveyBody): Response<RelevantWebSurveyResponse>
+    suspend fun getToken(
+        userName: String,
+        grantType: String,
+        password: String
+    ): Response<TokenResponse>
+
+    suspend fun getRelevantWebSurvey(body: RelevantWebSurveyBody): Response<RelevantWebSurveyResponse>
+    suspend fun saveWebSurvey(body: SaveWebSurveyBody?): Resource<RelevantWebSurveyResponse>
+    suspend fun getRelevantWebSurveyResource(
+        userName: String,
+        password: String,
+        surveyBody: RelevantWebSurveyBody
+    ): Resource<RelevantWebSurveyResponse>
 }
-class HiveSDKRepositoryImpl (
-    private val server: ApiService =apiService
+
+class HiveSDKRepositoryImpl(
+    private val server: ApiService = apiService
 ) : HiveSDKRepository {
-    override suspend  fun getToken( userName:String, grantType:String, password:String): Response<TokenResponse> {
+    override suspend fun getToken(
+        userName: String,
+        grantType: String,
+        password: String
+    ): Response<TokenResponse> {
         return server.getToken(userName, grantType, password)
     }
 
-    override  suspend fun getRelevantWebSurvey(body: RelevantWebSurveyBody): Response<RelevantWebSurveyResponse> {
-       return server.getRelevantWebSurvey(body)
+    override suspend fun getRelevantWebSurvey(body: RelevantWebSurveyBody): Response<RelevantWebSurveyResponse> {
+        return server.getRelevantWebSurvey(body)
     }
 
-    override suspend fun saveWebSurvey(body: SaveWebSurveyBody): Response<RelevantWebSurveyResponse> {
-        return server.saveWebSurvey(body)
+    override suspend fun saveWebSurvey(body: SaveWebSurveyBody?): Resource<RelevantWebSurveyResponse> {
+        return try {
+            val resp = server.saveWebSurvey(body)
+            return if (resp.isSuccess == true) {
+                Resource.success(resp)
+            } else
+                Resource.error(resp.message ?: "", null)
+        } catch (e: Exception) {
+            Resource.error(e.message ?: e.localizedMessage, null)
+        }
     }
 
 
-     suspend fun getTokenResource(userName:String, grantType:String, password:String): Resource<TokenResponse> = withContext(Dispatchers.IO) {
+    suspend fun getTokenResource(
+        userName: String,
+        grantType: String,
+        password: String
+    ): Resource<TokenResponse> = withContext(Dispatchers.IO) {
         try {
             val remoteTasks = getToken(userName, grantType, password)
             if (remoteTasks.body() != null) return@withContext success(remoteTasks.body()) else {
-                 error("token error")
+                error("token error")
             }
         } catch (e: Exception) {
             error("General token error")
@@ -49,34 +77,36 @@ class HiveSDKRepositoryImpl (
     }
 
 
-    suspend fun getRelevantWebSurveyResource(userName:String, password:String, surveyBody: RelevantWebSurveyBody):
-            Resource<RelevantWebSurveyResponse> = withContext(Dispatchers.IO) {
-       try {
-           var grantType:String = PASSWORD
+    override suspend fun getRelevantWebSurveyResource(
+        userName: String,
+        password: String,
+        surveyBody: RelevantWebSurveyBody
+    ): Resource<RelevantWebSurveyResponse> {
+        try {
+            var grantType: String = PASSWORD
 
-           if( Preferences.getTokenResponse().expiresIn!= 0 &&!checkTokenTime(Preferences.getTokenResponse().expiresIn))
-               grantType = REFRESH_TOKEN
-           val tokenBody = getTokenResource(userName,grantType ,password)
-           updateTokenResponse(tokenResponse = tokenBody.data)
+            if (Preferences.getTokenResponse().expiresIn != 0 && !checkTokenTime(Preferences.getTokenResponse().expiresIn))
+                grantType = REFRESH_TOKEN
+            val tokenBody = getTokenResource(userName, grantType, password)
+            updateTokenResponse(tokenResponse = tokenBody.data)
 
-           if( tokenBody.status== Status.SUCCESS){
-               try {
-                   val survey = getRelevantWebSurvey(surveyBody)
-                   survey.body()?.let { CacheInMemory.saveSurveyResponse(survey = it) }
-                   return@withContext success(survey.body())
-               }catch (e:Exception){
-                   error("survey error")
+            return if (tokenBody.status == Status.SUCCESS) {
+                try {
+                    val survey = getRelevantWebSurvey(surveyBody)
+                    survey.body()?.let { CacheInMemory.saveSurveyResponse(survey = it) }
+                    success(survey.body())
+                } catch (e: Exception) {
+                    Resource.error("survey error", null)
 
-               }
-           }else{
-                error("token error")
-           }
-           }catch (e:Exception){
-            error("token error")
-       }
+                }
+            } else {
+                Resource.error("token error", null)
+            }
+        } catch (e: Exception) {
+            return Resource.error("token error", null)
+        }
 
     }
-
 
 
 }
