@@ -20,12 +20,13 @@ internal class RatingEmoji : ConstraintLayout {
     private var ratingClickListener: RatingClickListener? = null
 
     private val unselectedImageSize: Int by lazy {
-        context.resources.getDimension(R.dimen.unselected_size).toInt()
+        val ratio = context.resources.displayMetrics.density
+        (context.resources.getDimension(R.dimen.unselected_size) * ratio).toInt()
     }
 
     private val selectedImageSize: Int by lazy {
-        context.resources.getDimension(R.dimen.selected_size).toInt()
-    }
+        val ratio = context.resources.displayMetrics.density
+        (context.resources.getDimension(R.dimen.selected_size) * ratio).toInt()    }
 
 
     constructor(context: Context) : super(context) {

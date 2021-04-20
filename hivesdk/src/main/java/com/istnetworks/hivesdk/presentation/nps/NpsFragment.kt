@@ -116,118 +116,20 @@ class NpsFragment : Fragment() {
     }
 
 
+
     private fun setNpsList() {
         val nps: ArrayList<NpsModel> = ArrayList()
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#e43e3d",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "0"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#e43e3d",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "1"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#ea484d",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "2"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#ec654e",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "3"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#f3a84c",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "4"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#f8c43e",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "5"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#e1c63b",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "6"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#e1c63b",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "7"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#9fce35",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "8"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#7fcd31",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "9"
-            )
-        )
-        nps.add(
-            NpsModel(
-                npsBackgroundColor = "#5aaf2b",
-                npsSelectedHeight = 70,
-                npsSelectedWidth = 70,
-                npsUnselectedHeight = 60,
-                npsUnselectedWidth = 60,
-                npsText = "10"
-            )
-        )
+        nps.add(NpsModel(npsBackgroundColor = "#e43e3d", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "0"))
+        nps.add(NpsModel(npsBackgroundColor = "#e43e3d", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "1"))
+        nps.add(NpsModel(npsBackgroundColor = "#ea484d", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "2"))
+        nps.add(NpsModel(npsBackgroundColor = "#ec654e", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "3"))
+        nps.add(NpsModel(npsBackgroundColor = "#f3a84c", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "4"))
+        nps.add(NpsModel(npsBackgroundColor = "#f8c43e", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "5"))
+        nps.add(NpsModel(npsBackgroundColor = "#e1c63b", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "6"))
+        nps.add(NpsModel(npsBackgroundColor = "#e1c63b", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "7"))
+        nps.add(NpsModel(npsBackgroundColor = "#9fce35", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "8"))
+        nps.add(NpsModel(npsBackgroundColor = "#7fcd31", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "9"))
+        nps.add(NpsModel(npsBackgroundColor = "#5aaf2b", npsSelectedHeight = 24, npsSelectedWidth = 24, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "10"))
 
         binding.npsRecyclerView.layoutManager = GridLayoutManager(context, 11)
         val adapter = NpsAdapter(nps) {

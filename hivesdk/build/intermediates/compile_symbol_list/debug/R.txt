@@ -173,6 +173,11 @@ int attr behavior_overlapTop 0x0
 int attr behavior_peekHeight 0x0
 int attr behavior_saveFlags 0x0
 int attr behavior_skipCollapsed 0x0
+int attr blk_alpha 0x0
+int attr blk_blurRadius 0x0
+int attr blk_cornerRadius 0x0
+int attr blk_downscaleFactor 0x0
+int attr blk_fps 0x0
 int attr borderWidth 0x0
 int attr borderlessButtonStyle 0x0
 int attr bottomAppBarStyle 0x0
@@ -1094,6 +1099,7 @@ int color foreground_material_dark 0x0
 int color foreground_material_light 0x0
 int color gray 0x0
 int color green 0x0
+int color greyBlue 0x0
 int color highlighted_text_material_dark 0x0
 int color highlighted_text_material_light 0x0
 int color hint_foreground_material_dark 0x0
@@ -1802,6 +1808,7 @@ int drawable nps_6 0x0
 int drawable nps_7 0x0
 int drawable nps_8 0x0
 int drawable nps_9 0x0
+int drawable original_bk_logo 0x0
 int drawable radio_button_selector 0x0
 int drawable rating_button_selected 0x0
 int drawable test_custom_background 0x0
@@ -3522,6 +3529,12 @@ int styleable BaseProgressIndicator_showDelay 5
 int styleable BaseProgressIndicator_trackColor 6
 int styleable BaseProgressIndicator_trackCornerRadius 7
 int styleable BaseProgressIndicator_trackThickness 8
+int[] styleable BlurLayout { 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable BlurLayout_blk_alpha 0
+int styleable BlurLayout_blk_blurRadius 1
+int styleable BlurLayout_blk_cornerRadius 2
+int styleable BlurLayout_blk_downscaleFactor 3
+int styleable BlurLayout_blk_fps 4
 int[] styleable BottomAppBar { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable BottomAppBar_backgroundTint 0
 int styleable BottomAppBar_elevation 1
