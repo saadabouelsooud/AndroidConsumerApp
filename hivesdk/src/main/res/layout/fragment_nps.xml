@@ -11,7 +11,7 @@
         android:id="@+id/mtrl_card_title"
         android:layout_width="match_parent"
         android:layout_height="125dp"
-        android:background="@drawable/card_bg"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="295dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/card_bg"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,14 +71,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/card_bg"
-            android:padding="10dp">
+            android:background="@drawable/card_bg">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/nps_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".presentation.nps.NpsFragment">
+                tools:context=".presentation.nps.NpsFragment"
+                android:layout_marginStart="@dimen/size30"
+                android:layout_marginEnd="@dimen/size30">
 
                 <TextView
                     android:id="@+id/tv_question_title"
@@ -127,30 +128,30 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/nps_recycler_view" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/iv_prev_question"
+                android:layout_width="@dimen/hiveArrowDimens"
+                android:layout_height="@dimen/hiveArrowDimens"
+                android:src="@drawable/ic_arrow_back_ios_black_36dp"
+                app:cornerRadius="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <ImageView
+                android:id="@+id/iv_next_question"
+                android:layout_width="@dimen/hiveArrowDimens"
+                android:layout_height="@dimen/hiveArrowDimens"
+                android:src="@drawable/ic_arrow_forward_ios_black_36dp"
+                app:cornerRadius="40dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:id="@+id/iv_prev_question"
-        android:layout_width="@dimen/hiveArrowDimens"
-        android:layout_height="@dimen/hiveArrowDimens"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_arrow_back_ios_black_36dp"
-        app:cornerRadius="40dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mtrl_card_question" />
 
-    <ImageView
-        android:id="@+id/iv_next_question"
-        android:layout_width="@dimen/hiveArrowDimens"
-        android:layout_height="@dimen/hiveArrowDimens"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_arrow_forward_ios_black_36dp"
-        app:cornerRadius="40dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mtrl_card_question" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

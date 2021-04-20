@@ -47,19 +47,24 @@ class NpsViewHolder(private val view: View) :
         tvTitle.text = npsItem.npsText ?: ""
         val lp: ConstraintLayout.LayoutParams =
             tvTitle.layoutParams as ConstraintLayout.LayoutParams
-        lp.width = npsItem.npsUnselectedWidth!!
-        lp.height = npsItem.npsUnselectedHeight!!
+        val ratio = view.resources.displayMetrics.density
+
+
+        lp.width = (npsItem.npsUnselectedWidth!! * ratio).toInt()
+        lp.height = (npsItem.npsUnselectedHeight!! * ratio).toInt()
         tvTitle.layoutParams = lp
         tvTitle.background
             .setColorFilter(Color.parseColor(npsItem.npsBackgroundColor), PorterDuff.Mode.SRC_ATOP)
 
         if (row_index == adapterPosition) {
-            lp.width = npsItem.npsSelectedWidth!!
-            lp.height = npsItem.npsSelectedHeight!!
+
+            lp.width = (npsItem.npsSelectedWidth!! * ratio).toInt()
+            lp.height = (npsItem.npsSelectedHeight!! * ratio).toInt()
+
             tvTitle.layoutParams = lp
         } else {
-            lp.width = npsItem.npsUnselectedWidth
-            lp.height = npsItem.npsUnselectedHeight
+            lp.width = (npsItem.npsUnselectedWidth!! * ratio).toInt()
+            lp.height = (npsItem.npsUnselectedHeight!! * ratio).toInt()
             tvTitle.layoutParams = lp
         }
     }

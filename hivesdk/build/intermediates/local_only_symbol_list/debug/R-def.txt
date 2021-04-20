@@ -21,6 +21,7 @@ color black
 color cerulean_4
 color gray
 color green
+color greyBlue
 color orange
 color purple_200
 color purple_500
