@@ -90,6 +90,10 @@ class NpsFragment : Fragment() {
             }
 
         }
+
+        binding.ivClose.setOnClickListener{
+            requireActivity().finish()
+        }
     }
 
     private fun onSurveyReadyToSave() {
