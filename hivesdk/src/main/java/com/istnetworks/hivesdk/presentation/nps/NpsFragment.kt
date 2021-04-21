@@ -16,6 +16,8 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
+import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -36,6 +38,7 @@ class NpsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNpsBinding.inflate(inflater)
+        binding.hveBtnSubmit.disable()
         setNpsList()
         observeSurvey()
         observeViewModel()
@@ -75,22 +78,28 @@ class NpsFragment : Fragment() {
         binding.hveBtnSubmit.setOnClickListener {
             if (isRequired) {
                 if (npsValue >= 0) {
-                    viewModel.updateSelectedQuestions(
-                        selectedQuestion?.toQuestionResponse(
-                            "",
-                            npsValue
-                        )
-                    )
-                    viewModel.saveSurvey()
+                    onSurveyReadyToSave()
                 } else Toast.makeText(
                     requireContext(),
                     getString(R.string.required),
                     Toast.LENGTH_LONG
                 )
                     .show()
+            }else{
+                onSurveyReadyToSave()
             }
 
         }
+    }
+
+    private fun onSurveyReadyToSave() {
+        viewModel.updateSelectedQuestions(
+            selectedQuestion?.toQuestionResponse(
+                "",
+                npsValue
+            )
+        )
+        viewModel.saveSurvey()
     }
 
 
@@ -142,6 +151,7 @@ class NpsFragment : Fragment() {
         binding.npsRecyclerView.layoutManager = GridLayoutManager(context, 11)
         val adapter = NpsAdapter(nps) {
             npsValue = it ?: -1
+            binding.hveBtnSubmit.enable()
         }
         binding.npsRecyclerView.adapter = adapter
     }

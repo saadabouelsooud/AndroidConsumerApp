@@ -35,6 +35,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         surveyBody.customerName = "saad"
         surveyBody.customerEmail = "ss@ss.com"
         surveyBody.customerPhone = "01234567890"
+        surveyBody.dispositionCodes = listOf("login Event")
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
