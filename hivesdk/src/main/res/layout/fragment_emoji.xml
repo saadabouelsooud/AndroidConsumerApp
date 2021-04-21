@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="550dp"
     android:layout_gravity="center"
-    android:background="#1A007BA7"
+    android:background="#E6F4FD"
     android:padding="18dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mtrl_card_title"
         android:layout_width="match_parent"
         android:layout_height="125dp"
-        android:background="@drawable/card_bg"
         app:cardElevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="@dimen/size20"
+        app:cardBackgroundColor="@android:color/transparent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_bg"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/card_bg"
-            android:padding="10dp">
-
+            android:padding="20dp"
+            >
             <TextView
                 android:id="@+id/tv_survey_title"
                 android:layout_width="wrap_content"
@@ -63,21 +65,27 @@
         android:layout_width="match_parent"
         android:layout_height="295dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/card_bg"
         app:cardElevation="4dp"
+        app:cardCornerRadius="@dimen/size20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mtrl_card_title">
+        app:layout_constraintTop_toBottomOf="@id/mtrl_card_title"
+        app:cardBackgroundColor="@android:color/transparent"
+        >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/card_bg">
+            android:background="@drawable/card_bg"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/tv_question_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:text="Survey Title"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -85,39 +93,41 @@
                 app:layout_constraintTop_toTopOf="parent" />
             <com.istnetworks.hivesdk.presentation.emojis.SmileyRatingBar
                 android:id="@+id/smiley_rating"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_prev_question"
+                app:layout_constraintEnd_toStartOf="@id/iv_next_question"
                 android:layout_margin="@dimen/size5"
                 android:layout_gravity="center"
                 android:gravity="center" />
+            <ImageView
+                android:id="@+id/iv_prev_question"
+                android:layout_width="@dimen/hiveArrowDimens"
+                android:layout_height="@dimen/hiveArrowDimens"
+                android:src="@drawable/ic_arrow_back_ios_black_36dp"
+                app:cornerRadius="40dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <ImageView
+                android:id="@+id/iv_next_question"
+                android:layout_width="@dimen/hiveArrowDimens"
+                android:layout_height="@dimen/hiveArrowDimens"
+                android:src="@drawable/ic_arrow_forward_ios_black_36dp"
+                app:cornerRadius="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:id="@+id/iv_prev_question"
-        android:layout_width="@dimen/hiveArrowDimens"
-        android:layout_height="@dimen/hiveArrowDimens"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_arrow_back_ios_black_36dp"
-        app:cornerRadius="40dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mtrl_card_question" />
 
-    <ImageView
-        android:id="@+id/iv_next_question"
-        android:layout_width="@dimen/hiveArrowDimens"
-        android:layout_height="@dimen/hiveArrowDimens"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_arrow_forward_ios_black_36dp"
-        app:cornerRadius="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mtrl_card_question"
-
-        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

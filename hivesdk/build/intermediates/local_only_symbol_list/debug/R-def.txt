@@ -21,6 +21,7 @@ color black
 color cerulean_4
 color gray
 color green
+color greyBlue
 color orange
 color purple_200
 color purple_500
@@ -65,6 +66,7 @@ id action_nps_to_emojie
 id animate_progress_bar
 id emojiFragment
 id hive_graph
+id hve_btn_submit
 id iv_emoji
 id iv_next_question
 id iv_prev_question

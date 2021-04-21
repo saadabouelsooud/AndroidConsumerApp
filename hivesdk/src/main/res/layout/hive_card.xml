@@ -4,8 +4,8 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="530dp"
-    android:layout_gravity="center"
-    android:background="#1A007BA7">
+    android:background="#E6F4FD"
+    android:layout_gravity="center">
 
     <fragment
         android:id="@+id/nav_host_fragment"

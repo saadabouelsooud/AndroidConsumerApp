@@ -1,68 +1,71 @@
 package com.istnetworks.hivesdk.presentation.emojis
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import com.daasuu.ahp.AnimateHorizontalProgressBar
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
+import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
+import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
-import com.istnetworks.hivesdk.presentation.HiveSDKViewModel
+import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
+import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
+import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 
-class EmojiFragment : Fragment(), RatingSelectListener {
-
-      var viewOfLayout: View? = null
-    private lateinit var smileyRating: SmileyRatingBar
-    private lateinit var tvSurveyTitle: TextView
-    private lateinit var tvQuestionTitle: TextView
-    private lateinit var ivPrevQuestion: ImageView
-    private lateinit var ivNextQuestion: ImageView
+class EmojiFragment : Fragment() {
+    private val viewModel: HiveSDKViewModel by activityViewModels {
+        HiveSDKViewModelFactory(
+            HiveSDKRepositoryImpl()
+        )
+    }
+    private lateinit var binding: FragmentEmojiBinding
     private var isRequired: Boolean = false
     private var rateValue: Int = -1
-    private lateinit var bar: AnimateHorizontalProgressBar
+    private var selectedQuestion: Question? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        if(viewOfLayout==null)
-        viewOfLayout = inflater.inflate(R.layout.fragment_emoji, container, false)
-        smileyRating = viewOfLayout!!.findViewById(R.id.smiley_rating)
-        tvSurveyTitle = viewOfLayout!!.findViewById(R.id.tv_survey_title)
-        tvQuestionTitle = viewOfLayout!!.findViewById(R.id.tv_question_title)
-        bar = viewOfLayout!!.findViewById(R.id.animate_progress_bar)
-        ivNextQuestion = viewOfLayout!!.findViewById(R.id.iv_next_question)
-        ivPrevQuestion = viewOfLayout!!.findViewById(R.id.iv_prev_question)
+        binding = FragmentEmojiBinding.inflate(inflater)
         observeSurvey()
-        smileyRating.setRatingSelectListener(this)
-        ivNextQuestion.setOnClickListener {
+        setOnClickListeners()
+        return binding.root
+    }
+
+    private fun setOnClickListeners() {
+        binding.smileyRating.setRatingSelectListener(object : RatingSelectListener {
+            override fun ratingSelected(rating: Int) {
+                rateValue = rating
+            }
+
+        })
+        binding.ivNextQuestion.setOnClickListener {
             validateNextButton()
         }
-        return viewOfLayout
     }
 
     private fun observeSurvey() {
         val surveyResponse = CacheInMemory.getSurveyResponse()
         if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-            bar.visibility = View.VISIBLE
-        tvSurveyTitle.text = surveyResponse.survey?.title
+            binding.animateProgressBar.visibility = View.VISIBLE
+
+        binding.tvSurveyTitle.text = surveyResponse.survey?.title
+
         for (i in surveyResponse.survey?.questions?.indices!!) {
-            if (surveyResponse.survey?.questions?.get(i)?.questionType == QuestionType.Emoji.value) {
-                tvQuestionTitle.text = surveyResponse.survey.questions[i].title
+            if (surveyResponse.survey.questions[i].questionType == QuestionType.Emoji.value) {
+                binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
                 isRequired = surveyResponse.survey.questions[i].isRequired!!
+                selectedQuestion = surveyResponse.survey.questions[i]
                 if (i == 0)
-                    ivPrevQuestion.visibility = View.GONE
+                    binding.ivPrevQuestion.visibility = View.GONE
                 break
 
             }
@@ -76,17 +79,15 @@ class EmojiFragment : Fragment(), RatingSelectListener {
             if (rateValue >= 0) {
                 moveToNpsQuestion()
             } else Toast.makeText(activity, getString(R.string.required), Toast.LENGTH_LONG).show()
-        } else moveToNpsQuestion()
+        } else
+            moveToNpsQuestion()
     }
 
     private fun moveToNpsQuestion() {
-        val navController =  view?.let { Navigation.findNavController(it) }
+        viewModel.updateSelectedQuestions(selectedQuestion?.toQuestionResponse("", rateValue))
+        val navController = view?.let { Navigation.findNavController(it) }
         if (navController?.currentDestination?.id == R.id.emojiFragment)
             navController.navigate(R.id.action_emoji_to_nps)
-    }
-
-    override fun ratingSelected(rating: Int) {
-        rateValue = rating
     }
 
 
