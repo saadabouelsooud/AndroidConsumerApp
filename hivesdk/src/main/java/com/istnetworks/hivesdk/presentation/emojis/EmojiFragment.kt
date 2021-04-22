@@ -50,6 +50,10 @@ class EmojiFragment : Fragment() {
         binding.ivNextQuestion.setOnClickListener {
             validateNextButton()
         }
+
+        binding.ivClose.setOnClickListener{
+            requireActivity().finish()
+        }
     }
 
     private fun observeSurvey() {
