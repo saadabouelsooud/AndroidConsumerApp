@@ -91,6 +91,6 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
 
     private fun generateSaveSurveyRequest() =
-        CacheInMemory.getSurveyResponse().survey?.toSaveSurveyBody(questionResponsesList)
+        survey?.toSaveSurveyBody(questionResponsesList)
 
 }

@@ -12,7 +12,7 @@ import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.presentation.emojis.RatingSelectListener
-import com.istnetworks.hivesdk.presentation.hivecard.HiveCardDialogFragment
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
@@ -65,7 +65,7 @@ class SurveyActivity : AppCompatActivity(), RatingSelectListener {
     }
 
     private fun showCardDialog(data: RelevantWebSurveyResponse) {
-        val hiveCardDialogFragment = HiveCardDialogFragment()
+        val hiveCardDialogFragment = MainFragment()
         val beginTransaction = supportFragmentManager.beginTransaction()
         beginTransaction.add(android.R.id.content,hiveCardDialogFragment, "").commit()
     }
