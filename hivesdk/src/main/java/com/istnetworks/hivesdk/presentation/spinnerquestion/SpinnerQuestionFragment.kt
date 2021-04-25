@@ -14,6 +14,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
+import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
@@ -35,6 +36,7 @@ class SpinnerQuestionFragment : Fragment() {
     ): View {
         binding = FragmentSpinnerQuestionBinding.inflate(inflater)
         binding.hveBtnSubmit.disable()
+        viewModel.stylingSubmitBtn(binding.hveBtnSubmit)
         selectedQuestion = viewModel.findQuestion(position)
         setSpinner()
         onClickActions()

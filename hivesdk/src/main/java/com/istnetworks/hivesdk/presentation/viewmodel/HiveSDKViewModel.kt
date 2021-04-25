@@ -16,6 +16,7 @@ import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
+import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import kotlinx.coroutines.launch
 import java.text.FieldPosition
 
@@ -73,12 +74,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun stylingSubmitBtn(btn: MaterialButton) {
-        val submitBtnStyle = survey?.surveyOptions?.surveyTheme?.submitButton
-        val style = getFontStyle(submitBtnStyle)
-
-        btn.typeface = Typeface.create(submitBtnStyle?.fontFamily, style)
-        /*  val drawable = createSubmitBtnDrawable(submitBtnStyle)
-          btn.background = drawable*/
+      btn.submitButtonStyle(survey?.surveyOptions?.surveyTheme?.submitButton)
     }
 
     private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {
