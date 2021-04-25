@@ -11,11 +11,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.*
+import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
 import kotlinx.coroutines.launch
+import java.text.FieldPosition
 
 
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
@@ -27,6 +29,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val showErrorMsg = MutableLiveData<String?>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
 
+
+    fun findQuestion(position: Int?): Question? {
+        if (position == null || position == -1) return null
+        return survey?.questions?.get(position)
+    }
 
     fun getSurvey(username: String, password: String) = viewModelScope.launch {
         val surveyBody = RelevantWebSurveyBody()
@@ -70,8 +77,8 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         val style = getFontStyle(submitBtnStyle)
 
         btn.typeface = Typeface.create(submitBtnStyle?.fontFamily, style)
-      /*  val drawable = createSubmitBtnDrawable(submitBtnStyle)
-        btn.background = drawable*/
+        /*  val drawable = createSubmitBtnDrawable(submitBtnStyle)
+          btn.background = drawable*/
     }
 
     private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {
