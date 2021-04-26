@@ -65,8 +65,8 @@ class SurveyActivity : AppCompatActivity(), RatingSelectListener {
     }
 
     private fun showCardDialog(data: RelevantWebSurveyResponse) {
-        val hiveCardDialogFragment = MainFragment()
+        val f = MainFragment()
         val beginTransaction = supportFragmentManager.beginTransaction()
-        beginTransaction.add(android.R.id.content,hiveCardDialogFragment, "").commit()
+        beginTransaction.add(android.R.id.content,f, "").commit()
     }
 }

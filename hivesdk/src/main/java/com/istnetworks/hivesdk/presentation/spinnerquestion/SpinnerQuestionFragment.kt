@@ -1,5 +1,6 @@
 package com.istnetworks.hivesdk.presentation.spinnerquestion
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
+import com.istnetworks.hivesdk.presentation.surveyExtension.questionStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -36,11 +38,23 @@ class SpinnerQuestionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSpinnerQuestionBinding.inflate(inflater)
-        initSubmitBtn()
         selectedQuestion = viewModel.findQuestion(position)
-        setSpinner()
+        stylingViews()
+        initSubmitBtn()
+        bindQuestion()
         onClickActions()
         return binding.root
+    }
+
+    private fun stylingViews() {
+        val theme = viewModel.getSurveyTheme()
+        binding.tvQuestionTitle.questionStyle(theme?.questionTitleStyle)
+        binding.hveSpAnswers.setBackgroundColor(Color.parseColor("#" + theme?.surveyBackgroundColor))
+    }
+
+    private fun bindQuestion() {
+        setSpinner()
+        binding.tvQuestionTitle.text = selectedQuestion?.title
     }
 
     private fun initSubmitBtn() {
