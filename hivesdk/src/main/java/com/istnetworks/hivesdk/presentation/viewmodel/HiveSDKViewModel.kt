@@ -24,7 +24,7 @@ import java.text.FieldPosition
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
 
     val getSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
-    private var survey: Survey? = null
+    var survey: Survey? = null
     val saveSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
@@ -43,11 +43,15 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         surveyBody.customerName = "saad"
         surveyBody.customerEmail = "ss@ss.com"
         surveyBody.customerPhone = "01234567890"
-        surveyBody.dispositionCodes = listOf("login Event")
+        surveyBody.dispositionCodes = listOf("complian Event")
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
-        getSurveyResponseLD.value = surveyResult.data
+        when(surveyResult.status){
+            Status.SUCCESS -> getSurveyResponseLD.value = surveyResult.data
+            Status.ERROR -> showErrorMsg.value = surveyResult.message
+            Status.LOADING -> TODO()
+        }
         survey = surveyResult.data?.survey
 
     }
@@ -73,9 +77,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
     }
 
-    fun stylingSubmitBtn(btn: MaterialButton) {
-      btn.submitButtonStyle(survey?.surveyOptions?.surveyTheme?.submitButton)
-    }
+    fun getSurveyTheme()=survey?.surveyOptions?.surveyTheme
 
     private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {
         val drawable = ShapeDrawable()

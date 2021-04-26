@@ -28,9 +28,9 @@ data class Question(
     @SerializedName("Choices")
     @Expose
     val choices: List<Choices>? = null,
-    @SerializedName("StarOption")
+   /* @SerializedName("StarOption")
     @Expose
-    val StarOption: String? = null
+    val StarOption: String? = null*/
 ) : Parcelable
 
 fun Question.toQuestionResponse(textResponse: String?, numberResponse: Int?): QuestionResponses {

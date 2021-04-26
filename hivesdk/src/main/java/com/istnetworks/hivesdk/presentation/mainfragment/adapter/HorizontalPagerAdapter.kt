@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
+import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 import java.util.*
 
 /**
@@ -25,7 +26,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> NpsFragment()
+            0 -> SpinnerQuestionFragment.getInstance(0)
             1 -> EmojiFragment()
             else -> Fragment()
         }
