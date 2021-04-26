@@ -1,6 +1,5 @@
 package com.istnetworks.hivesdk.presentation.nps
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,8 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
+import com.istnetworks.hivesdk.presentation.surveyExtension.questionStyle
+import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
@@ -112,6 +113,8 @@ class NpsFragment : Fragment() {
         if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
             binding.animateProgressBar.visibility = View.VISIBLE
         binding.tvSurveyTitle.text = surveyResponse.survey?.title
+        binding.tvSurveyTitle.surveyTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.surveyTitleStyle)
+        binding.tvQuestionTitle.questionStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey.questions[i].questionType == QuestionType.NPS.value) {
                 binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
