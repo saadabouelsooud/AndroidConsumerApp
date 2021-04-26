@@ -180,3 +180,12 @@ data class SelectedChoices(
     @Expose
     val choiceGuid: String? = ""
 ) : Serializable
+
+data class StarOption(
+    @SerializedName("FillColor")
+    val fillColor: String?,
+    @SerializedName("NormalColor")
+    val normalColor: String?,
+    @SerializedName("Shape")
+    val shape: Int?
+):Serializable

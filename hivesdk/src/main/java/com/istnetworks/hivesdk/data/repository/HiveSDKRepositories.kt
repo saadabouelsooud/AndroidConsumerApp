@@ -1,5 +1,6 @@
 package com.istnetworks.hivesdk.data.repository
 
+import android.util.Log
 import com.istnetworks.hivesdk.*
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.*
@@ -96,6 +97,7 @@ class HiveSDKRepositoryImpl(
                     survey.body()?.let { CacheInMemory.saveSurveyResponse(survey = it) }
                     success(survey.body())
                 } catch (e: Exception) {
+                    Log.e("API", "getRelevantWebSurveyResource: ", e)
                     Resource.error("survey error", null)
 
                 }

@@ -5,16 +5,21 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
+import android.view.View
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.*
+import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
+import com.istnetworks.hivesdk.data.utils.QuestionType
 import kotlinx.coroutines.launch
 
 
@@ -35,7 +40,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         surveyBody.customerName = "saad"
         surveyBody.customerEmail = "ss@ss.com"
         surveyBody.customerPhone = "01234567890"
-        surveyBody.dispositionCodes = listOf("login Event")
+        surveyBody.dispositionCodes = listOf("Complian Event")
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
@@ -92,5 +97,21 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     private fun generateSaveSurveyRequest() =
         CacheInMemory.getSurveyResponse().survey?.toSaveSurveyBody(questionResponsesList)
+
+    fun getQuestions(position:Int): Question
+    {
+        return getSurveyResponseLD.value!!.survey!!.questions!![position]
+    }
+
+    fun hasProgressBar():Boolean?{
+        return getSurveyResponseLD.value?.survey?.surveyOptions?.hasProgressBar
+    }
+
+    fun getQuestionStyle(questionType: QuestionType){
+        when(questionType)
+        {
+
+        }
+    }
 
 }

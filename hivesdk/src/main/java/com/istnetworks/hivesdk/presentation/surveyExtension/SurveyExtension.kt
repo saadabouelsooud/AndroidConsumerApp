@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.widget.CheckBox
+import android.widget.RadioButton
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.data.models.response.styles.*
@@ -31,7 +32,7 @@ fun TextView.surveyTitleStyle(titleStyle: SurveyTitleStyle?){
 /**
  * Welcome screen title style
  */
-fun TextView.titleStyle(titleStyle: TitleStyle?){
+fun TextView.welcomeScreenTitleStyle(titleStyle: TitleStyle?){
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
     typeface = getFontTypeface(titleStyle?.fontBold!!, titleStyle.fontItalic!!,
         titleStyle.fontFamily!!)
@@ -51,7 +52,7 @@ fun TextView.titleStyle(titleStyle: TitleStyle?){
 /**
  * Question title style
  */
-fun TextView.questionStyle(titleStyle: QuestionTitleStyle?){
+fun TextView.questionTitleStyle(titleStyle: QuestionTitleStyle?){
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
     typeface = getFontTypeface(titleStyle?.fontBold!!, titleStyle.fontItalic!!,
         titleStyle.fontFamily!!)
@@ -92,6 +93,24 @@ fun TextView.subTitleStyle(subtitleStyle: SubTitleStyle?){
  * multiChoice style
  */
 fun CheckBox.multiChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
+{
+    setTextColor(Color.parseColor("#" + questionChoicesStyle.fontColor))
+    typeface = getFontTypeface(
+        questionChoicesStyle.fontBold!!, questionChoicesStyle.fontItalic!!,
+        questionChoicesStyle.fontFamily!!)
+    val sp: Float =
+        questionChoicesStyle.
+        fontSize?.
+        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+
+    textSize = sp
+    if (questionChoicesStyle.fontUnderline!!)
+    {
+        paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+}
+
+fun RadioButton.singleChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
 {
     setTextColor(Color.parseColor("#" + questionChoicesStyle.fontColor))
     typeface = getFontTypeface(

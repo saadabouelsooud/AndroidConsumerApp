@@ -152,7 +152,6 @@
                 android:layout_height="@dimen/hiveArrowDimens"
                 android:src="@drawable/ic_arrow_forward_ios_black_36dp"
                 app:cornerRadius="40dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
