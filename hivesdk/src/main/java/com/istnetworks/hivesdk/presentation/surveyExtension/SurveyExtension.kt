@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.widget.CheckBox
-import android.widget.RadioButton
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.data.models.response.styles.*
@@ -12,19 +11,19 @@ import com.istnetworks.hivesdk.data.models.response.styles.*
 /**
  * Survey title style
  */
-fun TextView.surveyTitleStyle(titleStyle: SurveyTitleStyle?){
+fun TextView.surveyTitleStyle(titleStyle: SurveyTitleStyle?) {
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
-    typeface = getFontTypeface(titleStyle?.fontBold!!, titleStyle.fontItalic!!,
-        titleStyle.fontFamily!!)
+    typeface = getFontTypeface(
+        titleStyle?.fontBold!!, titleStyle.fontItalic!!,
+        titleStyle.fontFamily!!
+    )
     val sp: Float =
-        titleStyle.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        titleStyle.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (titleStyle.fontUnderline!!)
-    {
+    if (titleStyle.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -32,19 +31,19 @@ fun TextView.surveyTitleStyle(titleStyle: SurveyTitleStyle?){
 /**
  * Welcome screen title style
  */
-fun TextView.welcomeScreenTitleStyle(titleStyle: TitleStyle?){
+fun TextView.titleStyle(titleStyle: TitleStyle?) {
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
-    typeface = getFontTypeface(titleStyle?.fontBold!!, titleStyle.fontItalic!!,
-        titleStyle.fontFamily!!)
+    typeface = getFontTypeface(
+        titleStyle?.fontBold!!, titleStyle.fontItalic!!,
+        titleStyle.fontFamily!!
+    )
     val sp: Float =
-        titleStyle.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        titleStyle.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (titleStyle.fontUnderline!!)
-    {
+    if (titleStyle.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -52,19 +51,19 @@ fun TextView.welcomeScreenTitleStyle(titleStyle: TitleStyle?){
 /**
  * Question title style
  */
-fun TextView.questionTitleStyle(titleStyle: QuestionTitleStyle?){
+fun TextView.questionStyle(titleStyle: QuestionTitleStyle?) {
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
-    typeface = getFontTypeface(titleStyle?.fontBold!!, titleStyle.fontItalic!!,
-        titleStyle.fontFamily!!)
+    typeface = getFontTypeface(
+        titleStyle?.fontBold!!, titleStyle.fontItalic!!,
+        titleStyle.fontFamily!!
+    )
     val sp: Float =
-        titleStyle.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        titleStyle.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (titleStyle.fontUnderline!!)
-    {
+    if (titleStyle.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -72,19 +71,19 @@ fun TextView.questionTitleStyle(titleStyle: QuestionTitleStyle?){
 /**
  * subTitleStyle
  */
-fun TextView.subTitleStyle(subtitleStyle: SubTitleStyle?){
+fun TextView.subTitleStyle(subtitleStyle: SubTitleStyle?) {
     setTextColor(Color.parseColor("#" + subtitleStyle?.fontColor))
-    typeface = getFontTypeface(subtitleStyle?.fontBold!!,
-        subtitleStyle.fontItalic!!, subtitleStyle.fontFamily!!)
+    typeface = getFontTypeface(
+        subtitleStyle?.fontBold!!,
+        subtitleStyle.fontItalic!!, subtitleStyle.fontFamily!!
+    )
     val sp: Float =
-        subtitleStyle.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        subtitleStyle.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (subtitleStyle.fontUnderline!!)
-    {
+    if (subtitleStyle.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -92,12 +91,12 @@ fun TextView.subTitleStyle(subtitleStyle: SubTitleStyle?){
 /**
  * multiChoice style
  */
-fun CheckBox.multiChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
-{
+fun CheckBox.multiChoiceStyle(questionChoicesStyle: QuestionChoicesStyle) {
     setTextColor(Color.parseColor("#" + questionChoicesStyle.fontColor))
     typeface = getFontTypeface(
         questionChoicesStyle.fontBold!!, questionChoicesStyle.fontItalic!!,
-        questionChoicesStyle.fontFamily!!)
+        questionChoicesStyle.fontFamily!!
+    )
     val sp: Float =
         questionChoicesStyle.
         fontSize?.
@@ -131,19 +130,19 @@ fun RadioButton.singleChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
 /**
  * start screen message
  */
-fun TextView.startScreenMsgStyle(screenMsg: StartScreenMsgStyle?){
+fun TextView.startScreenMsgStyle(screenMsg: StartScreenMsgStyle?) {
     setTextColor(Color.parseColor("#" + screenMsg?.fontColor))
-    typeface = getFontTypeface(screenMsg?.fontBold!!, screenMsg.fontItalic!!,
-        screenMsg.fontFamily!!)
+    typeface = getFontTypeface(
+        screenMsg?.fontBold!!, screenMsg.fontItalic!!,
+        screenMsg.fontFamily!!
+    )
     val sp: Float =
-        screenMsg.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        screenMsg.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (screenMsg.fontUnderline!!)
-    {
+    if (screenMsg.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -151,19 +150,19 @@ fun TextView.startScreenMsgStyle(screenMsg: StartScreenMsgStyle?){
 /**
  * end screen message style
  */
-fun TextView.endScreenMsgStyle(screenMsg: EndScreenMsgStyle?){
+fun TextView.endScreenMsgStyle(screenMsg: EndScreenMsgStyle?) {
     setTextColor(Color.parseColor("#" + screenMsg?.fontColor))
-    typeface = getFontTypeface(screenMsg?.fontBold!!, screenMsg.fontItalic!!,
-        screenMsg.fontFamily!!)
+    typeface = getFontTypeface(
+        screenMsg?.fontBold!!, screenMsg.fontItalic!!,
+        screenMsg.fontFamily!!
+    )
     val sp: Float =
-        screenMsg.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        screenMsg.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (screenMsg.fontUnderline!!)
-    {
+    if (screenMsg.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -171,19 +170,19 @@ fun TextView.endScreenMsgStyle(screenMsg: EndScreenMsgStyle?){
 /**
  * input answer style
  */
-fun TextView.inputAnswerStyle(inputAnswerStyle: InputAnswerStyle?){
+fun TextView.inputAnswerStyle(inputAnswerStyle: InputAnswerStyle?) {
     setTextColor(Color.parseColor("#" + inputAnswerStyle?.fontColor))
-    typeface = getFontTypeface(inputAnswerStyle?.fontBold!!, inputAnswerStyle.fontItalic!!,
-        inputAnswerStyle.fontFamily!!)
+    typeface = getFontTypeface(
+        inputAnswerStyle?.fontBold!!, inputAnswerStyle.fontItalic!!,
+        inputAnswerStyle.fontFamily!!
+    )
     val sp: Float =
-        inputAnswerStyle.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        inputAnswerStyle.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (inputAnswerStyle.fontUnderline!!)
-    {
+    if (inputAnswerStyle.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
@@ -191,40 +190,34 @@ fun TextView.inputAnswerStyle(inputAnswerStyle: InputAnswerStyle?){
 /**
  * Submit button style
  */
-fun MaterialButton.submitButtonStyle(submitButton: SubmitButton?){
-    val style = getFontTypeface(submitButton!!.fontBold!!,
-        submitButton.fontItalic!!, submitButton.fontFamily!!)
-    setBackgroundColor(Color.parseColor("#"+ submitButton.backgroundColor))
-    setTextColor(Color.parseColor("#"+ submitButton.fontColor))
+fun MaterialButton.submitButtonStyle(submitButton: SubmitButton?) {
+    if (submitButton == null) return
+    val style = getFontTypeface(
+        submitButton.fontBold!!,
+        submitButton.fontItalic!!, submitButton.fontFamily!!
+    )
+    setBackgroundColor(Color.parseColor("#" + submitButton.backgroundColor))
+    setTextColor(Color.parseColor("#" + submitButton.fontColor))
     typeface = style
     val sp: Float =
-        submitButton.
-        fontSize?.
-        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+        submitButton.fontSize?.replace("px", "")?.toFloat()
+            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
 
     textSize = sp
 
-    if (submitButton.fontUnderline!!)
-    {
+    if (submitButton.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
 
-fun getFontTypeface(bold:Boolean,italic:Boolean,fontFamily: String): Typeface
-{
-    return if (bold && italic)
-    {
+fun getFontTypeface(bold: Boolean, italic: Boolean, fontFamily: String): Typeface {
+    return if (bold && italic) {
         Typeface.create(fontFamily, Typeface.BOLD_ITALIC)
-    }
-    else if (bold && !italic)
-    {
+    } else if (bold && !italic) {
         Typeface.create(fontFamily, Typeface.BOLD)
-    }
-    else if (!bold && italic)
-    {
+    } else if (!bold && italic) {
         Typeface.create(fontFamily, Typeface.ITALIC)
-    }
-    else{
+    } else {
         Typeface.create(fontFamily, Typeface.NORMAL)
     }
 }

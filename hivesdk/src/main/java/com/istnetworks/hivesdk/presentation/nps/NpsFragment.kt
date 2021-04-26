@@ -44,7 +44,7 @@ class NpsFragment : Fragment() {
         setNpsList()
         observeSurvey()
         observeViewModel()
-        viewModel.stylingSubmitBtn(binding.hveBtnSubmit)
+        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
         onClickActions()
         return binding.root
     }

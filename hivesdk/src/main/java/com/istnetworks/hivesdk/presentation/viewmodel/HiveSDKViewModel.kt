@@ -21,17 +21,23 @@ import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import kotlinx.coroutines.launch
+import java.text.FieldPosition
 
 
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
 
     val getSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
-    private var survey: Survey? = null
+    var survey: Survey? = null
     val saveSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
 
+
+    fun findQuestion(position: Int?): Question? {
+        if (position == null || position == -1) return null
+        return survey?.questions?.get(position)
+    }
 
     fun getSurvey(username: String, password: String) = viewModelScope.launch {
         val surveyBody = RelevantWebSurveyBody()
@@ -40,11 +46,15 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         surveyBody.customerName = "saad"
         surveyBody.customerEmail = "ss@ss.com"
         surveyBody.customerPhone = "01234567890"
-        surveyBody.dispositionCodes = listOf("Complian Event")
+        surveyBody.dispositionCodes = listOf("login Event")
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
-        getSurveyResponseLD.value = surveyResult.data
+        when(surveyResult.status){
+            Status.SUCCESS -> getSurveyResponseLD.value = surveyResult.data
+            Status.ERROR -> showErrorMsg.value = surveyResult.message
+            Status.LOADING -> TODO()
+        }
         survey = surveyResult.data?.survey
 
     }
@@ -96,7 +106,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
 
     private fun generateSaveSurveyRequest() =
-        CacheInMemory.getSurveyResponse().survey?.toSaveSurveyBody(questionResponsesList)
+        survey?.toSaveSurveyBody(questionResponsesList)
 
     fun getQuestions(position:Int): Question
     {

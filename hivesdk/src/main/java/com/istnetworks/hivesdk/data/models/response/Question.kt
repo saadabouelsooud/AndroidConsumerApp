@@ -5,7 +5,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.QuestionResponses
-import com.istnetworks.hivesdk.data.models.StarOption
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
