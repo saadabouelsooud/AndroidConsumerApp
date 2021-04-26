@@ -19,6 +19,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionStyle
+import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -43,7 +44,7 @@ class NpsFragment : Fragment() {
         setNpsList()
         observeSurvey()
         observeViewModel()
-        viewModel.stylingSubmitBtn(binding.hveBtnSubmit)
+        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
         onClickActions()
         return binding.root
     }

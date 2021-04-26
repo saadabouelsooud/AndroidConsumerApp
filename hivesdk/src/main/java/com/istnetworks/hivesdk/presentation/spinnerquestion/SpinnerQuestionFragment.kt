@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.annotation.Keep
 import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
@@ -35,16 +36,25 @@ class SpinnerQuestionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSpinnerQuestionBinding.inflate(inflater)
-        binding.hveBtnSubmit.disable()
-        viewModel.stylingSubmitBtn(binding.hveBtnSubmit)
+        initSubmitBtn()
         selectedQuestion = viewModel.findQuestion(position)
         setSpinner()
         onClickActions()
         return binding.root
     }
 
-    private fun setSpinner() {
+    private fun initSubmitBtn() {
+        binding.hveBtnSubmit.disable()
+        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+    }
 
+    private fun setSpinner() {
+        val list = selectedQuestion?.choices?.map { it.title }?.toMutableList()
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item, list ?: listOf()
+        )
+        binding.hveSpAnswers.adapter = adapter
     }
 
     @Keep
@@ -71,7 +81,6 @@ class SpinnerQuestionFragment : Fragment() {
     private fun onSurveyReadyToSave() {
 
     }
-
 
 
 }
