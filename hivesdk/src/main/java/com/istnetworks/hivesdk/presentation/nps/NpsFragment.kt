@@ -20,6 +20,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
+import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory

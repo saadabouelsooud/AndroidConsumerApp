@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.widget.CheckBox
+import android.widget.RadioButton
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.data.models.response.styles.*
@@ -51,7 +52,7 @@ fun TextView.titleStyle(titleStyle: TitleStyle?) {
 /**
  * Question title style
  */
-fun TextView.questionStyle(titleStyle: QuestionTitleStyle?) {
+fun TextView.questionTitleStyle(titleStyle: QuestionTitleStyle?) {
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
     typeface = getFontTypeface(
         titleStyle?.fontBold!!, titleStyle.fontItalic!!,

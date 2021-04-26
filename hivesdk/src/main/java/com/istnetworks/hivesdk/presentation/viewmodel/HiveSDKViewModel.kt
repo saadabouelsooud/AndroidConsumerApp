@@ -46,7 +46,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         surveyBody.customerName = "saad"
         surveyBody.customerEmail = "ss@ss.com"
         surveyBody.customerPhone = "01234567890"
-        surveyBody.dispositionCodes = listOf("login Event")
+        surveyBody.dispositionCodes = listOf("complian Event")
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
@@ -80,14 +80,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
     }
 
-    fun stylingSubmitBtn(btn: MaterialButton) {
-        val submitBtnStyle = survey?.surveyOptions?.surveyTheme?.submitButton
-        val style = getFontStyle(submitBtnStyle)
-
-        btn.typeface = Typeface.create(submitBtnStyle?.fontFamily, style)
-      /*  val drawable = createSubmitBtnDrawable(submitBtnStyle)
-        btn.background = drawable*/
-    }
+    fun getSurveyTheme()=survey?.surveyOptions?.surveyTheme
 
     private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {
         val drawable = ShapeDrawable()
