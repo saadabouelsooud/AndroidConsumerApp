@@ -11,6 +11,7 @@ import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
@@ -49,7 +50,6 @@ class SpinnerQuestionFragment : Fragment() {
     private fun stylingViews() {
         val theme = viewModel.getSurveyTheme()
         binding.tvQuestionTitle.questionStyle(theme?.questionTitleStyle)
-        binding.hveSpAnswers.setBackgroundColor(Color.parseColor("#" + theme?.surveyBackgroundColor))
     }
 
     private fun bindQuestion() {
@@ -64,6 +64,7 @@ class SpinnerQuestionFragment : Fragment() {
 
     private fun setSpinner() {
         val list = selectedQuestion?.choices?.map { it.title }?.toMutableList()
+        list?.add(0, getString(R.string.choose_spinner))
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item, list ?: listOf()

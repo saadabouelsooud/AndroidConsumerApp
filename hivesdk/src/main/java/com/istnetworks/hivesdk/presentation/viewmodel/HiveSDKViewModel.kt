@@ -24,7 +24,7 @@ import java.text.FieldPosition
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
 
     val getSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
-    private var survey: Survey? = null
+    var survey: Survey? = null
     val saveSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
@@ -47,7 +47,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
-        getSurveyResponseLD.value = surveyResult.data
+        when(surveyResult.status){
+            Status.SUCCESS -> getSurveyResponseLD.value = surveyResult.data
+            Status.ERROR -> showErrorMsg.value = surveyResult.message
+            Status.LOADING -> TODO()
+        }
         survey = surveyResult.data?.survey
 
     }

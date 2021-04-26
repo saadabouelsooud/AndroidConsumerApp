@@ -26,7 +26,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> SpinnerQuestionFragment()
+            0 -> SpinnerQuestionFragment.getInstance(0)
             1 -> EmojiFragment()
             else -> Fragment()
         }

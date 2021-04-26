@@ -15,4 +15,5 @@
     <string name="great">Great</string>
     <string name="good">Good</string>
     <string name="required">this field is required</string>
+    <string name="choose_spinner">Choose..</string>
 </resources>
