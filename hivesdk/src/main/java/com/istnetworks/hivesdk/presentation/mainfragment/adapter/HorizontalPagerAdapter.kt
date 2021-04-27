@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
+import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
+import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 import java.util.*
 
@@ -14,7 +16,9 @@ import java.util.*
  */
 class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
-    private val mFragmentList = mutableListOf<Fragment>( NpsFragment(),EmojiFragment())
+    private val mFragmentList = mutableListOf<Fragment>( NpsFragment(),EmojiFragment(),
+        SingleChoiceFragment(),
+        MultipleChoicesFragment())
     fun addFragment(fragment: Fragment) {
         mFragmentList.add(fragment)
     }
@@ -28,6 +32,8 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
         return when (position) {
             0 -> SpinnerQuestionFragment.getInstance(0)
             1 -> EmojiFragment()
+            2 -> SingleChoiceFragment.newInstance(1)
+            3 -> MultipleChoicesFragment.newInstance(0)
             else -> Fragment()
         }
     }

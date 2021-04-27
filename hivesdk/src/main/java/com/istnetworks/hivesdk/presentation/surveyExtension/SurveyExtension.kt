@@ -7,6 +7,7 @@ import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
+import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.styles.*
 
 /**
@@ -125,6 +126,19 @@ fun RadioButton.singleChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
     if (questionChoicesStyle.fontUnderline!!)
     {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+}
+
+fun RadioButton.setChecked(checked: Boolean){
+    isChecked = checked
+//    val background = when(checked){
+//        true -> context.getColor(R.color.hve_dark_red)
+//        false ->  context.getColor(R.color.hve_dark_red)
+//    }
+//    setBackgroundColor(background)
+    background = when(checked){
+        true -> context.getDrawable(R.drawable.bg_choice_checked)
+        false ->context.getDrawable(R.drawable.card_bg)
     }
 }
 

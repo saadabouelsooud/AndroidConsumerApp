@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.QuestionResponses
+import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.StarOption
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
@@ -34,8 +35,9 @@ data class Question(
     val StarOption: StarOption? = null
 ) : Parcelable
 
-fun Question.toQuestionResponse(textResponse: String?, numberResponse: Int?): QuestionResponses {
+fun Question.toQuestionResponse(textResponse: String?, numberResponse: Int?,
+                                choices: List<SelectedChoices>? = listOf()): QuestionResponses {
     return QuestionResponses(
-        surveyQuestionID, surveyQuestionGUID, textResponse, numberResponse, listOf()
+        surveyQuestionID, surveyQuestionGUID, textResponse, numberResponse, choices
     )
 }

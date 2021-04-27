@@ -1,45 +1,35 @@
-package com.istnetworks.hivesdk.presentation.singleChoice
+package com.istnetworks.hivesdk.presentation.multipleChoices
 
 import android.os.Bundle
-import android.util.LayoutDirection
-import android.util.Log
-import android.view.Gravity
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
-import androidx.core.view.marginTop
-import androidx.fragment.app.Fragment
+import android.widget.*
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
-import com.google.android.material.resources.TextAppearance
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
-import com.istnetworks.hivesdk.data.models.QuestionResponses
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
-import com.istnetworks.hivesdk.databinding.FragmentSingleChoiceBinding
+import com.istnetworks.hivesdk.databinding.FragmentMultipleChoicesBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
+import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.setChecked
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-private const val TAG = "SingleChoiceFragment"
-class SingleChoiceFragment : Fragment() {
+private const val TAG = "MultipleChoicesFragment"
+class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListener{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
-    private var selectedChoice :Int =0
-    private lateinit var binding:FragmentSingleChoiceBinding
+    private lateinit var binding : FragmentMultipleChoicesBinding
+    private var selectedChoices :ArrayList<SelectedChoices> = arrayListOf()
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -56,11 +46,11 @@ class SingleChoiceFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSingleChoiceBinding.inflate(inflater)
+        binding = FragmentMultipleChoicesBinding.inflate(inflater)
         binding.hveBtnSubmit.disable()
         observeViewModel()
-        onClickActions()
         observeSurvey()
+
         return binding.root
     }
 
@@ -94,17 +84,17 @@ class SingleChoiceFragment : Fragment() {
 
         val inflater = LayoutInflater.from(context)
         for (choice in selectedQuestion?.choices!!) {
-            val rbChoice = inflater.inflate(R.layout.single_choice_item
-                , binding.rgSingleChoiceWrapper, false) as RadioButton
+            val cbChoice = inflater.inflate(R.layout.multi_choice_item
+                , binding.hveLiMultipleChoiceWrapper, false) as CheckBox
             val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
                 , ViewGroup.LayoutParams.WRAP_CONTENT)
             params.topMargin = 16
-            rbChoice.layoutParams = params
-            rbChoice.id = choice.choiceID!!
-            rbChoice.text = choice.title
+            cbChoice.layoutParams = params
+            cbChoice.id = choice.choiceID!!
+            cbChoice.text = choice.title
 
-            rbChoice.singleChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
-            binding.rgSingleChoiceWrapper.addView(rbChoice)
+            cbChoice.multiChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
             this.view?.let { (requireActivity() as MainFragment).updatePagerHeightForChild(it) }
 
         }
@@ -122,18 +112,26 @@ class SingleChoiceFragment : Fragment() {
 
         }
 
-        binding.rgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
-            val checkedId = radioGroup.checkedRadioButtonId
-            val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
+    }
+
+    override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+        val checkedId = p0?.id
+        val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
+        if (p1) {
+            selectedChoices.add(SelectedChoices(selectedChoice?.choiceID, selectedChoice?.choiceGUID))
             viewModel.updateSelectedQuestions(
-                selectedQuestion?.toQuestionResponse("",0,
-                listOf(SelectedChoices(selectedChoice?.choiceID,selectedChoice?.choiceGUID)
-                )
+                selectedQuestion?.toQuestionResponse(
+                    "", 0,
+                    listOf(
+
+                    )
                 )
             )
         }
-
-
+        else
+        {
+//            selectedChoices.removeIf { it.find { it.choiceID == checkedId }
+        }
     }
 
     private fun onSurveyReadyToSave() {
@@ -147,16 +145,16 @@ class SingleChoiceFragment : Fragment() {
     }
 
 
-
     companion object {
         /**
          *
          * @param questionPosition Parameter 1.
          * @return A new instance of fragment SingleChoiceFragment.
          */
+
         @JvmStatic
         fun newInstance(questionPosition: Int) =
-            SingleChoiceFragment().apply {
+            MultipleChoicesFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }

@@ -40,10 +40,29 @@ class MainFragment : Fragment() {
      //   binding.hveIvIcon.
         binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
         binding.clParent.setBackgroundColor(Color.parseColor("#"+viewModel.getSurveyTheme()?.surveyBackgroundColor))
+
     }
 
     private fun initializeViewPager() {
        // binding.hveViewPager.isUserInputEnabled = false
+        binding.hveViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                // Because the fragment might or might not be created yet,
+                // we need to check for the size of the fragmentManager
+                // before accessing it.
+                if (childFragmentManager.fragments.size > position) {
+                    val fragment = childFragmentManager.fragments.get(position)
+                    fragment.view?.let {
+                        // Now we've got access to the fragment Root View
+                        // we will use it to calculate the height and
+                        // apply it to the ViewPager2
+                        updatePagerHeightForChild(it, binding.hveViewPager)
+                    }
+                }
+            }
+        })
         val adapter = HorizontalPagerAdapter(this)
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
@@ -51,5 +70,22 @@ class MainFragment : Fragment() {
         binding.hveViewPager.adapter = adapter
     }
 
+    // This function can sit in an Helper file, so it can be shared across your project.
+    fun updatePagerHeightForChild(view: View, pager: ViewPager2 = binding.hveViewPager) {
+        view.post {
+            val wMeasureSpec =
+                View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
+            val hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            view.measure(wMeasureSpec, hMeasureSpec)
 
+            if (pager.layoutParams.height != view.measuredHeight) {
+                pager.layoutParams = (pager.layoutParams)
+                    .also { lp ->
+                        // applying Fragment Root View Height to
+                        // the pager LayoutParams, so they match
+                        lp.height = view.measuredHeight
+                    }
+            }
+        }
+    }
 }
