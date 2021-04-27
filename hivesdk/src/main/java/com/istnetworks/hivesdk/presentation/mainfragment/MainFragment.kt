@@ -88,6 +88,7 @@ class MainFragment : Fragment() {
     private fun initializeViewPager() {
         binding.hveViewPager.isUserInputEnabled = false
         val adapter = HorizontalPagerAdapter(this)
+        adapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
         }
