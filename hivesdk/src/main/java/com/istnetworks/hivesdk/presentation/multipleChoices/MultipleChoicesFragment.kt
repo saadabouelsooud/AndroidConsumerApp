@@ -94,6 +94,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
             cbChoice.text = choice.title
 
             cbChoice.multiChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
             this.view?.let { (requireActivity() as MainFragment).updatePagerHeightForChild(it) }
 
@@ -119,19 +120,17 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
         if (p1) {
             selectedChoices.add(SelectedChoices(selectedChoice?.choiceID, selectedChoice?.choiceGUID))
-            viewModel.updateSelectedQuestions(
-                selectedQuestion?.toQuestionResponse(
-                    "", 0,
-                    listOf(
-
-                    )
-                )
-            )
         }
         else
         {
 //            selectedChoices.removeIf { it.find { it.choiceID == checkedId }
         }
+        viewModel.updateSelectedQuestions(
+            selectedQuestion?.toQuestionResponse(
+                "", 0,
+                selectedChoices
+            )
+        )
     }
 
     private fun onSurveyReadyToSave() {

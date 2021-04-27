@@ -6,7 +6,9 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
+import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
+import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 
 /**
@@ -15,7 +17,7 @@ import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragm
  */
 class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
-    private val mFragmentList = mutableListOf(NpsFragment(), EmojiFragment())
+    private val mFragmentList : MutableList<Fragment> = mutableListOf()
     fun setData(questions: List<Question?>) {
         mFragmentList.clear()
         mFragmentList.addAll(questions.mapIndexed { position, it ->
@@ -28,7 +30,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
     private fun getFragmentFromType(it: Int?, position: Int): Fragment {
         return when (it) {
-            QuestionType.MultipleChoiceQuestion.value -> Fragment()
+            QuestionType.MultipleChoiceQuestion.value -> MultipleChoicesFragment.newInstance(position)
             QuestionType.ListQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.DateQuestion.value -> DatePickerQuestionFragment.getInstance(position)
             QuestionType.SlideQuestion.value -> SpinnerQuestionFragment.getInstance(position)
@@ -40,7 +42,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.PhoneNumberInput.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.PostalCodeInput.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.URLInput.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.SingleChoice.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(position)
             QuestionType.Emoji.value -> EmojiFragment()
             QuestionType.ImageMCQ.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.ImageSingleChoice.value -> SpinnerQuestionFragment.getInstance(position)
