@@ -10,20 +10,26 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.extensions.onClick
+import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
+
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+    lateinit var onPageChangeCallback: ViewPager2.OnPageChangeCallback
+
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
         )
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,26 +38,15 @@ class MainFragment : Fragment() {
         binding = FragmentMainBinding.inflate(inflater)
         initializeViewPager()
         bindViews()
+        onClickActions()
+        listenToViewPagerChanges()
         return binding.root
     }
 
-    private fun bindViews() {
-        binding.tvSurveyTitle.text=viewModel.survey?.title
-     //   binding.hveIvIcon.
-        binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
-        binding.clParent.setBackgroundColor(Color.parseColor("#"+viewModel.getSurveyTheme()?.surveyBackgroundColor))
-
-    }
-
-    private fun initializeViewPager() {
-       // binding.hveViewPager.isUserInputEnabled = false
-        binding.hveViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+    private fun listenToViewPagerChanges() {
+        onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                // Because the fragment might or might not be created yet,
-                // we need to check for the size of the fragmentManager
-                // before accessing it.
+                binding.hveIvPrevious.isEnabled = position > 0
                 if (childFragmentManager.fragments.size > position) {
                     val fragment = childFragmentManager.fragments.get(position)
                     fragment.view?.let {
@@ -62,15 +57,56 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
+        binding.hveViewPager.registerOnPageChangeCallback(onPageChangeCallback)
+    }
+
+
+    private fun onClickActions() {
+        binding.hveIvNext.onClick {
+            onNextArrowClicked()
+        }
+        binding.hveIvPrevious.onClick {
+            val newPosition =
+                viewModel.getThePreviousPosition(binding.hveViewPager.currentItem)
+            binding.hveViewPager.currentItem = newPosition
+        }
+    }
+
+    private fun onNextArrowClicked() {
+        if (viewModel.validateAnswer(binding.hveViewPager.currentItem)) {
+            navigateToNextQuestion()
+        } else {
+            showToast(getString(R.string.question_is_required))
+        }
+    }
+
+    private fun navigateToNextQuestion() {
+        val newPosition =
+            viewModel.getTheNextQuestionPosition(binding.hveViewPager.currentItem)
+        binding.hveViewPager.currentItem = newPosition
+    }
+
+    private fun bindViews() {
+        binding.tvSurveyTitle.text = viewModel.survey?.title
+        binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
+        binding.clParent.setBackgroundColor(Color.parseColor("#" + viewModel.getSurveyTheme()?.surveyBackgroundColor))
+    }
+
+    private fun initializeViewPager() {
+        binding.hveViewPager.isUserInputEnabled = false
         val adapter = HorizontalPagerAdapter(this)
+        adapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
         }
         binding.hveViewPager.adapter = adapter
     }
 
-    // This function can sit in an Helper file, so it can be shared across your project.
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.hveViewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
+    }
     fun updatePagerHeightForChild(view: View, pager: ViewPager2 = binding.hveViewPager) {
         view.post {
             val wMeasureSpec =

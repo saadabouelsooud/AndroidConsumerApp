@@ -1,14 +1,13 @@
 package com.istnetworks.hivesdk.presentation.mainfragment.adapter
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.utils.QuestionType
+import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
-import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
-import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
-import java.util.*
 
 /**
  * Created by khairy on ن, 06/ماي/2019 at 03:15 م.
@@ -16,12 +15,41 @@ import java.util.*
  */
 class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
-    private val mFragmentList = mutableListOf<Fragment>( NpsFragment(),EmojiFragment(),
-        SingleChoiceFragment(),
-        MultipleChoicesFragment())
-    fun addFragment(fragment: Fragment) {
-        mFragmentList.add(fragment)
+    private val mFragmentList = mutableListOf(NpsFragment(), EmojiFragment())
+    fun setData(questions: List<Question?>) {
+        mFragmentList.clear()
+        mFragmentList.addAll(questions.mapIndexed { position, it ->
+            getFragmentFromType(
+                it?.questionType,
+                position
+            )
+        })
     }
+
+    private fun getFragmentFromType(it: Int?, position: Int): Fragment {
+        return when (it) {
+            QuestionType.MultipleChoiceQuestion.value -> Fragment()
+            QuestionType.ListQuestion.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.DateQuestion.value -> DatePickerQuestionFragment.getInstance(position)
+            QuestionType.SlideQuestion.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.StarQuestion.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.NPS.value -> NpsFragment()
+            QuestionType.TextInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.NumberInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.EmailInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.PhoneNumberInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.PostalCodeInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.URLInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.SingleChoice.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.Emoji.value -> EmojiFragment()
+            QuestionType.ImageMCQ.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.ImageSingleChoice.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.CSAT.value -> SpinnerQuestionFragment.getInstance(position)
+            null ->SpinnerQuestionFragment.getInstance(position)
+            else -> SpinnerQuestionFragment.getInstance(position)
+        }
+    }
+
 
     override fun getItemCount(): Int {
         return mFragmentList.size
@@ -29,12 +57,6 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> SpinnerQuestionFragment.getInstance(0)
-            1 -> EmojiFragment()
-            2 -> SingleChoiceFragment.newInstance(1)
-            3 -> MultipleChoicesFragment.newInstance(0)
-            else -> Fragment()
-        }
+        return mFragmentList.get(position)
     }
 }
