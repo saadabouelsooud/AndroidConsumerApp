@@ -42,6 +42,11 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -123,7 +128,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
         else
         {
-//            selectedChoices.removeIf { it.find { it.choiceID == checkedId }
+            selectedChoices.removeIf { it -> it.choiceID == checkedId }
         }
         viewModel.updateSelectedQuestions(
             selectedQuestion?.toQuestionResponse(
