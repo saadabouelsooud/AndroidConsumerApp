@@ -5,15 +5,13 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
-import android.view.View
-import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.button.MaterialButton
-import com.istnetworks.hivesdk.data.local.CacheInMemory
-import com.istnetworks.hivesdk.data.models.*
+import com.istnetworks.hivesdk.data.models.QuestionResponses
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyBody
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.Status
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
@@ -21,7 +19,6 @@ import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import kotlinx.coroutines.launch
-import java.text.FieldPosition
 
 
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
@@ -101,20 +98,34 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private fun generateSaveSurveyRequest() =
         survey?.toSaveSurveyBody(questionResponsesList)
 
-    fun getQuestions(position:Int): Question
-    {
+    fun getQuestions(position: Int): Question {
         return getSurveyResponseLD.value!!.survey!!.questions!![position]
     }
 
-    fun hasProgressBar():Boolean?{
+    fun hasProgressBar(): Boolean? {
         return getSurveyResponseLD.value?.survey?.surveyOptions?.hasProgressBar
     }
 
-    fun getQuestionStyle(questionType: QuestionType){
-        when(questionType)
-        {
+    fun getQuestionStyle(questionType: QuestionType) {
+        when (questionType) {
 
         }
+    }
+
+    fun validateAnswer(questionPosition: Int): Boolean {
+        val currentQuestion = survey?.questions?.get(questionPosition)
+        val currentQuestionId = survey?.questions?.get(questionPosition)?.surveyQuestionID
+        return questionResponsesList.find { it.questionID == currentQuestionId } != null
+                || currentQuestion?.isRequired == false
+    }
+
+    fun getTheNextQuestionPosition(currentQuestion: Int): Int {
+        //TODO Skip Logic
+        return currentQuestion + 1
+    }
+
+    fun getThePreviousPosition(currentItem: Int): Int {
+        return currentItem-1
     }
 
 }

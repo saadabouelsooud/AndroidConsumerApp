@@ -1,10 +1,10 @@
 package com.istnetworks.hivesdk.presentation.spinnerquestion
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.Keep
 import androidx.annotation.NonNull
@@ -44,6 +44,7 @@ class SpinnerQuestionFragment : Fragment() {
         initSubmitBtn()
         bindQuestion()
         onClickActions()
+        listenToSpinnerSelection()
         return binding.root
     }
 
@@ -87,14 +88,36 @@ class SpinnerQuestionFragment : Fragment() {
 
         binding.hveBtnSubmit.setOnClickListener {
             if (selectedQuestion?.isRequired == true) {
-
+                //   viewModel.saveSurvey()
             }
         }
 
+
+
     }
 
-    private fun onSurveyReadyToSave() {
+    private fun listenToSpinnerSelection() {
+        binding.hveSpAnswers.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position > 0)
+                    viewModel.updateSelectedQuestions(
+                        selectedQuestion?.toQuestionResponse(
+                            binding.hveSpAnswers.selectedItem.toString(),
+                            position - 1
+                        )
+                    )
+            }
 
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
     }
 
 

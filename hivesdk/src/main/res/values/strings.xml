@@ -18,4 +18,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="required">this field is required</string>
     <string name="choose_spinner">Choose..</string>
+    <string name="question_is_required">Question Is Required</string>
 </resources>
