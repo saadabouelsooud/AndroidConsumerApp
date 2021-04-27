@@ -1,6 +1,7 @@
 package com.istnetworks.hivesdk.presentation.spinnerquestion
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,19 @@ class SpinnerQuestionFragment : Fragment() {
         bindQuestion()
         onClickActions()
         listenToSpinnerSelection()
+        Log.d("TAG", "onCreateView: ")
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("TAG", "onStart: ")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "onResume: ")
     }
 
     private fun stylingViews() {

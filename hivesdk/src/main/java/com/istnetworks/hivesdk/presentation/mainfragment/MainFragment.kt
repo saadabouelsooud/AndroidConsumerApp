@@ -80,7 +80,6 @@ class MainFragment : Fragment() {
 
     private fun bindViews() {
         binding.tvSurveyTitle.text = viewModel.survey?.title
-        //   binding.hveIvIcon.
         binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
         binding.clParent.setBackgroundColor(Color.parseColor("#" + viewModel.getSurveyTheme()?.surveyBackgroundColor))
     }

@@ -4,14 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.annotation.Keep
 import androidx.annotation.NonNull
 import com.istnetworks.hivesdk.R
-import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.presentation.emojis.RatingSelectListener
+import com.istnetworks.hivesdk.data.utils.extensions.shouldShow
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -19,7 +18,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 private const val HVE_ARG_USER_NAME: String = "HVE_ARG_USER_NAME"
 private const val HVE_ARG_PASSWORD: String = "HVE_ARG_PASSWORD"
 
-class SurveyActivity : AppCompatActivity(), RatingSelectListener {
+class SurveyActivity : AppCompatActivity() {
     private val viewModel: HiveSDKViewModel by viewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -46,7 +45,7 @@ class SurveyActivity : AppCompatActivity(), RatingSelectListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_survey)
         //todo validate params
         viewModel.getSurvey(userName!!, password!!)
         observeViewModel()
@@ -55,16 +54,15 @@ class SurveyActivity : AppCompatActivity(), RatingSelectListener {
     private fun observeViewModel() {
         viewModel.getSurveyResponseLD.observe(this, {
             if (it != null)
-                showCardDialog(it)
+                showCardDialog()
+        })
+        viewModel.isLoading.observe(this,{
+            findViewById<ProgressBar>(R.id.hve_progress_bar).shouldShow(it)
         })
 
     }
 
-    override fun ratingSelected(rating: Int) {
-        Log.v("rating", "" + rating)
-    }
-
-    private fun showCardDialog(data: RelevantWebSurveyResponse) {
+    private fun showCardDialog() {
         val f = MainFragment()
         val beginTransaction = supportFragmentManager.beginTransaction()
         beginTransaction.add(android.R.id.content,f, "").commit()
