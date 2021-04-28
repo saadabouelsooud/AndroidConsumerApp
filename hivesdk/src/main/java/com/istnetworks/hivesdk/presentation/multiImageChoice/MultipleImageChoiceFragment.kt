@@ -1,12 +1,17 @@
-package com.istnetworks.hivesdk.presentation.multipleChoices
+package com.istnetworks.hivesdk.presentation.multiImageChoice
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.CompoundButton
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.graphics.drawable.toDrawable
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.SelectedChoices
@@ -14,22 +19,25 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
-import com.istnetworks.hivesdk.databinding.FragmentMultipleChoicesBinding
+import com.istnetworks.hivesdk.databinding.FragmentMultipleImageChoiceBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-private const val TAG = "MultipleChoicesFragment"
-class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListener{
+private const val TAG = "MultipleImageChoiceFragment"
+class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeListener{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
-    private lateinit var binding : FragmentMultipleChoicesBinding
     private var selectedChoices :ArrayList<SelectedChoices> = arrayListOf()
+    private lateinit var binding: FragmentMultipleImageChoiceBinding
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -42,21 +50,21 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.root.requestLayout()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMultipleChoicesBinding.inflate(inflater)
+        binding = FragmentMultipleImageChoiceBinding.inflate(inflater)
         binding.hveBtnSubmit.disable()
         observeViewModel()
         observeSurvey()
-
+        onClickActions()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
     }
 
     private fun observeViewModel() {
@@ -96,9 +104,27 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
             params.topMargin = 16
             cbChoice.layoutParams = params
             cbChoice.id = choice.choiceID!!
-            cbChoice.text = choice.title
+
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO)
+                {
+                    val bitmap =
+                        Picasso.get().load(choice.imageURL)
+                            .placeholder(R.drawable.emoji_bad)
+                            .resize(200, 200)
+                            .get().toDrawable(resources)
+                    withContext(Dispatchers.Main) {
+
+                        cbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+
+                        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+                    }
+                }
+
+            }
 
             cbChoice.multiChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            cbChoice.setPadding(32, 16, 16, 16)
             cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
             this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
@@ -157,8 +183,8 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
          */
 
         @JvmStatic
-        fun newInstance(questionPosition: Int) =
-            MultipleChoicesFragment().apply {
+        fun getInstance(questionPosition: Int) =
+            MultipleImageChoiceFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }

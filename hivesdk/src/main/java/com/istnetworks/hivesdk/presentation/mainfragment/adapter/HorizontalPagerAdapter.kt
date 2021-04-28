@@ -6,6 +6,7 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
+import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
@@ -45,9 +46,9 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.URLInput.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(position)
             QuestionType.Emoji.value -> EmojiFragment()
-            QuestionType.ImageMCQ.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.ImageMCQ.value -> MultipleImageChoiceFragment.getInstance(position)
             QuestionType.ImageSingleChoice.value -> SingleImageChoiceFragment.getInstance(position)
-            QuestionType.CSAT.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.CSAT.value -> SingleChoiceFragment.newInstance(position)
             null ->SpinnerQuestionFragment.getInstance(position)
             else -> SpinnerQuestionFragment.getInstance(position)
         }
