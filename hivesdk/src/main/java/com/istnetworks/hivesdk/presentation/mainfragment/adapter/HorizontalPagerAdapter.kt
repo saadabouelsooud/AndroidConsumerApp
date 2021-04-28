@@ -9,6 +9,7 @@ import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
+import com.istnetworks.hivesdk.presentation.singleImageChoice.SingleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 
 /**
@@ -45,7 +46,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(position)
             QuestionType.Emoji.value -> EmojiFragment()
             QuestionType.ImageMCQ.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.ImageSingleChoice.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.ImageSingleChoice.value -> SingleImageChoiceFragment.getInstance(position)
             QuestionType.CSAT.value -> SpinnerQuestionFragment.getInstance(position)
             null ->SpinnerQuestionFragment.getInstance(position)
             else -> SpinnerQuestionFragment.getInstance(position)
