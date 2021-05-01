@@ -14,10 +14,13 @@
     <string name="bad">Bad</string>
     <string name="great">Great</string>
     <string name="good">Good</string>
+
     <string name="required">هذا الحقل مطلوب</string>
     <string name="choose_spinner">اختر ..</string>
     <string name="phone_number">رقم التليفون</string>
     <string name="postal_code">الرمز البريدي</string>
     <string name="url">عنوان الانترنت</string>
     <string name="email">البريد الالكتروني</string>
+    <string name="question_is_required">Question Is Required</string>
+
 </resources>

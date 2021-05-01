@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
@@ -18,7 +19,7 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
-import com.istnetworks.hivesdk.presentation.surveyExtension.questionStyle
+import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -115,7 +116,7 @@ class NpsFragment : Fragment() {
             binding.animateProgressBar.visibility = View.VISIBLE
         binding.tvSurveyTitle.text = surveyResponse.survey?.title
         binding.tvSurveyTitle.surveyTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.surveyTitleStyle)
-        binding.tvQuestionTitle.questionStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
+        binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey.questions[i].questionType == QuestionType.NPS.value) {
                 binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
@@ -134,7 +135,7 @@ class NpsFragment : Fragment() {
     private fun validateNextButton() {
         if (isRequired) {
             if (npsValue >= 0) {
-
+                this.findNavController().navigate(NpsFragmentDirections.actionNpsFragmentToSingleChoiceFragment(1))
             } else Toast.makeText(activity, getString(R.string.required), Toast.LENGTH_LONG).show()
         }
 

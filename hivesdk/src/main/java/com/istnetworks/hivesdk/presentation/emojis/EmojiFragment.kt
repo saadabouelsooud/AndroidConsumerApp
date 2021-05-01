@@ -15,7 +15,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
-import com.istnetworks.hivesdk.presentation.surveyExtension.questionStyle
+import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -65,7 +65,7 @@ class EmojiFragment : Fragment() {
 
         binding.tvSurveyTitle.text = surveyResponse.survey?.title
         binding.tvSurveyTitle.surveyTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.surveyTitleStyle)
-        binding.tvQuestionTitle.questionStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
+        binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey.questions[i].questionType == QuestionType.Emoji.value) {
                 binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title

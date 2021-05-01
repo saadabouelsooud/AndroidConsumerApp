@@ -16,10 +16,10 @@
     <string name="good">Good</string>
     <string name="required">this field is required</string>
     <string name="choose_spinner">Choose..</string>
+
     <string name="phone_number">Phone Number</string>
     <string name="postal_code">Postal Code</string>
     <string name="url">URL</string>
     <string name="email">Email</string>
-
-
+    <string name="question_is_required">Question Is Required</string>
 </resources>

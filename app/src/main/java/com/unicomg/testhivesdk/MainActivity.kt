@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
          SurveyActivity.startSurvey(this,"InAppUser","InApp2021")
-
         }
 
     }

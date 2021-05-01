@@ -4,8 +4,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.widget.CheckBox
+import android.widget.RadioButton
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
+import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.styles.*
 
 /**
@@ -51,7 +53,7 @@ fun TextView.titleStyle(titleStyle: TitleStyle?) {
 /**
  * Question title style
  */
-fun TextView.questionStyle(titleStyle: QuestionTitleStyle?) {
+fun TextView.questionTitleStyle(titleStyle: QuestionTitleStyle?) {
     setTextColor(Color.parseColor("#" + titleStyle?.fontColor))
     typeface = getFontTypeface(
         titleStyle?.fontBold!!, titleStyle.fontItalic!!,
@@ -98,12 +100,45 @@ fun CheckBox.multiChoiceStyle(questionChoicesStyle: QuestionChoicesStyle) {
         questionChoicesStyle.fontFamily!!
     )
     val sp: Float =
-        questionChoicesStyle.fontSize?.replace("px", "")?.toFloat()
-            ?: 12f / resources.displayMetrics.scaledDensity + 0.5f
+        questionChoicesStyle.
+        fontSize?.
+        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
 
     textSize = sp
-    if (questionChoicesStyle.fontUnderline!!) {
+    if (questionChoicesStyle.fontUnderline!!)
+    {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+}
+
+fun RadioButton.singleChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
+{
+    setTextColor(Color.parseColor("#" + questionChoicesStyle.fontColor))
+    typeface = getFontTypeface(
+        questionChoicesStyle.fontBold!!, questionChoicesStyle.fontItalic!!,
+        questionChoicesStyle.fontFamily!!)
+    val sp: Float =
+        questionChoicesStyle.
+        fontSize?.
+        replace("px","")?.toFloat() ?: 12f  / resources.displayMetrics.scaledDensity+ 0.5f
+
+    textSize = sp
+    if (questionChoicesStyle.fontUnderline!!)
+    {
+        paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+}
+
+fun RadioButton.setChecked(checked: Boolean){
+    isChecked = checked
+//    val background = when(checked){
+//        true -> context.getColor(R.color.hve_dark_red)
+//        false ->  context.getColor(R.color.hve_dark_red)
+//    }
+//    setBackgroundColor(background)
+    background = when(checked){
+        true -> context.getDrawable(R.drawable.bg_choice_checked)
+        false ->context.getDrawable(R.drawable.card_bg)
     }
 }
 

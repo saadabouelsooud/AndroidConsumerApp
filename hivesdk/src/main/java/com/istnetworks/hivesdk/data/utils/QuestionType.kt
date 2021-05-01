@@ -2,7 +2,7 @@ package com.istnetworks.hivesdk.data.utils
 
 enum class QuestionType(val value: Int) {
 
-    MultipleChoiceQuestion(0),
+    MultipleChoiceQuestion(2),
     ListQuestion(4),
     DateQuestion(5),
     SlideQuestion(6),

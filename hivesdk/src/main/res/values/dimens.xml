@@ -7,4 +7,5 @@
     <dimen name="selected_size">24dp</dimen>
     <dimen name="size60">60dp</dimen>
     <dimen name="hiveArrowDimens">30dp</dimen>
+    <dimen name="size_16">16dp</dimen>
 </resources>
