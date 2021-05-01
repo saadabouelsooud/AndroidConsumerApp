@@ -49,31 +49,19 @@ class EmojiFragment : Fragment() {
             }
 
         })
-        binding.ivNextQuestion.setOnClickListener {
-            validateNextButton()
-        }
 
-        binding.ivClose.setOnClickListener{
-            requireActivity().finish()
-        }
     }
 
     private fun observeSurvey() {
         val surveyResponse = CacheInMemory.getSurveyResponse()
-        if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-            binding.animateProgressBar.visibility = View.VISIBLE
 
-        binding.tvSurveyTitle.text = surveyResponse.survey?.title
-        binding.tvSurveyTitle.surveyTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.surveyTitleStyle)
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey.questions[i].questionType == QuestionType.Emoji.value) {
                 binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
                 isRequired = surveyResponse.survey.questions[i].isRequired!!
                 selectedQuestion = surveyResponse.survey.questions[i]
-                if (i == 0)
-                    binding.ivPrevQuestion.visibility = View.GONE
-                break
+
 
             }
 
@@ -81,21 +69,6 @@ class EmojiFragment : Fragment() {
         }
     }
 
-    private fun validateNextButton() {
-        if (isRequired) {
-            if (rateValue >= 0) {
-                moveToNpsQuestion()
-            } else Toast.makeText(activity, getString(R.string.required), Toast.LENGTH_LONG).show()
-        } else
-            moveToNpsQuestion()
-    }
-
-    private fun moveToNpsQuestion() {
-        viewModel.updateSelectedQuestions(selectedQuestion?.toQuestionResponse("", rateValue))
-        val navController = view?.let { Navigation.findNavController(it) }
-        if (navController?.currentDestination?.id == R.id.emojiFragment)
-            navController.navigate(R.id.action_emoji_to_nps)
-    }
 
 
 }

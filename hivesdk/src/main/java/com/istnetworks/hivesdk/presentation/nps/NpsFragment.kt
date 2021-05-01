@@ -55,14 +55,14 @@ class NpsFragment : Fragment() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-        viewModel.isLoading.observe(viewLifecycleOwner, {
-           if(it){
-               binding.animateProgressBar.visibility=View.VISIBLE
-           }else {
-               binding.animateProgressBar.visibility=View.GONE
-           }
-
-        })
+//        viewModel.isLoading.observe(viewLifecycleOwner, {
+//           if(it){
+//               binding.animateProgressBar.visibility=View.VISIBLE
+//           }else {
+//               binding.animateProgressBar.visibility=View.GONE
+//           }
+//
+//        })
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -93,10 +93,6 @@ class NpsFragment : Fragment() {
             }
 
         }
-
-        binding.ivClose.setOnClickListener{
-            requireActivity().finish()
-        }
     }
 
     private fun onSurveyReadyToSave() {
@@ -112,10 +108,7 @@ class NpsFragment : Fragment() {
 
     private fun observeSurvey() {
         val surveyResponse = CacheInMemory.getSurveyResponse()
-        if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-            binding.animateProgressBar.visibility = View.VISIBLE
-        binding.tvSurveyTitle.text = surveyResponse.survey?.title
-        binding.tvSurveyTitle.surveyTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.surveyTitleStyle)
+
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey.questions[i].questionType == QuestionType.NPS.value) {
