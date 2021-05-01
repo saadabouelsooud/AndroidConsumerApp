@@ -14,8 +14,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
+import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
@@ -91,20 +93,20 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
 //            binding.animateProgressBar.visibility = View.VISIBLE
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
 
-        binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
+        binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
         binding.tvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired!!
 
+        createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
+
+    }
+    private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
         val inflater = LayoutInflater.from(context)
-        for (choice in selectedQuestion?.choices!!) {
+        for (choice in choiceList!!) {
             val cbChoice = inflater.inflate(R.layout.multi_choice_item
                 , binding.hveLiMultipleChoiceWrapper, false) as CheckBox
-            val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                , ViewGroup.LayoutParams.WRAP_CONTENT)
-            params.topMargin = 16
-            cbChoice.layoutParams = params
-            cbChoice.id = choice.choiceID!!
 
+            cbChoice.id = choice.choiceID!!
             lifecycleScope.launch {
                 withContext(Dispatchers.IO)
                 {
@@ -123,16 +125,14 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
 
             }
 
-            cbChoice.multiChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            cbChoice.multiChoiceStyle(style)
             cbChoice.setPadding(32, 16, 16, 16)
             cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
             this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
 
         }
-
     }
-
     private fun onClickActions() {
 
         binding.hveBtnSubmit.setOnClickListener {

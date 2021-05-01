@@ -13,8 +13,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
+import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
@@ -95,16 +97,18 @@ class SingleImageChoiceFragment : Fragment() {
         binding.hveTvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired!!
 
+        createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
+        surveyTheme?.questionChoicesStyle!!)
+
+    }
+
+    private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle){
         val inflater = LayoutInflater.from(context)
-        for (choice in selectedQuestion?.choices!!) {
+        for (choice in choiceList!!) {
             val rbChoice = inflater.inflate(
                 R.layout.single_choice_image_item, binding.hveRgSingleChoiceWrapper, false
             ) as RadioButton
-            val params = ConstraintLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            params.topMargin = 16
-            rbChoice.layoutParams = params
+
             rbChoice.id = choice.choiceID!!
 
             lifecycleScope.launch {
@@ -124,7 +128,7 @@ class SingleImageChoiceFragment : Fragment() {
                 }
 
             }
-            rbChoice.singleChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            rbChoice.singleChoiceStyle(style)
             rbChoice.setPadding(32, 16, 16, 16)
             binding.hveRgSingleChoiceWrapper.addView(rbChoice)
             this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }

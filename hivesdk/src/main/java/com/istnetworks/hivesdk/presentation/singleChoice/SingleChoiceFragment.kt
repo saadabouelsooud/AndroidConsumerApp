@@ -1,33 +1,25 @@
 package com.istnetworks.hivesdk.presentation.singleChoice
 
 import android.os.Bundle
-import android.util.LayoutDirection
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
-import com.google.android.material.resources.TextAppearance
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
-import com.istnetworks.hivesdk.data.models.QuestionResponses
+import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSingleChoiceBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.setChecked
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -89,31 +81,32 @@ class SingleChoiceFragment : Fragment() {
 
     private fun observeSurvey() {
         val surveyResponse = CacheInMemory.getSurveyResponse()
-//        if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-//            binding.animateProgressBar.visibility = View.VISIBLE
-        selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
 
+        selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         binding.tvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired!!
 
+        createChoices(selectedQuestion?.choices,
+            surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+
+    }
+
+    private fun createChoices(choiceList: List<Choices>?,style:QuestionChoicesStyle){
         val inflater = LayoutInflater.from(context)
-        for (choice in selectedQuestion?.choices!!) {
+        for (choice in choiceList!!) {
             val rbChoice = inflater.inflate(R.layout.single_choice_item
                 , binding.rgSingleChoiceWrapper, false) as RadioButton
-            val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                , ViewGroup.LayoutParams.WRAP_CONTENT)
-            params.topMargin = 16
-            rbChoice.layoutParams = params
+
             rbChoice.id = choice.choiceID!!
             rbChoice.text = choice.title
 
-            rbChoice.singleChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            rbChoice.singleChoiceStyle(style)
             binding.rgSingleChoiceWrapper.addView(rbChoice)
-            this.view?.let { (requireActivity() as MainFragment).updatePagerHeightForChild(it) }
+            this.view?.let { (requireParentFragment() as MainFragment)
+                .updatePagerHeightForChild(it) }
 
         }
-
     }
 
     private fun onClickActions() {
