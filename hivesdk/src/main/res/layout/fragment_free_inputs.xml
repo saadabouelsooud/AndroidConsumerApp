@@ -15,8 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="8dp"
         android:background="#0A0075BE"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
         android:paddingTop="32dp"
         android:paddingBottom="32dp">
 
@@ -36,32 +37,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/charcoalGrey"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@id/hve_iv_next"
-                app:layout_constraintStart_toEndOf="@id/hve_iv_previous"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Question Title" />
-
-            <ImageView
-                android:id="@+id/hve_iv_previous"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_arrow_back_ios_black_36dp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_question_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_question_title"
-                app:layout_constraintVertical_bias="0.3" />
-
-            <ImageView
-                android:id="@+id/hve_iv_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleX="-1"
-                android:src="@drawable/ic_arrow_back_ios_black_36dp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_question_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_question_title"
-                app:layout_constraintVertical_bias="0.3" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -137,12 +116,12 @@
 
                     <ImageView
                         android:id="@+id/iv_phone_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_gravity="center"
                         android:scaleType="fitXY"
                         app:tint="@color/navyBlue"
-                        android:src="@drawable/ic_arrow_back_ios_black_36dp" />
+                        android:src="@drawable/bg_phone_icon" />
 
                     <EditText
                         android:id="@+id/hve_edt_phone"
@@ -150,7 +129,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:hint="gbrgbrgbrgbrgb"
-                        android:inputType="phone"
+                        android:inputType="number"
                         android:textSize="14sp"
                         android:fontFamily="@font/montserrat_medium"
                         android:paddingStart="10dp"

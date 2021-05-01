@@ -7,7 +7,9 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
 import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
+
 import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
+
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
@@ -39,6 +41,12 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.SlideQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.StarQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.NPS.value -> NpsFragment()
+            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(position)
+            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(position)
+            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(position)
+            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(position)
+            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(position)
+            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(position)
             QuestionType.TextInput.value -> FreeInputsFragment.newInstance(position)
             QuestionType.NumberInput.value -> FreeInputsFragment.newInstance(position)
             QuestionType.EmailInput.value -> FreeInputsFragment.newInstance(position)
