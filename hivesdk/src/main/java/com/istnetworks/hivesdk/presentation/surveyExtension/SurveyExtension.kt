@@ -3,13 +3,19 @@ package com.istnetworks.hivesdk.presentation.surveyExtension
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+
 import android.util.Patterns
 import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
+
+import android.view.ViewGroup
+import android.widget.*
+
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.styles.*
+import com.squareup.picasso.Picasso
 
 /**
  * Survey title style
@@ -128,20 +134,14 @@ fun RadioButton.singleChoiceStyle(questionChoicesStyle: QuestionChoicesStyle)
     {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
+
+    val params = LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT
+        , ViewGroup.LayoutParams.WRAP_CONTENT)
+    params.topMargin = 16
+    layoutParams = params
 }
 
-fun RadioButton.setChecked(checked: Boolean){
-    isChecked = checked
-//    val background = when(checked){
-//        true -> context.getColor(R.color.hve_dark_red)
-//        false ->  context.getColor(R.color.hve_dark_red)
-//    }
-//    setBackgroundColor(background)
-    background = when(checked){
-        true -> context.getDrawable(R.drawable.bg_choice_checked)
-        false ->context.getDrawable(R.drawable.card_bg)
-    }
-}
 
 /**
  * start screen message
@@ -224,6 +224,12 @@ fun MaterialButton.submitButtonStyle(submitButton: SubmitButton?) {
     if (submitButton.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
+}
+
+fun ImageView.surveyLogoStyle(logoStyle:SurveyLogoStyle){
+    Picasso.get().load(logoStyle.uRL).into(this)
+    alpha = logoStyle.opacity?.toFloat()?: 1f
+
 }
 
 fun getFontTypeface(bold: Boolean, italic: Boolean, fontFamily: String): Typeface {

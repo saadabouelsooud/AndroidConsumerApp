@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RadioButton android:id="@+id/hve_radiobutton"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/choice_selector"
     android:layout_gravity="end"
     android:textAlignment="viewEnd"
     android:layoutDirection="rtl"
-    android:padding="@dimen/size5"
+    android:padding="@dimen/size_16"
     android:layout_margin="@dimen/size5"
-    tools:text="choice" />
-
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />

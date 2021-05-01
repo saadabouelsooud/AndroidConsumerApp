@@ -14,6 +14,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
+import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -88,6 +89,7 @@ class MainFragment : Fragment() {
     }
 
     private fun bindViews() {
+        binding.hveIvIcon.surveyLogoStyle(viewModel.getSurveyTheme()?.surveyLogoStyle!!)
         binding.tvSurveyTitle.text = viewModel.survey?.title
         binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
         binding.clParent.setBackgroundColor(Color.parseColor("#" + viewModel.getSurveyTheme()?.surveyBackgroundColor))
@@ -99,6 +101,7 @@ class MainFragment : Fragment() {
         adapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
+            orientation = ViewPager2.ORIENTATION_VERTICAL
         }
         binding.hveViewPager.adapter = adapter
     }

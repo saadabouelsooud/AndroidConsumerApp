@@ -20,8 +20,10 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentFreeInputsBinding
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
+
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
+
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -176,6 +178,7 @@ class FreeInputsFragment : Fragment() {
         val theme = viewModel.getSurveyTheme()
         binding.tvQuestionTitle.questionTitleStyle(theme?.questionTitleStyle)
         binding.tvQuestionTitle.text = selectedQuestion?.title
+
     }
 
     private fun initSubmitBtn() {

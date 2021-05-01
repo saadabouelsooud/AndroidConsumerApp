@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.multipleChoices.MultipleChoicesFragment">
+    tools:context=".presentation.singleImageChoice.SingleImageChoiceFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/hve_cl_single_choice"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_question_title"
+            android:id="@+id/hve_tv_question_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -25,11 +25,11 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <LinearLayout
-            android:id="@+id/hve_li_multiple_choice_wrapper"
+        <RadioGroup
+            android:id="@+id/hve_rg_single_choice_wrapper"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_question_title"
+            app:layout_constraintTop_toBottomOf="@id/hve_tv_question_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +37,7 @@
             android:padding="8dp"
             android:orientation="vertical" >
 
-        </LinearLayout>
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.button.MaterialButton
@@ -51,4 +51,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hve_cl_single_choice" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
