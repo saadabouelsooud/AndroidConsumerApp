@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentFreeInputsBinding
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
@@ -44,37 +45,38 @@ class FreeInputsFragment : Fragment() {
         stylingViews()
         initSubmitBtn()
         bindQuestions(9)
-        onClickActions()
+        onClickActions(9)
         return binding.root
     }
 
     private fun bindQuestions(questionType: Int) {
         binding.hveEdtFreeInput.visibility = View.VISIBLE
+        binding.llPhone.visibility = View.GONE
         when (questionType) {
-            9 -> {
+            QuestionType.TextInput.value -> {
                 binding.hveTvFreeInputsLabel.text = ""
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_TEXT
                 binding.hveEdtFreeInput.hint = ""
             }
-            10 -> {
+            QuestionType.NumberInput.value -> {
                 binding.hveTvFreeInputsLabel.text = ""
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_NUMBER
                 binding.hveEdtFreeInput.hint = ""
             }
-            11 -> {
+            QuestionType.EmailInput.value -> {
                 binding.hveTvFreeInputsLabel.text = getString(R.string.email)
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 binding.hveEdtFreeInput.hint = getString(R.string.email)
             }
-            12 -> {
+            QuestionType.PhoneNumberInput.value -> {
                 handlePhoneInput()
             }
-            13 -> {
+            QuestionType.PostalCodeInput.value -> {
                 binding.hveTvFreeInputsLabel.text = getString(R.string.postal_code)
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_NUMBER
                 binding.hveEdtFreeInput.hint = getString(R.string.postal_code)
             }
-            14 -> {
+            QuestionType.URLInput.value -> {
                 binding.hveTvFreeInputsLabel.text = getString(R.string.url)
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_TEXT_VARIATION_URI
                 binding.hveEdtFreeInput.hint = getString(R.string.url)
@@ -87,8 +89,8 @@ class FreeInputsFragment : Fragment() {
         binding.hveTvFreeInputsLabel.text = getString(R.string.phone_number)
         binding.hveEdtFreeInput.visibility = View.GONE
         binding.llPhone.visibility = View.VISIBLE
-        binding.hveEdtFreeInput.hint = getString(R.string.phone_number)
         binding.tvCountryCode.setTextColor(Color.parseColor(R.color.navyBlue.toString()))
+        binding.hveEdtPhone.setTextColor(Color.parseColor(R.color.navyBlue.toString()))
         activity?.let { ContextCompat.getColor(it, R.color.navyBlue) }?.let {
             binding.ivPhoneIcon.setColorFilter(
                 it, android.graphics.PorterDuff.Mode.SRC_IN
@@ -96,7 +98,14 @@ class FreeInputsFragment : Fragment() {
         }
     }
 
-    private fun handleError() {
+    private fun handleError(questionType: Int) {
+        when (questionType) {
+            QuestionType.PhoneNumberInput.value -> handlePhoneError()
+            else -> handleFreeInputError()
+        }
+    }
+
+    private fun handleFreeInputError() {
         binding.tvErrorMessage.visibility = View.VISIBLE
         binding.hveEdtFreeInput.setTextColor(Color.parseColor(R.color.errorColor.toString()))
         binding.hveEdtFreeInput.background =
@@ -106,6 +115,33 @@ class FreeInputsFragment : Fragment() {
                     R.drawable.free_input_error
                 )
             }
+    }
+
+    private fun handlePhoneError() {
+        binding.tvErrorMessage.visibility = View.VISIBLE
+        binding.hveEdtPhone.setTextColor(Color.parseColor(R.color.errorColor.toString()))
+        binding.llPhone.background =
+            activity?.let { it1 ->
+                ContextCompat.getDrawable(
+                    it1,
+                    R.drawable.free_input_error
+                )
+            }
+        binding.tvCountryCode.setTextColor(Color.parseColor(R.color.errorColor.toString()))
+        activity?.let { ContextCompat.getColor(it, R.color.errorColor) }?.let {
+            binding.ivPhoneIcon.setColorFilter(
+                it, android.graphics.PorterDuff.Mode.SRC_IN
+            )
+        }
+    }
+
+    private fun getFreeInputText(questionType: Int): String {
+        return when (questionType) {
+            QuestionType.PhoneNumberInput.value ->
+                binding.hveEdtPhone.text.toString()
+            else -> binding.hveEdtFreeInput.text.toString()
+
+        }
     }
 
     private fun stylingViews() {
@@ -118,15 +154,14 @@ class FreeInputsFragment : Fragment() {
         binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
     }
 
-    private fun onClickActions() {
+    private fun onClickActions(questionType: Int) {
         binding.hveBtnSubmit.setOnClickListener {
             if (selectedQuestion?.isRequired == true) {
                 if (TextUtils.isEmpty(binding.hveEdtFreeInput.text)) {
-                    handleError()
-                }
-            }
+                    handleError(questionType)
+                } else getFreeInputText(questionType)
+            } else getFreeInputText(questionType)
         }
-
     }
 
     companion object {
