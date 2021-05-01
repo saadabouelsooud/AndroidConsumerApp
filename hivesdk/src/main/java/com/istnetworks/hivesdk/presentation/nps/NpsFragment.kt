@@ -70,14 +70,7 @@ class NpsFragment : Fragment() {
     }
 
     private fun onClickActions() {
-        binding.ivPrevQuestion.setOnClickListener {
-            val navController = view?.let { Navigation.findNavController(it) }
-            if (navController?.currentDestination?.id == R.id.npsFragment)
-                navController.popBackStack()
-        }
-        binding.ivNextQuestion.setOnClickListener {
-            validateNextButton()
-        }
+
         binding.hveBtnSubmit.setOnClickListener {
             if (isRequired) {
                 if (npsValue >= 0) {
@@ -115,25 +108,13 @@ class NpsFragment : Fragment() {
                 binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
                 isRequired = surveyResponse.survey.questions[i].isRequired!!
                 selectedQuestion = surveyResponse.survey.questions[i]
-                if (i == 0)
-                    binding.ivPrevQuestion.visibility = View.GONE
-                break
+
 
             }
 
 
         }
     }
-
-    private fun validateNextButton() {
-        if (isRequired) {
-            if (npsValue >= 0) {
-                this.findNavController().navigate(NpsFragmentDirections.actionNpsFragmentToSingleChoiceFragment(1))
-            } else Toast.makeText(activity, getString(R.string.required), Toast.LENGTH_LONG).show()
-        }
-
-    }
-
 
 
     private fun setNpsList() {

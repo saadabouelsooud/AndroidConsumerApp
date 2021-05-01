@@ -101,6 +101,7 @@ class MainFragment : Fragment() {
         adapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
+            orientation = ViewPager2.ORIENTATION_VERTICAL
         }
         binding.hveViewPager.adapter = adapter
     }
