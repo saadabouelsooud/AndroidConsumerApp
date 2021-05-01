@@ -14,5 +14,14 @@
     <color name="orange">#e1c63b</color>
     <color name="greyBlue">#647688</color>
     <color name="blur_A1cee5f1">#A1cee5f1</color>
+
+    <color name="charcoalGrey">#40434a</color>
+    <color name="navyBlue">#0075be</color>
+    <color name="navyBlue_04">#0A0075BE</color>
+    <color name="errorColor">#e4606c</color>
+    <color name="eerieBlack_0">#00151515</color>
+    <color name="paleBlue">#e6f4fd</color>
+    <color name="cloudyBlue">#b7c6d4</color>
     <color name="hve_dark_red">#BE1535</color>
+
 </resources>

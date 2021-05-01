@@ -6,6 +6,7 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
+import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
 import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
@@ -38,12 +39,12 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.SlideQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.StarQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.NPS.value -> NpsFragment()
-            QuestionType.TextInput.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.NumberInput.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.EmailInput.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.PhoneNumberInput.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.PostalCodeInput.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.URLInput.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.TextInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.NumberInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.EmailInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.PostalCodeInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.URLInput.value -> FreeInputsFragment.newInstance(position)
             QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(position)
             QuestionType.Emoji.value -> EmojiFragment()
             QuestionType.ImageMCQ.value -> MultipleImageChoiceFragment.getInstance(position)
