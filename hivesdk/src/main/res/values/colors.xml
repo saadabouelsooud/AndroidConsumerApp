@@ -15,4 +15,6 @@
     <color name="greyBlue">#647688</color>
     <color name="blur_A1cee5f1">#A1cee5f1</color>
     <color name="charcoalGrey">#40434a</color>
+    <color name="navyBlue">#0075be</color>
+    <color name="errorColor">#e4606c</color>
 </resources>

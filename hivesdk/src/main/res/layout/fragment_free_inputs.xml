@@ -74,13 +74,22 @@
 
                 <TextView
                     android:id="@+id/hve_tv_free_inputs_label"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown"
                     android:text="label"
                     android:textColor="@color/greyBlue"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_error_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="please enter your ...."
+                    android:textColor="@color/errorColor"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
@@ -96,7 +105,50 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/hve_tv_free_inputs_label" />
+
+                <LinearLayout
+                    android:id="@+id/ll_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="53dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/bg_spinner_rounded_border"
+                    android:gravity="center|start"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/hve_tv_free_inputs_label">
+
+                    <TextView
+                        android:id="@+id/tv_country_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="+20"
+                        android:textColor="@color/charcoalGrey" />
+
+                    <ImageView
+                        android:id="@+id/iv_phone_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_arrow_back_ios_black_36dp" />
+
+                    <EditText
+                        android:id="@+id/hve_edt_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="gbrgbrgbrgbrgb"
+                        android:inputType="phone"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="@color/navyBlue" />
+
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

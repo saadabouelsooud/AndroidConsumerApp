@@ -1,5 +1,6 @@
 package com.istnetworks.hivesdk.presentation.freeinputs
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
@@ -48,6 +49,7 @@ class FreeInputsFragment : Fragment() {
     }
 
     private fun bindQuestions(questionType: Int) {
+        binding.hveEdtFreeInput.visibility = View.VISIBLE
         when (questionType) {
             9 -> {
                 binding.hveTvFreeInputsLabel.text = ""
@@ -65,9 +67,7 @@ class FreeInputsFragment : Fragment() {
                 binding.hveEdtFreeInput.hint = getString(R.string.email)
             }
             12 -> {
-                binding.hveTvFreeInputsLabel.text = getString(R.string.phone_number)
-                binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_PHONE
-                binding.hveEdtFreeInput.hint = getString(R.string.phone_number)
+                handlePhoneInput()
             }
             13 -> {
                 binding.hveTvFreeInputsLabel.text = getString(R.string.postal_code)
@@ -83,6 +83,31 @@ class FreeInputsFragment : Fragment() {
 
     }
 
+    private fun handlePhoneInput() {
+        binding.hveTvFreeInputsLabel.text = getString(R.string.phone_number)
+        binding.hveEdtFreeInput.visibility = View.GONE
+        binding.llPhone.visibility = View.VISIBLE
+        binding.hveEdtFreeInput.hint = getString(R.string.phone_number)
+        binding.tvCountryCode.setTextColor(Color.parseColor(R.color.navyBlue.toString()))
+        activity?.let { ContextCompat.getColor(it, R.color.navyBlue) }?.let {
+            binding.ivPhoneIcon.setColorFilter(
+                it, android.graphics.PorterDuff.Mode.SRC_IN
+            )
+        }
+    }
+
+    private fun handleError() {
+        binding.tvErrorMessage.visibility = View.VISIBLE
+        binding.hveEdtFreeInput.setTextColor(Color.parseColor(R.color.errorColor.toString()))
+        binding.hveEdtFreeInput.background =
+            activity?.let { it1 ->
+                ContextCompat.getDrawable(
+                    it1,
+                    R.drawable.free_input_error
+                )
+            }
+    }
+
     private fun stylingViews() {
         val theme = viewModel.getSurveyTheme()
         binding.tvQuestionTitle.questionStyle(theme?.questionTitleStyle)
@@ -92,23 +117,23 @@ class FreeInputsFragment : Fragment() {
         binding.hveBtnSubmit.disable()
         binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
     }
+
     private fun onClickActions() {
         binding.hveBtnSubmit.setOnClickListener {
             if (selectedQuestion?.isRequired == true) {
                 if (TextUtils.isEmpty(binding.hveEdtFreeInput.text)) {
-                    binding.hveEdtFreeInput.error=getString(R.string.required)
-                    binding.hveEdtFreeInput.background=
-                        activity?.let { it1 -> ContextCompat.getDrawable(it1,R.drawable.free_input_error) }
+                    handleError()
                 }
             }
         }
 
     }
+
     companion object {
         @JvmStatic
         fun newInstance(@NonNull position: Int) =
             FreeInputsFragment().apply {
-                arguments  = bundleOf(ARG_POSITION to position)
+                arguments = bundleOf(ARG_POSITION to position)
             }
     }
 }
