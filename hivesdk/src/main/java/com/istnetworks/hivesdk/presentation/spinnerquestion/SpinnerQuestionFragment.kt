@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
-import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
