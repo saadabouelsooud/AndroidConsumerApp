@@ -50,7 +50,10 @@ class NpsFragment : Fragment() {
         return binding.root
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()

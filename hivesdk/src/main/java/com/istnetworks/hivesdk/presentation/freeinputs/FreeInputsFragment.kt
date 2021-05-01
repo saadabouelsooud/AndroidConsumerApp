@@ -52,7 +52,10 @@ class FreeInputsFragment : Fragment() {
         selectedQuestion?.questionType?.let { onClickActions(it) }
         return binding.root
     }
-
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
     private fun bindQuestions(questionType: Int) {
         binding.hveEdtFreeInput.visibility = View.VISIBLE
         binding.llPhone.visibility = View.GONE

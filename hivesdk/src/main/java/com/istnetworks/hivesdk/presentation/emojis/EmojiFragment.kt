@@ -42,6 +42,11 @@ class EmojiFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
+
     private fun setOnClickListeners() {
         binding.smileyRating.setRatingSelectListener(object : RatingSelectListener {
             override fun ratingSelected(rating: Int) {
