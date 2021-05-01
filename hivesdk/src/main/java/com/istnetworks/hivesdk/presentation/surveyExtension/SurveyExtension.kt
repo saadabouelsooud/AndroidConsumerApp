@@ -3,6 +3,7 @@ package com.istnetworks.hivesdk.presentation.surveyExtension
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.util.Patterns
 import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
@@ -236,3 +237,8 @@ fun getFontTypeface(bold: Boolean, italic: Boolean, fontFamily: String): Typefac
         Typeface.create(fontFamily, Typeface.NORMAL)
     }
 }
+////  validation
+
+fun CharSequence?.isValidEmail() = !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
+fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
