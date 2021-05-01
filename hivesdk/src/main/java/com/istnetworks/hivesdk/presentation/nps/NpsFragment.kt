@@ -55,14 +55,14 @@ class NpsFragment : Fragment() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-        viewModel.isLoading.observe(viewLifecycleOwner, {
-           if(it){
-               binding.animateProgressBar.visibility=View.VISIBLE
-           }else {
-               binding.animateProgressBar.visibility=View.GONE
-           }
-
-        })
+//        viewModel.isLoading.observe(viewLifecycleOwner, {
+//           if(it){
+//               binding.animateProgressBar.visibility=View.VISIBLE
+//           }else {
+//               binding.animateProgressBar.visibility=View.GONE
+//           }
+//
+//        })
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -70,14 +70,7 @@ class NpsFragment : Fragment() {
     }
 
     private fun onClickActions() {
-        binding.ivPrevQuestion.setOnClickListener {
-            val navController = view?.let { Navigation.findNavController(it) }
-            if (navController?.currentDestination?.id == R.id.npsFragment)
-                navController.popBackStack()
-        }
-        binding.ivNextQuestion.setOnClickListener {
-            validateNextButton()
-        }
+
         binding.hveBtnSubmit.setOnClickListener {
             if (isRequired) {
                 if (npsValue >= 0) {
@@ -92,10 +85,6 @@ class NpsFragment : Fragment() {
                 onSurveyReadyToSave()
             }
 
-        }
-
-        binding.ivClose.setOnClickListener{
-            requireActivity().finish()
         }
     }
 
@@ -112,35 +101,20 @@ class NpsFragment : Fragment() {
 
     private fun observeSurvey() {
         val surveyResponse = CacheInMemory.getSurveyResponse()
-        if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-            binding.animateProgressBar.visibility = View.VISIBLE
-        binding.tvSurveyTitle.text = surveyResponse.survey?.title
-        binding.tvSurveyTitle.surveyTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.surveyTitleStyle)
+
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         for (i in surveyResponse.survey?.questions?.indices!!) {
             if (surveyResponse.survey.questions[i].questionType == QuestionType.NPS.value) {
                 binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
                 isRequired = surveyResponse.survey.questions[i].isRequired!!
                 selectedQuestion = surveyResponse.survey.questions[i]
-                if (i == 0)
-                    binding.ivPrevQuestion.visibility = View.GONE
-                break
+
 
             }
 
 
         }
     }
-
-    private fun validateNextButton() {
-        if (isRequired) {
-            if (npsValue >= 0) {
-                this.findNavController().navigate(NpsFragmentDirections.actionNpsFragmentToSingleChoiceFragment(1))
-            } else Toast.makeText(activity, getString(R.string.required), Toast.LENGTH_LONG).show()
-        }
-
-    }
-
 
 
     private fun setNpsList() {

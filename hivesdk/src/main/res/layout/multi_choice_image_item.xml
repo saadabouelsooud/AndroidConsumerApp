@@ -5,9 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/choice_selector"
     android:layout_gravity="end"
-    android:textAlignment="viewEnd"
+    android:textAlignment="center"
     android:layoutDirection="rtl"
     android:padding="@dimen/size5"
     android:layout_margin="@dimen/size5"
+    tools:drawableTop="@drawable/emoji_good"
+    android:gravity="center"
+    android:button="@null"
     tools:text="choice" />
 

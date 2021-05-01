@@ -7,9 +7,13 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
 import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
+
+import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
+
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
+import com.istnetworks.hivesdk.presentation.singleImageChoice.SingleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 
 /**
@@ -43,11 +47,17 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(position)
             QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(position)
             QuestionType.URLInput.value -> FreeInputsFragment.getInstance(position)
+            QuestionType.TextInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.NumberInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.EmailInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.PostalCodeInput.value -> FreeInputsFragment.newInstance(position)
+            QuestionType.URLInput.value -> FreeInputsFragment.newInstance(position)
             QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(position)
             QuestionType.Emoji.value -> EmojiFragment()
-            QuestionType.ImageMCQ.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.ImageSingleChoice.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.CSAT.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.ImageMCQ.value -> MultipleImageChoiceFragment.getInstance(position)
+            QuestionType.ImageSingleChoice.value -> SingleImageChoiceFragment.getInstance(position)
+            QuestionType.CSAT.value -> SingleChoiceFragment.newInstance(position)
             null ->SpinnerQuestionFragment.getInstance(position)
             else -> SpinnerQuestionFragment.getInstance(position)
         }

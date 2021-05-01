@@ -106,11 +106,6 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return getSurveyResponseLD.value?.survey?.surveyOptions?.hasProgressBar
     }
 
-    fun getQuestionStyle(questionType: QuestionType) {
-        when (questionType) {
-
-        }
-    }
 
     fun validateAnswer(questionPosition: Int): Boolean {
         val currentQuestion = survey?.questions?.get(questionPosition)

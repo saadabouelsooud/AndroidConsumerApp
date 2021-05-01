@@ -1,16 +1,20 @@
 package com.istnetworks.hivesdk.presentation.multipleChoices
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.CompoundButton
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
+import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
@@ -18,7 +22,6 @@ import com.istnetworks.hivesdk.databinding.FragmentMultipleChoicesBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
@@ -42,6 +45,11 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,7 +58,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         binding.hveBtnSubmit.disable()
         observeViewModel()
         observeSurvey()
-
+        onClickActions()
         return binding.root
     }
 
@@ -82,26 +90,26 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         binding.tvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired!!
 
+        createChoices(selectedQuestion?.choices,surveyResponse.survey?.surveyOptions
+                ?.surveyTheme?.questionChoicesStyle!!)
+
+    }
+    private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
         val inflater = LayoutInflater.from(context)
-        for (choice in selectedQuestion?.choices!!) {
+        for (choice in choiceList!!) {
             val cbChoice = inflater.inflate(R.layout.multi_choice_item
                 , binding.hveLiMultipleChoiceWrapper, false) as CheckBox
-            val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                , ViewGroup.LayoutParams.WRAP_CONTENT)
-            params.topMargin = 16
-            cbChoice.layoutParams = params
+
             cbChoice.id = choice.choiceID!!
             cbChoice.text = choice.title
 
-            cbChoice.multiChoiceStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
+            cbChoice.multiChoiceStyle(style)
             cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
-            this.view?.let { (requireActivity() as MainFragment).updatePagerHeightForChild(it) }
+            this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
 
         }
-
     }
-
     private fun onClickActions() {
 
         binding.hveBtnSubmit.setOnClickListener {
@@ -123,7 +131,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
         else
         {
-//            selectedChoices.removeIf { it.find { it.choiceID == checkedId }
+            selectedChoices.removeIf { it -> it.choiceID == checkedId }
         }
         viewModel.updateSelectedQuestions(
             selectedQuestion?.toQuestionResponse(
