@@ -1,6 +1,8 @@
 package com.istnetworks.hivesdk.presentation.mainfragment.adapter
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.utils.QuestionType
@@ -20,7 +22,8 @@ import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragm
  * Created by khairy on ن, 06/ماي/2019 at 03:15 م.
  *
  */
-class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
+class PagerAdapter(f: FragmentManager) : FragmentPagerAdapter(f,
+    BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val mFragmentList : MutableList<Fragment> = mutableListOf()
     fun setData(questions: List<Question?>) {
@@ -64,12 +67,15 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
     }
 
 
-    override fun getItemCount(): Int {
+
+    override fun getPageWidth(position: Int): Float {
+        return .40f
+    }
+    override fun getCount(): Int {
         return mFragmentList.size
     }
 
-    
-    override fun createFragment(position: Int): Fragment {
+    override fun getItem(position: Int): Fragment {
         return mFragmentList.get(position)
     }
 }

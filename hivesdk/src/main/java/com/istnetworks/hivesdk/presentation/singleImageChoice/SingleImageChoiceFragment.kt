@@ -97,8 +97,8 @@ class SingleImageChoiceFragment : Fragment() {
         binding.hveTvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired!!
 
-        createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
-        surveyTheme?.questionChoicesStyle!!)
+      /*  createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
+        surveyTheme?.questionChoicesStyle!!)*/
 
     }
 
