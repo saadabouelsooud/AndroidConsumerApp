@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,18 +11,19 @@ import androidx.annotation.Keep
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentFreeInputsBinding
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
-
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
-
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -50,12 +50,34 @@ class FreeInputsFragment : Fragment() {
         initSubmitBtn()
         selectedQuestion?.questionType?.let { bindQuestions(it) }
         selectedQuestion?.questionType?.let { onClickActions(it) }
+        listenToInputTextChanges()
         return binding.root
     }
+
+    private fun listenToInputTextChanges() {
+        binding.hveEdtFreeInput.doAfterTextChanged {
+            viewModel.updateQuestionResponsesList(
+                selectedQuestion?.toQuestionResponse(
+                    textResponse = it.toString(),
+                    numberResponse = null
+                )
+            )
+        }
+        binding.hveEdtPhone.doAfterTextChanged {
+            viewModel.updateQuestionResponsesList(
+                selectedQuestion?.toQuestionResponse(
+                    textResponse = it.toString(),
+                    numberResponse = null
+                )
+            )
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
     }
+
     private fun bindQuestions(questionType: Int) {
         binding.hveEdtFreeInput.visibility = View.VISIBLE
         binding.llPhone.visibility = View.GONE

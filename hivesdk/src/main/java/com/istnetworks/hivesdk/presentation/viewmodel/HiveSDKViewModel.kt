@@ -55,16 +55,23 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     }
 
-    fun updateSelectedQuestions(question: QuestionResponses?) {
+    fun updateQuestionResponsesList(question: QuestionResponses?) {
         question?.let { q ->
             val duplicatedQuestion = questionResponsesList.find { it.questionID == q.questionID }
             if (duplicatedQuestion != null)
                 questionResponsesList.remove(duplicatedQuestion)
-            questionResponsesList.add(q)
-            updateProgressSliderLD.value = questionResponsesList.size.toFloat()
-        }
 
+            if (hasNoAnswer(question))
+                return@let
+            questionResponsesList.add(q)
+        }
+        updateProgressSliderLD.value = questionResponsesList.size.toFloat()
     }
+
+    private fun hasNoAnswer(question: QuestionResponses) =
+        (question.numberResponse == null
+                && question.textResponse.isNullOrEmpty()
+                && question.selectedChoices.isNullOrEmpty())
 
     fun saveSurvey() {
         viewModelScope.launch {

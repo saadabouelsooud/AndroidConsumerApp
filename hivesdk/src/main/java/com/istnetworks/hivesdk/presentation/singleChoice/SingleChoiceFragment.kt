@@ -124,7 +124,7 @@ class SingleChoiceFragment : Fragment() {
         binding.rgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
             val checkedId = radioGroup.checkedRadioButtonId
             val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
-            viewModel.updateSelectedQuestions(
+            viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse("",0,
                 listOf(SelectedChoices(selectedChoice?.choiceID,selectedChoice?.choiceGUID)
                 )

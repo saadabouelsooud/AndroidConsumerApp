@@ -16,7 +16,6 @@ import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.databinding.FragmentDatePickerQuestionBinding
-import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -95,7 +94,7 @@ class DatePickerQuestionFragment : Fragment() {
     }
 
     private fun saveAnswer(answerText: String) {
-        viewModel.updateSelectedQuestions(
+        viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
                 answerText,
                 0

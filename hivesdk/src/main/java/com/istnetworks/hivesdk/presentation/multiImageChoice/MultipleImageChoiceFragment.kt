@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
@@ -156,7 +155,7 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
         {
             selectedChoices.removeIf { it -> it.choiceID == checkedId }
         }
-        viewModel.updateSelectedQuestions(
+        viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
                 "", 0,
                 selectedChoices

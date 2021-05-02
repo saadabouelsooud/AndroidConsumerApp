@@ -122,7 +122,7 @@ class SpinnerQuestionFragment : Fragment() {
                 id: Long
             ) {
                 if (position > 0)
-                    viewModel.updateSelectedQuestions(
+                    viewModel.updateQuestionResponsesList(
                         selectedQuestion?.toQuestionResponse(
                             binding.hveSpAnswers.selectedItem.toString(),
                             position - 1
