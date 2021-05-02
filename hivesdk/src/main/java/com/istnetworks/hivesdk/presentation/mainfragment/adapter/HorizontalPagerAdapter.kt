@@ -6,14 +6,10 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
-import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
-
-import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
-
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
-import com.istnetworks.hivesdk.presentation.singleImageChoice.SingleImageChoiceFragment
+import com.istnetworks.hivesdk.presentation.sliderquestion.SliderQuestionFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 
 /**
@@ -38,7 +34,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.MultipleChoiceQuestion.value -> MultipleChoicesFragment.newInstance(position)
             QuestionType.ListQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.DateQuestion.value -> DatePickerQuestionFragment.getInstance(position)
-            QuestionType.SlideQuestion.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.SlideQuestion.value -> SliderQuestionFragment.getInstance(position)
             QuestionType.StarQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.NPS.value -> NpsFragment.getInstance(position)
             QuestionType.TextInput.value -> FreeInputsFragment.getInstance(position)
