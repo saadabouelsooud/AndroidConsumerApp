@@ -18,7 +18,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 class EmojiFragment : Fragment() {
-    private var questionPosition: Int? = null
+    private val questionPosition by lazy { arguments?.getInt(ARG_QUESTION_POSITION) }
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()

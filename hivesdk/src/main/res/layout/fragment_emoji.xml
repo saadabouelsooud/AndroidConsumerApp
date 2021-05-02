@@ -5,42 +5,28 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
-<!--    <com.google.android.material.card.MaterialCardView-->
-<!--        android:id="@+id/mtrl_card_question"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="295dp"-->
-<!--        app:cardElevation="4dp"-->
-<!--        app:cardCornerRadius="@dimen/size20"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:cardBackgroundColor="@android:color/transparent"-->
-<!--        >-->
+    <TextView
+        android:id="@+id/tv_question_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="question Title"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-
-            <TextView
-                android:id="@+id/tv_question_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="Survey Title"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <com.istnetworks.hivesdk.presentation.emojis.SmileyRatingBar
-                android:id="@+id/smiley_rating"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_question_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_gravity="center"
-                android:gravity="center" />
+    <com.istnetworks.hivesdk.presentation.emojis.SmileyRatingBar
+        android:id="@+id/smiley_rating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/size_16"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
 
 <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 <!--    </com.google.android.material.card.MaterialCardView>-->
