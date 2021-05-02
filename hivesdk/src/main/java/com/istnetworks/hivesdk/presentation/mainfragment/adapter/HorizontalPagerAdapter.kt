@@ -6,9 +6,12 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
+import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
+import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
+import com.istnetworks.hivesdk.presentation.singleImageChoice.SingleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.sliderquestion.SliderQuestionFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.SpinnerQuestionFragment
 
