@@ -132,7 +132,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         {
             selectedChoices.removeIf { it -> it.choiceID == checkedId }
         }
-        viewModel.updateSelectedQuestions(
+        viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
                 "", 0,
                 selectedChoices

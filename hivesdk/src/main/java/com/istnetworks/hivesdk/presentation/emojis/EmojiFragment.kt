@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
@@ -26,7 +25,6 @@ class EmojiFragment : Fragment() {
     }
     private lateinit var binding: FragmentEmojiBinding
     private var isRequired: Boolean = false
-    private var rateValue: Int = -1
     private var selectedQuestion: Question? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +44,12 @@ class EmojiFragment : Fragment() {
     private fun setOnClickListeners() {
         binding.smileyRating.setRatingSelectListener(object : RatingSelectListener {
             override fun ratingSelected(rating: Int) {
-                rateValue = rating
+                viewModel.updateQuestionResponsesList(
+                    selectedQuestion?.toQuestionResponse(
+                        textResponse = null,
+                        numberResponse = rating
+                    )
+                )
             }
 
         })

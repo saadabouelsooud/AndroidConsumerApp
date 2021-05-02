@@ -7,23 +7,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.istnetworks.hivesdk.R
-import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
-import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
@@ -39,7 +32,7 @@ class NpsFragment : Fragment() {
     }
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
-    private var npsValue: Int = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,14 +63,7 @@ class NpsFragment : Fragment() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-//        viewModel.isLoading.observe(viewLifecycleOwner, {
-//           if(it){
-//               binding.animateProgressBar.visibility=View.VISIBLE
-//           }else {
-//               binding.animateProgressBar.visibility=View.GONE
-//           }
-//
-//        })
+
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -86,31 +72,15 @@ class NpsFragment : Fragment() {
 
     private fun onClickActions() {
 
-        binding.hveBtnSubmit.setOnClickListener {
-            if (isRequired) {
-                if (npsValue >= 0) {
-                    onSurveyReadyToSave()
-                } else Toast.makeText(
-                    requireContext(),
-                    getString(R.string.required),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-            }else{
-                onSurveyReadyToSave()
-            }
-
-        }
     }
 
-    private fun onSurveyReadyToSave() {
-        viewModel.updateSelectedQuestions(
+    private fun onSurveyReadyToSave(npsValue: Int?) {
+        viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
                 "",
                 npsValue
             )
         )
-        viewModel.saveSurvey()
     }
 
 
@@ -138,8 +108,7 @@ class NpsFragment : Fragment() {
 
         binding.npsRecyclerView.layoutManager = GridLayoutManager(context, 11)
         val adapter = NpsAdapter(nps) {
-            npsValue = it ?: -1
-            binding.hveBtnSubmit.enable()
+           onSurveyReadyToSave(it)
         }
         binding.npsRecyclerView.adapter = adapter
     }

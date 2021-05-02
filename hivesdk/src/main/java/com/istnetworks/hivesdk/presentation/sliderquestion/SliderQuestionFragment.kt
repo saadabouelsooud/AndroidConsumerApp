@@ -1,7 +1,5 @@
 package com.istnetworks.hivesdk.presentation.sliderquestion
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +47,7 @@ class SliderQuestionFragment : Fragment() {
 
     private fun setSliderListener() {
         binding.hveSliderAnswers.addOnChangeListener { _, value, _ ->
-            viewModel.updateSelectedQuestions(
+            viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse(
                     numberResponse = value.toInt(),
                     textResponse = "${value.toInt()}"

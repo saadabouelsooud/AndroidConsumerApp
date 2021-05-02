@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
@@ -41,8 +42,27 @@ class MainFragment : Fragment() {
         initializeViewPager()
         bindViews()
         onClickActions()
+        setupProgressSlider()
         listenToViewPagerChanges()
+        observeViewModel()
         return binding.root
+    }
+
+    private fun observeViewModel() {
+        viewModel.updateProgressSliderLD.observe(viewLifecycleOwner, {
+            binding.hveSliderProgress.value = it
+        })
+    }
+
+    private fun setupProgressSlider() {
+        if (viewModel.survey?.surveyOptions?.hasProgressBar == true) {
+            binding.hveSliderProgress.show()
+            binding.hveSliderProgress.valueFrom = 0f
+            binding.hveSliderProgress.stepSize = 1f
+            binding.hveSliderProgress.valueTo = viewModel.survey?.questions?.size?.toFloat() ?: 1f
+        } else {
+            binding.hveSliderProgress.hide()
+        }
     }
 
     private fun listenToViewPagerChanges() {
@@ -60,7 +80,6 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-
         }
         binding.hveViewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
@@ -109,10 +128,10 @@ class MainFragment : Fragment() {
         binding.hveViewPager.adapter = adapter
     }
 
-    private fun initializeRecyclerView() {
+    private fun initializeRecyclerView(){
         val pagerAdapter = PagerAdapter(childFragmentManager)
-        pagerAdapter.setData(viewModel.survey?.questions ?: listOf())
-        binding.lvQuestions.adapter = pagerAdapter
+        pagerAdapter.setData(viewModel.survey?.questions?: listOf())
+        binding.lvQuestions.adapter= pagerAdapter
     }
 
     override fun onDestroyView() {
