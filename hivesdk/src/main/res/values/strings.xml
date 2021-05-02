@@ -11,8 +11,8 @@
     <string name="nps_2">2</string>
     <string name="nps_1">1</string>
     <string name="nps_0">0</string>
-    <string name="bad">Bad</string>
-    <string name="great">Great</string>
+    <string name="bad">Not at all Likely</string>
+    <string name="great">Extremely Likely</string>
     <string name="good">Good</string>
     <string name="required">this field is required</string>
     <string name="choose_spinner">Choose..</string>
