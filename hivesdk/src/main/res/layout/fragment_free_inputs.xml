@@ -6,9 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@android:color/transparent"
-    android:paddingStart="5dp"
-    android:paddingTop="32dp"
-    android:paddingEnd="5dp"
     android:paddingBottom="32dp">
 
 

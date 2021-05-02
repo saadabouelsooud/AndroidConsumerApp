@@ -106,7 +106,6 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
             cbChoice.multiChoiceStyle(style)
             cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
-            this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
 
         }
     }

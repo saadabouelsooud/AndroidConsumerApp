@@ -18,7 +18,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 class EmojiFragment : Fragment() {
-    private var questionPosition: Int? = null
+    private val questionPosition: Int? by lazy { arguments?.getInt(ARG_QUESTION_POSITION,-1) }
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -32,7 +32,6 @@ class EmojiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentEmojiBinding.inflate(inflater)
         observeSurvey()
         setOnClickListeners()
@@ -59,8 +58,6 @@ class EmojiFragment : Fragment() {
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
         binding.tvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired ?:false
-        this.view?.let { (requireParentFragment() as MainFragment)
-            .updatePagerHeightForChild(it) }
     }
 
 

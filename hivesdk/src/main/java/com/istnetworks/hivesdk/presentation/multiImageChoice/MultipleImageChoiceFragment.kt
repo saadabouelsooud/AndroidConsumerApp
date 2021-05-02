@@ -119,7 +119,6 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
 
                         cbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
 
-                        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
                     }
                 }
 

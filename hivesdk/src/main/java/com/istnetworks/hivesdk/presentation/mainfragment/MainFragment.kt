@@ -10,13 +10,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.HiveSDKType
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
-import com.istnetworks.hivesdk.presentation.mainfragment.adapter.VerticalListViewAdapter
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -51,8 +49,9 @@ class MainFragment : Fragment() {
         onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.hveIvPrevious.isEnabled = position > 0
-                if (childFragmentManager.fragments.size > position) {
-                    val fragment = childFragmentManager.fragments.get(position)
+
+                val fragment = childFragmentManager.findFragmentByTag("f" + position)
+                if (fragment != null) {
                     fragment.view?.let {
                         // Now we've got access to the fragment Root View
                         // we will use it to calculate the height and
@@ -61,6 +60,7 @@ class MainFragment : Fragment() {
                     }
                 }
             }
+
         }
         binding.hveViewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
@@ -109,15 +109,17 @@ class MainFragment : Fragment() {
         binding.hveViewPager.adapter = adapter
     }
 
-    private fun initializeRecyclerView(){
+    private fun initializeRecyclerView() {
         val pagerAdapter = PagerAdapter(childFragmentManager)
-        pagerAdapter.setData(viewModel.survey?.questions?: listOf())
-        binding.lvQuestions.adapter= pagerAdapter
+        pagerAdapter.setData(viewModel.survey?.questions ?: listOf())
+        binding.lvQuestions.adapter = pagerAdapter
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.hveViewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
     }
+
     fun updatePagerHeightForChild(view: View, pager: ViewPager2 = binding.hveViewPager) {
         view.post {
             val wMeasureSpec =
