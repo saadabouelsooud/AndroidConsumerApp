@@ -18,6 +18,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -59,6 +60,7 @@ class SpinnerQuestionFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d("TAG", "onResume: ")
+        binding.root.requestLayout()
     }
 
     private fun stylingViews() {
@@ -84,6 +86,8 @@ class SpinnerQuestionFragment : Fragment() {
             android.R.layout.simple_spinner_item, list ?: listOf()
         )
         binding.hveSpAnswers.adapter = adapter
+        this.view?.let { (requireParentFragment() as MainFragment)
+            .updatePagerHeightForChild(it) }
     }
 
     @Keep

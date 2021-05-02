@@ -103,10 +103,11 @@ class SingleChoiceFragment : Fragment() {
 
             rbChoice.singleChoiceStyle(style)
             binding.rgSingleChoiceWrapper.addView(rbChoice)
-            this.view?.let { (requireParentFragment() as MainFragment)
-                .updatePagerHeightForChild(it) }
+
 
         }
+        this.view?.let { (requireParentFragment() as MainFragment)
+            .updatePagerHeightForChild(it) }
     }
 
     private fun onClickActions() {

@@ -21,9 +21,7 @@
                 android:id="@+id/nps_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".presentation.nps.NpsFragment"
-                android:layout_marginStart="@dimen/size30"
-                android:layout_marginEnd="@dimen/size30">
+                tools:context=".presentation.nps.NpsFragment">
 
                 <TextView
                     android:id="@+id/tv_question_title"

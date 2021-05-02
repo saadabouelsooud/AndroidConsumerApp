@@ -19,14 +19,18 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
+import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
+private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 
 class NpsFragment : Fragment() {
+    private var questionPosition: Int? = null
     private lateinit var binding: FragmentNpsBinding
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
@@ -36,6 +40,14 @@ class NpsFragment : Fragment() {
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
     private var npsValue: Int = -1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            questionPosition = it.getInt(ARG_QUESTION_POSITION, 0)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -103,20 +115,12 @@ class NpsFragment : Fragment() {
 
 
     private fun observeSurvey() {
-        val surveyResponse = CacheInMemory.getSurveyResponse()
-
-        binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        for (i in surveyResponse.survey?.questions?.indices!!) {
-            if (surveyResponse.survey.questions[i].questionType == QuestionType.NPS.value) {
-                binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
-                isRequired = surveyResponse.survey.questions[i].isRequired!!
-                selectedQuestion = surveyResponse.survey.questions[i]
-
-
-            }
-
-
-        }
+        selectedQuestion = viewModel.findQuestion(questionPosition)
+        binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
+        binding.tvQuestionTitle.text = selectedQuestion?.title
+        isRequired = selectedQuestion?.isRequired ?:false
+        this.view?.let { (requireParentFragment() as MainFragment)
+            .updatePagerHeightForChild(it) }
     }
 
 
@@ -140,5 +144,21 @@ class NpsFragment : Fragment() {
             binding.hveBtnSubmit.enable()
         }
         binding.npsRecyclerView.adapter = adapter
+    }
+
+    companion object{
+        /**
+         *
+         * @param questionPosition Parameter 1.
+         * @return A new instance of fragment SingleChoiceFragment.
+         */
+
+        @JvmStatic
+        fun getInstance(questionPosition :Int)=
+            NpsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_QUESTION_POSITION, questionPosition)
+                }
+            }
     }
 }

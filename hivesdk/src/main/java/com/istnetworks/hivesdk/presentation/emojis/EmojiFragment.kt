@@ -4,24 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
-import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.response.Question
-import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
-
+private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 class EmojiFragment : Fragment() {
+    private var questionPosition: Int? = null
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -58,22 +55,28 @@ class EmojiFragment : Fragment() {
     }
 
     private fun observeSurvey() {
-        val surveyResponse = CacheInMemory.getSurveyResponse()
-
-        binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        for (i in surveyResponse.survey?.questions?.indices!!) {
-            if (surveyResponse.survey.questions[i].questionType == QuestionType.Emoji.value) {
-                binding.tvQuestionTitle.text = surveyResponse.survey.questions[i].title
-                isRequired = surveyResponse.survey.questions[i].isRequired!!
-                selectedQuestion = surveyResponse.survey.questions[i]
-
-
-            }
-
-
-        }
+        selectedQuestion = viewModel.findQuestion(questionPosition)
+        binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
+        binding.tvQuestionTitle.text = selectedQuestion?.title
+        isRequired = selectedQuestion?.isRequired ?:false
+        this.view?.let { (requireParentFragment() as MainFragment)
+            .updatePagerHeightForChild(it) }
     }
 
 
+    companion object{
+        /**
+         *
+         * @param questionPosition Parameter 1.
+         * @return A new instance of fragment SingleChoiceFragment.
+         */
 
+        @JvmStatic
+        fun getInstance(questionPosition :Int)=
+            EmojiFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_QUESTION_POSITION, questionPosition)
+                }
+            }
+    }
 }
