@@ -17,7 +17,6 @@ import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
-import com.istnetworks.hivesdk.data.utils.QuestionType
 import kotlinx.coroutines.launch
 
 
@@ -29,7 +28,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
-
+    val updateProgressSliderLD = MutableLiveData<Float>()
 
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
@@ -62,6 +61,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             if (duplicatedQuestion != null)
                 questionResponsesList.remove(duplicatedQuestion)
             questionResponsesList.add(q)
+            updateProgressSliderLD.value = questionResponsesList.size.toFloat()
         }
 
     }
