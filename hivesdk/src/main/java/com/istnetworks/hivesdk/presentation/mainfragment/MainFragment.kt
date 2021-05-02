@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater)
-        initializeRecyclerView()
+        initializeViewPager()
         bindViews()
         onClickActions()
         listenToViewPagerChanges()
