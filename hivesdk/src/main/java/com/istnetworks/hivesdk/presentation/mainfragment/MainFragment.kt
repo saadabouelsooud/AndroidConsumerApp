@@ -10,10 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.HiveSDKType
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
+import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
+import com.istnetworks.hivesdk.presentation.mainfragment.adapter.VerticalListViewAdapter
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -101,10 +104,16 @@ class MainFragment : Fragment() {
         adapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
         binding.hveViewPager.adapter = adapter
     }
 
+    private fun initializeRecyclerView(){
+        val pagerAdapter = PagerAdapter(childFragmentManager)
+        pagerAdapter.setData(viewModel.survey?.questions?: listOf())
+        binding.lvQuestions.adapter= pagerAdapter
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding.hveViewPager.unregisterOnPageChangeCallback(onPageChangeCallback)

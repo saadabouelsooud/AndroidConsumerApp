@@ -97,7 +97,7 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
         binding.tvQuestionTitle.text = selectedQuestion?.title
         isRequired = selectedQuestion?.isRequired!!
 
-        createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
+      //  createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
 
     }
     private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
