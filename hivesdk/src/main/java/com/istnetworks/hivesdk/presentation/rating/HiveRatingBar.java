@@ -14,9 +14,6 @@ import com.istnetworks.hivesdk.R;
 
 /**
  * Custom RatingBar
- *
- * @author shiju.wang
- * @date 2020-01-09
  */
 
 @SuppressLint("AppCompatCustomView")
@@ -92,8 +89,7 @@ public class HiveRatingBar extends RatingBar implements RatingBar.OnRatingBarCha
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-//        TintTypedArray typedArray = TintTypedArray.obtainStyledAttributes(context, attrs,
-//                R.styleable.AndRatingBar, defStyleAttr, 0);
+
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HiveRatingBar, defStyleAttr, 0);
         right2Left = typedArray.getBoolean(R.styleable.HiveRatingBar_right2Left, false);
 

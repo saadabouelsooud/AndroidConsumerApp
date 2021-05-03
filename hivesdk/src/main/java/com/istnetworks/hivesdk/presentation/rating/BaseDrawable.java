@@ -29,9 +29,6 @@ abstract class BaseDrawable extends Drawable {
         return mAlpha;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setAlpha(int alpha) {
         if (mAlpha != alpha) {
