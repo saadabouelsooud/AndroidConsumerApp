@@ -10,6 +10,7 @@ import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
 import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
+import com.istnetworks.hivesdk.presentation.rating.RatingFragment
 import com.istnetworks.hivesdk.presentation.singleChoice.SingleChoiceFragment
 import com.istnetworks.hivesdk.presentation.singleImageChoice.SingleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.sliderquestion.SliderQuestionFragment
@@ -38,7 +39,7 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
             QuestionType.ListQuestion.value -> SpinnerQuestionFragment.getInstance(position)
             QuestionType.DateQuestion.value -> DatePickerQuestionFragment.getInstance(position)
             QuestionType.SlideQuestion.value -> SliderQuestionFragment.getInstance(position)
-            QuestionType.StarQuestion.value -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.StarQuestion.value -> RatingFragment.getInstance(position)
             QuestionType.NPS.value -> NpsFragment.getInstance(position)
             QuestionType.TextInput.value -> FreeInputsFragment.getInstance(position)
             QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(position)
