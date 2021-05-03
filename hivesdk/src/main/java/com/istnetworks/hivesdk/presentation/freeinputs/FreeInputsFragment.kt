@@ -197,7 +197,7 @@ class FreeInputsFragment : Fragment() {
 
     private fun initSubmitBtn() {
         binding.hveBtnSubmit.disable()
-        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+        //binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
     }
 
     private fun onClickActions(questionType: Int) {
