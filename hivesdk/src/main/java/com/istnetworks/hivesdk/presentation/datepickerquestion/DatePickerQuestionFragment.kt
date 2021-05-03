@@ -10,6 +10,7 @@ import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
@@ -54,7 +55,9 @@ class DatePickerQuestionFragment : Fragment() {
     }
 
     private fun bindQuestion() {
-        binding.tvQuestionTitle.text = selectedQuestion?.title
+        binding.tvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            position?.plus(1),selectedQuestion?.title)
     }
 
     private fun initSubmitBtn() {

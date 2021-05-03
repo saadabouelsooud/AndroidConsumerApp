@@ -1,6 +1,7 @@
 package com.istnetworks.hivesdk.presentation.multiImageChoice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,16 +88,13 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
     }
 
     private fun observeSurvey() {
-        val surveyResponse = CacheInMemory.getSurveyResponse()
-//        if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-//            binding.animateProgressBar.visibility = View.VISIBLE
-        selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
-
+        selectedQuestion = questionPosition?.let { viewModel.findQuestion(it) }
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
-        binding.tvQuestionTitle.text = selectedQuestion?.title
+        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
+            questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
-      //  createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
+        createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
 
     }
     private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
@@ -109,15 +107,21 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
             lifecycleScope.launch {
                 withContext(Dispatchers.IO)
                 {
-                    val bitmap =
-                        Picasso.get().load(choice.imageURL)
-                            .placeholder(R.drawable.emoji_bad)
-                            .resize(200, 200)
-                            .get().toDrawable(resources)
-                    withContext(Dispatchers.Main) {
+                    try {
 
-                        cbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+                        val bitmap =
+                            Picasso.get().load(choice.imageURL)
+                                .placeholder(R.drawable.emoji_bad)
+                                .resize(200, 200)
+                                .get().toDrawable(resources)
+                        withContext(Dispatchers.Main) {
 
+                            cbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+
+                        }
+                    }catch (e:Exception)
+                    {
+                        Log.e(TAG, "createChoices: ", e)
                     }
                 }
 

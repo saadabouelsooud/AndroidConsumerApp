@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
@@ -59,7 +60,9 @@ class EmojiFragment : Fragment() {
     private fun observeSurvey() {
         selectedQuestion = viewModel.findQuestion(questionPosition)
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
-        binding.tvQuestionTitle.text = selectedQuestion?.title
+        binding.tvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired ?:false
     }
 

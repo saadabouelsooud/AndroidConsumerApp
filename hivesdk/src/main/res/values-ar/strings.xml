@@ -22,5 +22,5 @@
     <string name="url">عنوان الانترنت</string>
     <string name="email">البريد الالكتروني</string>
     <string name="question_is_required">Question Is Required</string>
-
+    <string name="question_format">س %1d : %2s</string>
 </resources>

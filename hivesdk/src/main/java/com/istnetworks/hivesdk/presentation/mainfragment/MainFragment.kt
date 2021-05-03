@@ -95,6 +95,10 @@ class MainFragment : Fragment() {
                 viewModel.getThePreviousPosition(binding.hveViewPager.currentItem)
             binding.hveViewPager.currentItem = newPosition
         }
+
+        binding.hveIvClose.onClick {
+            requireActivity().finish()
+        }
     }
 
     private fun onNextArrowClicked() {
