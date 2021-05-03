@@ -19,7 +19,6 @@
             android:id="@+id/hve_tv_question_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:text="Survey Title"
             android:textColor="@color/black"
             android:textSize="18sp"

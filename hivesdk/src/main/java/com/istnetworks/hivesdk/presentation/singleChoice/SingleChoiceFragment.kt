@@ -18,7 +18,6 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSingleChoiceBinding
-import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -84,7 +83,8 @@ class SingleChoiceFragment : Fragment() {
 
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        binding.tvQuestionTitle.text = selectedQuestion?.title
+        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
+            questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,
@@ -103,8 +103,6 @@ class SingleChoiceFragment : Fragment() {
 
             rbChoice.singleChoiceStyle(style)
             binding.rgSingleChoiceWrapper.addView(rbChoice)
-            this.view?.let { (requireParentFragment() as MainFragment)
-                .updatePagerHeightForChild(it) }
 
         }
     }
@@ -123,7 +121,7 @@ class SingleChoiceFragment : Fragment() {
         binding.rgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
             val checkedId = radioGroup.checkedRadioButtonId
             val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
-            viewModel.updateSelectedQuestions(
+            viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse("",0,
                 listOf(SelectedChoices(selectedChoice?.choiceID,selectedChoice?.choiceGUID)
                 )

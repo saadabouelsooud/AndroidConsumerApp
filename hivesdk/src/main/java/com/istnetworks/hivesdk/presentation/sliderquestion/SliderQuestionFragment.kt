@@ -1,6 +1,5 @@
-package com.istnetworks.hivesdk.presentation.datepickerquestion
+package com.istnetworks.hivesdk.presentation.sliderquestion
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,19 +14,17 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
-import com.istnetworks.hivesdk.data.utils.extensions.onClick
-import com.istnetworks.hivesdk.databinding.FragmentDatePickerQuestionBinding
+import com.istnetworks.hivesdk.databinding.HveFragmentSliderQuestionBinding
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
-import java.util.*
 
 
 const val ARG_POSITION = "pos"
 
-class DatePickerQuestionFragment : Fragment() {
-    private lateinit var binding: FragmentDatePickerQuestionBinding
+class SliderQuestionFragment : Fragment() {
+    private lateinit var binding: HveFragmentSliderQuestionBinding
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -39,14 +36,35 @@ class DatePickerQuestionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDatePickerQuestionBinding.inflate(inflater)
+        binding = HveFragmentSliderQuestionBinding.inflate(inflater)
         selectedQuestion = viewModel.findQuestion(position)
         stylingViews()
         initSubmitBtn()
         bindQuestion()
         onClickActions()
-        handleDatePickerField()
+        setSliderListener()
         return binding.root
+    }
+
+    private fun setSliderListener() {
+        binding.hveSliderAnswers.addOnChangeListener { _, value, _ ->
+            viewModel.updateQuestionResponsesList(
+                selectedQuestion?.toQuestionResponse(
+                    numberResponse = value.toInt(),
+                    textResponse = "${value.toInt()}"
+                )
+            )
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     private fun stylingViews() {
@@ -65,52 +83,13 @@ class DatePickerQuestionFragment : Fragment() {
         binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
     }
 
-    private fun handleDatePickerField() {
-
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
-
-        binding.hveTietDate.onClick {
-            //   binding.hveTietDate.disableForSecond()
-
-            val dialog = DatePickerDialog(
-                requireContext(), { _, year, month, dayOfMonth ->
-
-                    val mm = if (month < 9)
-                        "0${month + 1}"
-                    else
-                        (month + 1).toString()
-
-                    val dd = if (dayOfMonth <= 9)
-                        "0$dayOfMonth"
-                    else
-                        dayOfMonth.toString()
-
-                    binding.hveTietDate.setText("$dd $mm,$year")
-                    saveAnswer(binding.hveTietDate.text.toString())
-                }, year, month, day - 1
-            )
-            dialog.show()
-        }
-    }
-
-    private fun saveAnswer(answerText: String) {
-        viewModel.updateQuestionResponsesList(
-            selectedQuestion?.toQuestionResponse(
-                answerText,
-                0
-            )
-        )
-    }
 
 
     @Keep
     companion object {
         @JvmStatic
-        fun getInstance(@NonNull position: Int): DatePickerQuestionFragment {
-            val f = DatePickerQuestionFragment()
+        fun getInstance(@NonNull position: Int): SliderQuestionFragment {
+            val f = SliderQuestionFragment()
             f.arguments = bundleOf(ARG_POSITION to position)
             return f
         }
@@ -126,7 +105,9 @@ class DatePickerQuestionFragment : Fragment() {
         }
 
 
+
     }
+
 
 
 }

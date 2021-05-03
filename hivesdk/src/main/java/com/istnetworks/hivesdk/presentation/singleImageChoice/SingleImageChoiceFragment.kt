@@ -1,12 +1,12 @@
 package com.istnetworks.hivesdk.presentation.singleImageChoice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -94,10 +94,11 @@ class SingleImageChoiceFragment : Fragment() {
 
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.hveTvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        binding.hveTvQuestionTitle.text = selectedQuestion?.title
+        binding.hveTvQuestionTitle.text = context?.getString(R.string.question_format,
+            questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
-        createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
+       createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
         surveyTheme?.questionChoicesStyle!!)
 
     }
@@ -114,16 +115,22 @@ class SingleImageChoiceFragment : Fragment() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO)
                 {
-                    val bitmap =
-                        Picasso.get().load(choice.imageURL)
-                            .placeholder(R.drawable.emoji_bad)
-                            .resize(200, 200)
-                            .get().toDrawable(resources)
-                    withContext(Dispatchers.Main) {
+                    try {
 
-                        rbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+                        val bitmap =
+                            Picasso.get().load(choice.imageURL)
+                                .placeholder(R.drawable.emoji_bad)
+                                .resize(200, 200)
+                                .get().toDrawable(resources)
+                        withContext(Dispatchers.Main) {
 
-                        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+                            rbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+
+                            (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+                        }
+                    }catch (e:Exception)
+                    {
+                        Log.e(TAG, "createChoices: ", e)
                     }
                 }
 
@@ -151,7 +158,7 @@ class SingleImageChoiceFragment : Fragment() {
         binding.hveRgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
             val checkedId = radioGroup.checkedRadioButtonId
             val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
-            viewModel.updateSelectedQuestions(
+            viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse(
                     "", 0,
                     listOf(

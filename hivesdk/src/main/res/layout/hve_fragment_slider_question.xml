@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/hve_cl_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/tv_question_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Question Title" />
+
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/hve_slider_answers"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/size5"
+            android:layout_marginTop="16dp"
+            android:valueFrom="1"
+            android:valueTo="5"
+            app:tickColor="@android:color/transparent"
+            app:thumbColor="@android:color/white"
+            app:thumbStrokeColor="@color/gray"
+            app:thumbElevation="2dp"
+            app:thumbStrokeWidth="2dp"
+            app:trackColorInactive="@android:color/darker_gray"
+            app:trackColorActive="@android:color/holo_red_light"
+
+            app:trackHeight="8dp"
+
+            android:stepSize="1"
+            android:layout_marginEnd="@dimen/size5"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintEnd_toEndOf="@id/tv_question_title"
+            app:layout_constraintStart_toStartOf="@id/tv_question_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="@id/hve_slider_answers"
+            app:layout_constraintStart_toStartOf="@id/hve_slider_answers"
+            app:layout_constraintTop_toBottomOf="@id/hve_slider_answers">
+
+            <TextView
+                android:layout_width="0dp"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:paddingEnd="8dp"
+                android:gravity="center"
+
+                android:text="2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+
+                android:textSize="16sp"
+
+                android:layout_weight="1"
+                android:text="3" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:text="4" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="16sp"
+                android:text="5" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hve_btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Submit"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hve_cl_question" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

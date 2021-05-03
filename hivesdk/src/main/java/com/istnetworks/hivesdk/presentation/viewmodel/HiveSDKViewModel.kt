@@ -17,7 +17,6 @@ import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
-import com.istnetworks.hivesdk.data.utils.QuestionType
 import kotlinx.coroutines.launch
 
 
@@ -29,7 +28,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
-
+    val updateProgressSliderLD = MutableLiveData<Float>()
 
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
@@ -56,15 +55,23 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     }
 
-    fun updateSelectedQuestions(question: QuestionResponses?) {
+    fun updateQuestionResponsesList(question: QuestionResponses?) {
         question?.let { q ->
             val duplicatedQuestion = questionResponsesList.find { it.questionID == q.questionID }
             if (duplicatedQuestion != null)
                 questionResponsesList.remove(duplicatedQuestion)
+
+            if (hasNoAnswer(question))
+                return@let
             questionResponsesList.add(q)
         }
-
+        updateProgressSliderLD.value = questionResponsesList.size.toFloat()
     }
+
+    private fun hasNoAnswer(question: QuestionResponses) =
+        (question.numberResponse == null
+                && question.textResponse.isNullOrEmpty()
+                && question.selectedChoices.isNullOrEmpty())
 
     fun saveSurvey() {
         viewModelScope.launch {
@@ -78,6 +85,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun getSurveyTheme()=survey?.surveyOptions?.surveyTheme
+    fun getSurveyBackgroundColor()=Color.parseColor("#${getSurveyTheme()?.surveyBackgroundColor}")
 
     private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {
         val drawable = ShapeDrawable()

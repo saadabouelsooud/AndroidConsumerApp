@@ -9,6 +9,6 @@
     android:layout_gravity="end"
     android:textAlignment="viewEnd"
     android:layoutDirection="rtl"
-    android:padding="@dimen/size5"
+    android:padding="@dimen/size_16"
     android:layout_margin="@dimen/size5"
     xmlns:android="http://schemas.android.com/apk/res/android" />

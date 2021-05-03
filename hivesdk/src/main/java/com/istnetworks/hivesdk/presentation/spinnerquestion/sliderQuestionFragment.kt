@@ -18,6 +18,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -59,6 +60,7 @@ class SpinnerQuestionFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d("TAG", "onResume: ")
+        binding.root.requestLayout()
     }
 
     private fun stylingViews() {
@@ -68,7 +70,8 @@ class SpinnerQuestionFragment : Fragment() {
 
     private fun bindQuestion() {
         setSpinner()
-        binding.tvQuestionTitle.text = selectedQuestion?.title
+        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
+            position?.plus(1),selectedQuestion?.title)
     }
 
     private fun initSubmitBtn() {
@@ -84,6 +87,8 @@ class SpinnerQuestionFragment : Fragment() {
             android.R.layout.simple_spinner_item, list ?: listOf()
         )
         binding.hveSpAnswers.adapter = adapter
+        this.view?.let { (requireParentFragment() as MainFragment)
+            .updatePagerHeightForChild(it) }
     }
 
     @Keep
@@ -118,7 +123,7 @@ class SpinnerQuestionFragment : Fragment() {
                 id: Long
             ) {
                 if (position > 0)
-                    viewModel.updateSelectedQuestions(
+                    viewModel.updateQuestionResponsesList(
                         selectedQuestion?.toQuestionResponse(
                             binding.hveSpAnswers.selectedItem.toString(),
                             position - 1

@@ -10,10 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
+import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -40,16 +43,36 @@ class MainFragment : Fragment() {
         initializeViewPager()
         bindViews()
         onClickActions()
+        setupProgressSlider()
         listenToViewPagerChanges()
+        observeViewModel()
         return binding.root
+    }
+
+    private fun observeViewModel() {
+        viewModel.updateProgressSliderLD.observe(viewLifecycleOwner, {
+            binding.hveSliderProgress.value = it
+        })
+    }
+
+    private fun setupProgressSlider() {
+        if (viewModel.survey?.surveyOptions?.hasProgressBar == true) {
+            binding.hveSliderProgress.show()
+            binding.hveSliderProgress.valueFrom = 0f
+            binding.hveSliderProgress.stepSize = 1f
+            binding.hveSliderProgress.valueTo = viewModel.survey?.questions?.size?.toFloat() ?: 1f
+        } else {
+            binding.hveSliderProgress.hide()
+        }
     }
 
     private fun listenToViewPagerChanges() {
         onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.hveIvPrevious.isEnabled = position > 0
-                if (childFragmentManager.fragments.size > position) {
-                    val fragment = childFragmentManager.fragments.get(position)
+
+                val fragment = childFragmentManager.findFragmentByTag("f" + position)
+                if (fragment != null) {
                     fragment.view?.let {
                         // Now we've got access to the fragment Root View
                         // we will use it to calculate the height and
@@ -71,6 +94,10 @@ class MainFragment : Fragment() {
             val newPosition =
                 viewModel.getThePreviousPosition(binding.hveViewPager.currentItem)
             binding.hveViewPager.currentItem = newPosition
+        }
+
+        binding.hveIvClose.onClick {
+            requireActivity().finish()
         }
     }
 
@@ -101,15 +128,22 @@ class MainFragment : Fragment() {
         adapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
-            orientation = ViewPager2.ORIENTATION_VERTICAL
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
         binding.hveViewPager.adapter = adapter
+    }
+
+    private fun initializeRecyclerView(){
+        val pagerAdapter = PagerAdapter(childFragmentManager)
+        pagerAdapter.setData(viewModel.survey?.questions?: listOf())
+        binding.lvQuestions.adapter= pagerAdapter
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding.hveViewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
     }
+
     fun updatePagerHeightForChild(view: View, pager: ViewPager2 = binding.hveViewPager) {
         view.post {
             val wMeasureSpec =

@@ -28,4 +28,7 @@
     <string name="enter_telephone_answer">ادخل رقم التليفون</string>
     <string name="enter_postal_code_answer">ادخل الرمز البريدي</string>
     <string name="enter_url_answer">ادخل عنوان الانترنت</string>
+
+    <string name="question_format">س %1d : %2s</string>
+
 </resources>

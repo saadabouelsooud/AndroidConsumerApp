@@ -81,17 +81,12 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
     }
 
     private fun observeSurvey() {
-        val surveyResponse = CacheInMemory.getSurveyResponse()
-//        if (surveyResponse.survey?.surveyOptions?.hasProgressBar == true)
-//            binding.animateProgressBar.visibility = View.VISIBLE
-        selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
-
-        binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        binding.tvQuestionTitle.text = selectedQuestion?.title
+        selectedQuestion = questionPosition?.let { viewModel.findQuestion(it) }
+        binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
+        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
+            questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
-
-        createChoices(selectedQuestion?.choices,surveyResponse.survey?.surveyOptions
-                ?.surveyTheme?.questionChoicesStyle!!)
+        createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
 
     }
     private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
@@ -106,7 +101,6 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
             cbChoice.multiChoiceStyle(style)
             cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
-            this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
 
         }
     }
@@ -133,7 +127,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         {
             selectedChoices.removeIf { it -> it.choiceID == checkedId }
         }
-        viewModel.updateSelectedQuestions(
+        viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
                 "", 0,
                 selectedChoices
