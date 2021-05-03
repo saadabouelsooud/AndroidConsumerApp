@@ -21,6 +21,7 @@
         tools:text="Question Title" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/hve_cl_question_holder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -29,139 +30,18 @@
         app:layout_constraintStart_toStartOf="@id/tv_question_title"
         app:layout_constraintTop_toBottomOf="@id/tv_question_title">
 
-        <TextView
-            android:id="@+id/hve_tv_free_inputs_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:spinnerMode="dropdown"
-            android:text="label"
-            android:textColor="@color/greyBlue"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <TextView
-                android:id="@+id/tv_question_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/charcoalGrey"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Question Title" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintEnd_toEndOf="@id/tv_question_title"
-                app:layout_constraintStart_toStartOf="@id/tv_question_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_question_title">
-
-
-                <TextView
-                    android:id="@+id/tv_error_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="@string/question_is_required"
-                    android:textColor="@color/errorColor"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/hve_edt_free_input"
-                    android:layout_width="0dp"
-                    android:layout_height="53dp"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/bg_free_input_rounded_border"
-                    android:gravity="center|start"
-                    android:paddingStart="@dimen/size20"
-                    android:paddingEnd="@dimen/size20"
-                    android:hint="Enter your ..."
-                    android:textColor="@color/navyBlue"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_error_message" />
-
-                <LinearLayout
-                    android:id="@+id/ll_phone"
-                    android:layout_width="0dp"
-                    android:layout_height="53dp"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/bg_free_input_rounded_border"
-                    android:gravity="center|start"
-                    android:orientation="horizontal"
-                    android:visibility="visible"
-                    android:weightSum="7"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_error_message">
-
-                    <EditText
-                        android:id="@+id/edt_country_code"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:maxLength="5"
-                        android:gravity="center"
-                        android:background="@null"
-                        android:inputType="text"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:hint="+20"
-                        android:textColor="@color/navyBlue" />
-
-                    <View
-                        android:id="@+id/iv_phone_icon"
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/white" />
-
-                    <EditText
-                        android:id="@+id/hve_edt_phone"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="@null"
-                        android:hint="gbrgbrgbrgbrgb"
-                        android:inputType="number"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:textColor="@color/navyBlue" />
-
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/hve_btn_submit"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_error_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/montserrat_medium"
-            android:text="please enter your ...."
+            android:text="@string/question_is_required"
             android:textColor="@color/errorColor"
             android:textSize="10sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
@@ -179,7 +59,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hve_tv_free_inputs_label" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_message" />
 
         <LinearLayout
             android:id="@+id/ll_phone"
@@ -190,32 +70,36 @@
             android:gravity="center|start"
             android:orientation="horizontal"
             android:visibility="gone"
+            android:weightSum="7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hve_tv_free_inputs_label">
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_message">
 
-            <TextView
-                android:id="@+id/tv_country_code"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edt_country_code"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:text="+20"
-                android:textColor="@color/navyBlue" />
+                android:layout_weight="2"
+                android:background="@null"
+                android:fontFamily="@font/montserrat_medium"
+                android:gravity="center"
+                android:hint="+20"
+                android:inputType="text"
+                android:maxLength="5"
+                android:textColor="@color/navyBlue"
+                android:textSize="14sp" />
 
-            <ImageView
+            <View
                 android:id="@+id/iv_phone_icon"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:scaleType="fitXY"
-                android:src="@drawable/bg_phone_icon"
-                app:tint="@color/navyBlue" />
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
             <EditText
                 android:id="@+id/hve_edt_phone"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="5"
                 android:background="@null"
                 android:fontFamily="@font/montserrat_medium"
                 android:hint="gbrgbrgbrgbrgb"
@@ -229,17 +113,18 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/hve_btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Submit"
-        android:visibility="gone"
         app:cornerRadius="8dp"
+        android:layout_marginTop="16dp"
+        android:id="@+id/hve_btn_submit"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hve_cl_question" />
-
+        app:layout_constraintTop_toBottomOf="@+id/hve_cl_question_holder" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
