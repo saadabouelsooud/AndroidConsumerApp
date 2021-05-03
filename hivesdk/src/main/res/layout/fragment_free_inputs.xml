@@ -39,6 +39,117 @@
             android:textColor="@color/greyBlue"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/tv_question_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/charcoalGrey"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Question Title" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintEnd_toEndOf="@id/tv_question_title"
+                app:layout_constraintStart_toStartOf="@id/tv_question_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_question_title">
+
+
+                <TextView
+                    android:id="@+id/tv_error_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="@string/question_is_required"
+                    android:textColor="@color/errorColor"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/hve_edt_free_input"
+                    android:layout_width="0dp"
+                    android:layout_height="53dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/bg_free_input_rounded_border"
+                    android:gravity="center|start"
+                    android:paddingStart="@dimen/size20"
+                    android:paddingEnd="@dimen/size20"
+                    android:hint="Enter your ..."
+                    android:textColor="@color/navyBlue"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_error_message" />
+
+                <LinearLayout
+                    android:id="@+id/ll_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="53dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/bg_free_input_rounded_border"
+                    android:gravity="center|start"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    android:weightSum="7"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_error_message">
+
+                    <EditText
+                        android:id="@+id/edt_country_code"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:maxLength="5"
+                        android:gravity="center"
+                        android:background="@null"
+                        android:inputType="text"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="+20"
+                        android:textColor="@color/navyBlue" />
+
+                    <View
+                        android:id="@+id/iv_phone_icon"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
+
+                    <EditText
+                        android:id="@+id/hve_edt_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:background="@null"
+                        android:hint="gbrgbrgbrgbrgb"
+                        android:inputType="number"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="@color/navyBlue" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/hve_btn_submit"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
