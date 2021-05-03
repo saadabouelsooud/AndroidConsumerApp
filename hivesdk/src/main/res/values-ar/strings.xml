@@ -22,5 +22,10 @@
     <string name="url">عنوان الانترنت</string>
     <string name="email">البريد الالكتروني</string>
     <string name="question_is_required">Question Is Required</string>
-
+    <string name="enter_text_answer">ادخل اجابة نصية</string>
+    <string name="enter_number_answer">ادخل اجابتك بالارقام</string>
+    <string name="enter_email_answer">ادخل البريد الالكتروني</string>
+    <string name="enter_telephone_answer">ادخل رقم التليفون</string>
+    <string name="enter_postal_code_answer">ادخل الرمز البريدي</string>
+    <string name="enter_url_answer">ادخل عنوان الانترنت</string>
 </resources>

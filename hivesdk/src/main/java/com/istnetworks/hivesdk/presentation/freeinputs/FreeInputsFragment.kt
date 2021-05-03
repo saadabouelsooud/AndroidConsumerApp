@@ -32,6 +32,9 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 
 class FreeInputsFragment : Fragment() {
 
+       private  val CODE_AREA_PATTERN = "^[^01][0-9]{2}\$"
+       private  val PHONE_NUMBER_PATTERN= "[0-9][0-9]{8,14}"
+
     private lateinit var binding: FragmentFreeInputsBinding
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
@@ -58,48 +61,37 @@ class FreeInputsFragment : Fragment() {
         binding.llPhone.visibility = View.GONE
         when (questionType) {
             QuestionType.TextInput.value -> {
-                binding.hveTvFreeInputsLabel.text = "First Name"
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_TEXT
-                binding.hveEdtFreeInput.hint = "Enter your name"
+                binding.hveEdtFreeInput.hint = getString(R.string.enter_text_answer)
             }
             QuestionType.NumberInput.value -> {
-                binding.hveTvFreeInputsLabel.text = "Age"
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_NUMBER
-                binding.hveEdtFreeInput.hint = "Enter your age"
+                binding.hveEdtFreeInput.hint = getString(R.string.enter_number_answer)
             }
             QuestionType.EmailInput.value -> {
-                binding.hveTvFreeInputsLabel.text = getString(R.string.email)
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                binding.hveEdtFreeInput.hint = getString(R.string.email)
+                binding.hveEdtFreeInput.hint = getString(R.string.enter_email_answer)
             }
             QuestionType.PhoneNumberInput.value -> {
                 handlePhoneInput()
             }
             QuestionType.PostalCodeInput.value -> {
-                binding.hveTvFreeInputsLabel.text = getString(R.string.postal_code)
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_NUMBER
-                binding.hveEdtFreeInput.hint = getString(R.string.postal_code)
+                binding.hveEdtFreeInput.hint = getString(R.string.enter_postal_code_answer)
             }
             QuestionType.URLInput.value -> {
-                binding.hveTvFreeInputsLabel.text = getString(R.string.url)
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_TEXT_VARIATION_URI
-                binding.hveEdtFreeInput.hint = getString(R.string.url)
+                binding.hveEdtFreeInput.hint = getString(R.string.enter_url_answer)
             }
         }
     }
 
     private fun handlePhoneInput() {
-        binding.hveTvFreeInputsLabel.text = getString(R.string.phone_number)
         binding.hveEdtFreeInput.visibility = View.GONE
         binding.llPhone.visibility = View.VISIBLE
-        binding.hveEdtPhone.hint = getString(R.string.phone_number)
-        binding.tvCountryCode.setTextColor(Color.parseColor("#0075be"))
+        binding.hveEdtPhone.hint = getString(R.string.enter_telephone_answer)
+        binding.edtCountryCode.setTextColor(Color.parseColor("#0075be"))
         binding.hveEdtPhone.setTextColor(Color.parseColor("#0075be"))
-        activity?.let { ContextCompat.getColor(it, R.color.navyBlue) }?.let {
-            binding.ivPhoneIcon.setColorFilter(
-                it, android.graphics.PorterDuff.Mode.SRC_IN
-            )
-        }
     }
 
     private fun moveToNextQuestion(questionType: Int): Boolean {
@@ -119,7 +111,7 @@ class FreeInputsFragment : Fragment() {
                 return true
             }
             QuestionType.PhoneNumberInput.value -> {
-                if (TextUtils.isEmpty(binding.hveEdtPhone.text)) {
+                if (!binding.hveEdtPhone.text.toString().matches(PHONE_NUMBER_PATTERN.toRegex()) && !binding.edtCountryCode.text.toString().matches(CODE_AREA_PATTERN.toRegex()) ) {
                     setPhoneError()
                     return false
                 }
@@ -157,12 +149,7 @@ class FreeInputsFragment : Fragment() {
                     R.drawable.free_input_error
                 )
             }
-        binding.tvCountryCode.setTextColor(Color.parseColor("#e4606c"))
-        activity?.let { ContextCompat.getColor(it, R.color.errorColor) }?.let {
-            binding.ivPhoneIcon.setColorFilter(
-                it, android.graphics.PorterDuff.Mode.SRC_IN
-            )
-        }
+        binding.edtCountryCode.setTextColor(Color.parseColor("#e4606c"))
     }
 
     private fun getFreeInputText(questionType: Int): String {

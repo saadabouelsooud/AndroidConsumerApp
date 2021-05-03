@@ -42,17 +42,6 @@
                 app:layout_constraintStart_toStartOf="@id/tv_question_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_question_title">
 
-                <TextView
-                    android:id="@+id/hve_tv_free_inputs_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown"
-                    android:text="label"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:textColor="@color/greyBlue"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_error_message"
@@ -61,9 +50,10 @@
                     android:visibility="gone"
                     android:textSize="10sp"
                     android:fontFamily="@font/montserrat_medium"
-                    android:text="please enter your ...."
+                    android:text="@string/question_is_required"
                     android:textColor="@color/errorColor"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
@@ -81,7 +71,7 @@
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/hve_tv_free_inputs_label" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_error_message" />
 
                 <LinearLayout
                     android:id="@+id/ll_phone"
@@ -91,33 +81,37 @@
                     android:background="@drawable/bg_free_input_rounded_border"
                     android:gravity="center|start"
                     android:orientation="horizontal"
-                    android:visibility="gone"
+                    android:visibility="visible"
+                    android:weightSum="7"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/hve_tv_free_inputs_label">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_error_message">
 
-                    <TextView
-                        android:id="@+id/tv_country_code"
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/edt_country_code"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:text="+20"
+                        android:layout_weight="2"
+                        android:maxLength="5"
+                        android:gravity="center"
+                        android:background="@null"
+                        android:inputType="text"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="+20"
                         android:textColor="@color/navyBlue" />
 
-                    <ImageView
+                    <View
                         android:id="@+id/iv_phone_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_gravity="center"
-                        android:scaleType="fitXY"
-                        app:tint="@color/navyBlue"
-                        android:src="@drawable/bg_phone_icon" />
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
 
                     <EditText
                         android:id="@+id/hve_edt_phone"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="5"
                         android:background="@null"
                         android:hint="gbrgbrgbrgbrgb"
                         android:inputType="number"

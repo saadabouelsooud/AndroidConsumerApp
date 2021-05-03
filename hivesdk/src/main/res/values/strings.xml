@@ -22,4 +22,10 @@
     <string name="url">URL</string>
     <string name="email">Email</string>
     <string name="question_is_required">Question Is Required</string>
+    <string name="enter_text_answer">Enter text answer</string>
+    <string name="enter_number_answer">Enter number answer</string>
+    <string name="enter_email_answer">Enter email answer</string>
+    <string name="enter_telephone_answer">Enter telephone answer</string>
+    <string name="enter_postal_code_answer">Enter postal code answer</string>
+    <string name="enter_url_answer">Enter URL answer</string>
 </resources>
