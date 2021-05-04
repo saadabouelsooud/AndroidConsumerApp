@@ -8,6 +8,7 @@ import android.graphics.drawable.shapes.RectShape
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.data.models.QuestionResponses
 import com.istnetworks.hivesdk.data.models.RelevantWebSurveyBody
 import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
@@ -17,6 +18,10 @@ import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.onClick
+import com.istnetworks.hivesdk.data.utils.extensions.show
+import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import kotlinx.coroutines.launch
 
 
@@ -129,6 +134,17 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun getThePreviousPosition(currentItem: Int): Int {
         return currentItem-1
+    }
+    fun setSubmitButtonBasedOnPosition(btn:MaterialButton,questionPosition:Int?){
+        btn.submitButtonStyle(getSurveyTheme()?.submitButton)
+        if(survey?.questions?.lastIndex==questionPosition){
+            btn.show()
+        }else{
+            btn.hide()
+        }
+        btn.onClick {
+            saveSurvey()
+        }
     }
 
 }

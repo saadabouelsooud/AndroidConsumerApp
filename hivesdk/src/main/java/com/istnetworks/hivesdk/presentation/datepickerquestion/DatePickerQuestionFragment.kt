@@ -21,6 +21,7 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -57,12 +58,12 @@ class DatePickerQuestionFragment : Fragment() {
     private fun bindQuestion() {
         binding.tvQuestionTitle.text = context?.getString(
             R.string.question_format,
-            position?.plus(1),selectedQuestion?.title)
+            position?.plus(1), selectedQuestion?.title
+        )
     }
 
     private fun initSubmitBtn() {
-        binding.hveBtnSubmit.disable()
-        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+       viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)
     }
 
     private fun handleDatePickerField() {
@@ -78,17 +79,10 @@ class DatePickerQuestionFragment : Fragment() {
             val dialog = DatePickerDialog(
                 requireContext(), { _, year, month, dayOfMonth ->
 
-                    val mm = if (month < 9)
-                        "0${month + 1}"
-                    else
-                        (month + 1).toString()
-
-                    val dd = if (dayOfMonth <= 9)
-                        "0$dayOfMonth"
-                    else
-                        dayOfMonth.toString()
-
-                    binding.hveTietDate.setText("$dd $mm,$year")
+                    val sdf = SimpleDateFormat("dd MMMM,yyyy",Locale.getDefault())
+                    c.set(year, month, dayOfMonth)
+                    val dateString: String = sdf.format(c.getTime())
+                    binding.hveTietDate.setText(dateString)
                     saveAnswer(binding.hveTietDate.text.toString())
                 }, year, month, day - 1
             )
@@ -118,13 +112,6 @@ class DatePickerQuestionFragment : Fragment() {
     }
 
     private fun onClickActions() {
-
-        binding.hveBtnSubmit.setOnClickListener {
-            if (selectedQuestion?.isRequired == true) {
-                //   viewModel.saveSurvey()
-            }
-        }
-
 
     }
 

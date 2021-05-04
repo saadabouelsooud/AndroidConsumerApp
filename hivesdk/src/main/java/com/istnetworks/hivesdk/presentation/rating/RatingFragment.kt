@@ -1,12 +1,12 @@
 package com.istnetworks.hivesdk.presentation.rating
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.StarOption
@@ -37,9 +37,12 @@ class RatingFragment : Fragment() {
         binding = FragmentRatingBinding.inflate(inflater)
         selectedQuestion = viewModel.findQuestion(position)
         stylingViews()
-        selectedQuestion?.StarOption?.shape?.let { bindQuestions(it,selectedQuestion?.StarOption) }
+        initSubmitBtn()
+
+        selectedQuestion?.StarOption?.shape?.let { bindQuestions(it, selectedQuestion?.StarOption) }
         return binding.root
     }
+
     private fun bindQuestions(
         type: Int,
         starOption: StarOption?
@@ -69,8 +72,7 @@ class RatingFragment : Fragment() {
     }
 
     private fun initSubmitBtn() {
-        binding.hveBtnSubmit.disable()
-        //binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)
     }
 
     companion object {

@@ -45,35 +45,34 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.root.requestLayout()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMultipleChoicesBinding.inflate(inflater)
-        binding.hveBtnSubmit.disable()
+
         observeViewModel()
         observeSurvey()
         onClickActions()
+        initSubmitBtn()
         return binding.root
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
+    private fun initSubmitBtn() {
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
     }
 
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-//        viewModel.isLoading.observe(viewLifecycleOwner, {
-//            if(it){
-//                binding.animateProgressBar.visibility=View.VISIBLE
-//            }else {
-//                binding.animateProgressBar.visibility=View.GONE
-//            }
-//
-//        })
+
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -106,14 +105,6 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
     }
     private fun onClickActions() {
 
-        binding.hveBtnSubmit.setOnClickListener {
-            if (isRequired) {
-
-            }else{
-                onSurveyReadyToSave()
-            }
-
-        }
 
     }
 

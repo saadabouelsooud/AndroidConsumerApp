@@ -57,16 +57,20 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMultipleImageChoiceBinding.inflate(inflater)
-        binding.hveBtnSubmit.disable()
+
         observeViewModel()
         observeSurvey()
         onClickActions()
+        initSubmitBtn()
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+    }
+    private fun initSubmitBtn() {
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
     }
 
     private fun observeViewModel() {
@@ -137,14 +141,6 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
     }
     private fun onClickActions() {
 
-        binding.hveBtnSubmit.setOnClickListener {
-            if (isRequired) {
-
-            }else{
-                onSurveyReadyToSave()
-            }
-
-        }
 
     }
 

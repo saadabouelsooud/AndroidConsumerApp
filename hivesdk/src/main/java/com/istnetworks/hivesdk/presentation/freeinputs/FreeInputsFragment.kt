@@ -196,16 +196,11 @@ class FreeInputsFragment : Fragment() {
     }
 
     private fun initSubmitBtn() {
-        binding.hveBtnSubmit.disable()
-        //binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)
     }
 
     private fun onClickActions(questionType: Int) {
-        binding.hveBtnSubmit.setOnClickListener {
-            if (selectedQuestion?.isRequired == true) {
 
-            }
-        }
     }
 
     /////// handle next and prev button ///////

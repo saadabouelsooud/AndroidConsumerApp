@@ -75,9 +75,9 @@ class SpinnerQuestionFragment : Fragment() {
     }
 
     private fun initSubmitBtn() {
-        binding.hveBtnSubmit.disable()
-        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)
     }
+
 
     private fun setSpinner() {
         val list = selectedQuestion?.choices?.map { it.title }?.toMutableList()
@@ -103,14 +103,6 @@ class SpinnerQuestionFragment : Fragment() {
     }
 
     private fun onClickActions() {
-
-        binding.hveBtnSubmit.setOnClickListener {
-            if (selectedQuestion?.isRequired == true) {
-                //   viewModel.saveSurvey()
-            }
-        }
-
-
 
     }
 

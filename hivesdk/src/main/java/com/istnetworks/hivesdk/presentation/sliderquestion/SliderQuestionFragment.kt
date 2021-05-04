@@ -79,8 +79,7 @@ class SliderQuestionFragment : Fragment() {
     }
 
     private fun initSubmitBtn() {
-        binding.hveBtnSubmit.disable()
-        binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)
     }
 
 
@@ -97,13 +96,6 @@ class SliderQuestionFragment : Fragment() {
     }
 
     private fun onClickActions() {
-
-        binding.hveBtnSubmit.setOnClickListener {
-            if (selectedQuestion?.isRequired == true) {
-                //   viewModel.saveSurvey()
-            }
-        }
-
 
 
     }
