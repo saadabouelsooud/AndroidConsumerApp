@@ -10,6 +10,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.RatingBar;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+
 import com.istnetworks.hivesdk.R;
 
 /**
@@ -37,7 +40,7 @@ public class HiveRatingBar extends RatingBar implements RatingBar.OnRatingBarCha
     /**
      * customize star drawable
      */
-    private int mStarDrawable;
+    private @DrawableRes int mStarDrawable;
 
     /**
      * customize background drawable
@@ -326,6 +329,19 @@ public class HiveRatingBar extends RatingBar implements RatingBar.OnRatingBarCha
      */
     public void setStarSpacing(float starSpacing) {
         this.starSpacing = starSpacing;
+        requestLayout();
+    }
+
+    public void setStarColor(ColorStateList mStarColor) {
+        this.mStarColor = mStarColor;
+        invalidate();
+        requestLayout();
+    }
+
+    public void setStarDrawable(@DrawableRes int mStarDrawable) {
+        this.mStarDrawable = mStarDrawable;
+
+        invalidate();
         requestLayout();
     }
 }

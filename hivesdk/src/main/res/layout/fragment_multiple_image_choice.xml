@@ -26,7 +26,7 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <LinearLayout
+        <GridLayout
             android:id="@+id/hve_li_multiple_choice_wrapper"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,9 +36,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="@dimen/size5"
             android:padding="8dp"
-            android:orientation="vertical" >
+            android:orientation="horizontal"
+            android:columnCount="2">
 
-        </LinearLayout>
+        </GridLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.button.MaterialButton

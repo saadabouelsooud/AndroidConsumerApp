@@ -57,6 +57,8 @@ class MainFragment : Fragment() {
 
     private fun setupProgressSlider() {
         if (viewModel.survey?.surveyOptions?.hasProgressBar == true) {
+            binding.hveSliderProgress.isEnabled = false
+            binding.hveSliderProgress.thumbRadius=0
             binding.hveSliderProgress.show()
             binding.hveSliderProgress.valueFrom = 0f
             binding.hveSliderProgress.stepSize = 1f
@@ -120,6 +122,14 @@ class MainFragment : Fragment() {
         binding.tvSurveyTitle.text = viewModel.survey?.title
         binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
         binding.clParent.setBackgroundColor(Color.parseColor("#" + viewModel.getSurveyTheme()?.surveyBackgroundColor))
+
+        binding.hveIvClose.visibility =  if(viewModel.getSurveyOptions()?.enableCloseButton == true){
+            View.VISIBLE
+        }else
+        {
+            View.GONE
+        }
+
     }
 
     private fun initializeViewPager() {

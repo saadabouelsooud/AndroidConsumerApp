@@ -64,6 +64,7 @@ class EmojiFragment : Fragment() {
             R.string.question_format,
             questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired ?:false
+        binding.smileyRating.ratingScale = 2
     }
 
 

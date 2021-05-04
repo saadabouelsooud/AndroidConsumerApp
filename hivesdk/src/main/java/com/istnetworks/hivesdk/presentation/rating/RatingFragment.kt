@@ -1,11 +1,14 @@
 package com.istnetworks.hivesdk.presentation.rating
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
@@ -44,20 +47,24 @@ class RatingFragment : Fragment() {
         type: Int,
         starOption: StarOption?
     ) {
-
+        binding.ratingBar.setStarColor(
+                ColorStateList.valueOf(
+                    Color.parseColor("#"+starOption?.fillColor)))
         when (type) {
             StarOptionEnum.HEART.value -> {
-                binding.ratingBar.rating
+                binding.ratingBar.setStarDrawable(R.drawable.ic_heart)
             }
             StarOptionEnum.SMILEY.value -> {
-
+                binding.ratingBar.setStarDrawable(R.drawable.ic_rating_star_border)
             }
             StarOptionEnum.THUMB.value -> {
-
+                binding.ratingBar.setStarDrawable(R.drawable.baseline_thumb_up_24)
             }
             StarOptionEnum.STAR.value -> {
+                binding.ratingBar.setStarDrawable(R.drawable.ic_rating_star_solid)
             }
         }
+
     }
 
     private fun stylingViews() {

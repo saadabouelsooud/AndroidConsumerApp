@@ -100,10 +100,11 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
     private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
         val inflater = LayoutInflater.from(context)
         for (choice in choiceList!!) {
-            val cbChoice = inflater.inflate(R.layout.multi_choice_item
+            val cbChoice = inflater.inflate(R.layout.multi_choice_image_item
                 , binding.hveLiMultipleChoiceWrapper, false) as CheckBox
-
+            cbChoice.buttonDrawable = null
             cbChoice.id = choice.choiceID!!
+            cbChoice.text = choice.title
             lifecycleScope.launch {
                 withContext(Dispatchers.IO)
                 {
@@ -116,7 +117,7 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
                                 .get().toDrawable(resources)
                         withContext(Dispatchers.Main) {
 
-                            cbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+                            cbChoice.setCompoundDrawablesWithIntrinsicBounds(null, bitmap, null, null)
 
                         }
                     }catch (e:Exception)

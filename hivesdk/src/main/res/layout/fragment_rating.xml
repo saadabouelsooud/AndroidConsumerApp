@@ -29,8 +29,6 @@
         android:numStars="5"
         android:rating="1"
         android:isIndicator="true"
-        app:starColor="#F8FF3B"
-        app:starDrawable="@drawable/baseline_thumb_up_24"
         app:layout_constraintEnd_toEndOf="@id/tv_question_title"
         app:layout_constraintStart_toStartOf="@id/tv_question_title"
         app:layout_constraintTop_toBottomOf="@id/tv_question_title"/>

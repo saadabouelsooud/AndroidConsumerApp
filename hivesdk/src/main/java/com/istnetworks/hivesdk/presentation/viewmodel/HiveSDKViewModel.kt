@@ -85,6 +85,9 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun getSurveyTheme()=survey?.surveyOptions?.surveyTheme
+
+    fun getSurveyOptions() = survey?.surveyOptions
+
     fun getSurveyBackgroundColor()=Color.parseColor("#${getSurveyTheme()?.surveyBackgroundColor}")
 
     private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {

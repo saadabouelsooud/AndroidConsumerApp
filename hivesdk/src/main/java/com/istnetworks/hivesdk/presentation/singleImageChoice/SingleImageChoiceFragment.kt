@@ -11,6 +11,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.chip.Chip
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.Choices
@@ -33,7 +34,7 @@ import kotlinx.coroutines.withContext
 
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-private const val TAG = "SingleImageChoiceFragment"
+private const val TAG = "SingleImageChoice"
 
 class SingleImageChoiceFragment : Fragment() {
     private var questionPosition: Int? = null
@@ -98,7 +99,7 @@ class SingleImageChoiceFragment : Fragment() {
             questionPosition?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
-       createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
+        createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
         surveyTheme?.questionChoicesStyle!!)
 
     }
@@ -111,7 +112,7 @@ class SingleImageChoiceFragment : Fragment() {
             ) as RadioButton
 
             rbChoice.id = choice.choiceID!!
-
+            rbChoice.text = choice.title
             lifecycleScope.launch {
                 withContext(Dispatchers.IO)
                 {
@@ -124,7 +125,7 @@ class SingleImageChoiceFragment : Fragment() {
                                 .get().toDrawable(resources)
                         withContext(Dispatchers.Main) {
 
-                            rbChoice.setCompoundDrawablesWithIntrinsicBounds(bitmap, null, null, null)
+                            rbChoice.setCompoundDrawablesWithIntrinsicBounds(null, bitmap, null, null)
 
                             (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
                         }
@@ -137,12 +138,16 @@ class SingleImageChoiceFragment : Fragment() {
             }
             rbChoice.singleChoiceStyle(style)
             rbChoice.setPadding(32, 16, 16, 16)
+            rbChoice.layoutParams.apply {
+
+            }
             binding.hveRgSingleChoiceWrapper.addView(rbChoice)
             this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
 
         }
 
     }
+
 
     private fun onClickActions() {
 
@@ -156,7 +161,7 @@ class SingleImageChoiceFragment : Fragment() {
         }
 
         binding.hveRgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
-            val checkedId = radioGroup.checkedRadioButtonId
+            val checkedId = radioGroup.checkedCheckableImageButtonId
             val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
             viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse(

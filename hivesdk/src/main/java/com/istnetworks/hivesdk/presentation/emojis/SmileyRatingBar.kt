@@ -11,6 +11,14 @@ import com.istnetworks.hivesdk.R
 class SmileyRatingBar : LinearLayout, RatingClickListener {
 
     /**
+     * Rating scale
+     */
+     var ratingScale:Int = 5
+    set(value) {
+        field = value
+        postInvalidate()
+    }
+    /**
      * Rating Enum
      */
     enum class Rating(private val rating: Int) {
@@ -65,28 +73,85 @@ class SmileyRatingBar : LinearLayout, RatingClickListener {
     private fun setUpSmileys() {
         removeAllViews()
         ratingList.clear()
-        var ratingEmoji = RatingEmoji(context)
-        ratingEmoji.setRatingEmoji(Rating.TERRIBLE, R.drawable.emoji_terrible)
-        ratingEmoji.setRatingSelectListener(this)
-        ratingList.add(ratingEmoji)
-        ratingEmoji = RatingEmoji(context)
-        ratingEmoji.setRatingEmoji(Rating.BAD, R.drawable.emoji_bad)
-        ratingEmoji.setRatingSelectListener(this)
-        ratingList.add(ratingEmoji)
-        ratingEmoji = RatingEmoji(context)
-        ratingEmoji.setRatingEmoji(Rating.OKAY, R.drawable.emoji_ok)
-        ratingEmoji.setRatingSelectListener(this)
-        ratingList.add(ratingEmoji)
-        ratingEmoji = RatingEmoji(context)
-        ratingEmoji.setRatingEmoji(Rating.GOOD, R.drawable.emoji_good)
-        ratingEmoji.setRatingSelectListener(this)
-        ratingList.add(ratingEmoji)
-        ratingEmoji = RatingEmoji(context)
-        ratingEmoji.setRatingEmoji(Rating.GREAT, R.drawable.emoji_great)
-        ratingEmoji.setRatingSelectListener(this)
-        ratingList.add(ratingEmoji)
+//        var ratingEmoji = RatingEmoji(context)
+//        ratingEmoji.setRatingEmoji(Rating.TERRIBLE, R.drawable.emoji_terrible)
+//        ratingEmoji.setRatingSelectListener(this)
+//        ratingList.add(ratingEmoji)
+//        ratingEmoji = RatingEmoji(context)
+//        ratingEmoji.setRatingEmoji(Rating.BAD, R.drawable.emoji_bad)
+//        ratingEmoji.setRatingSelectListener(this)
+//        ratingList.add(ratingEmoji)
+//        ratingEmoji = RatingEmoji(context)
+//        ratingEmoji.setRatingEmoji(Rating.OKAY, R.drawable.emoji_ok)
+//        ratingEmoji.setRatingSelectListener(this)
+//        ratingList.add(ratingEmoji)
+//        ratingEmoji = RatingEmoji(context)
+//        ratingEmoji.setRatingEmoji(Rating.GOOD, R.drawable.emoji_good)
+//        ratingEmoji.setRatingSelectListener(this)
+//        ratingList.add(ratingEmoji)
+//        ratingEmoji = RatingEmoji(context)
+//        ratingEmoji.setRatingEmoji(Rating.GREAT, R.drawable.emoji_great)
+//        ratingEmoji.setRatingSelectListener(this)
+//        ratingList.add(ratingEmoji)
+
+        when(ratingScale){
+            2 -> {
+                ratingList.add(getBadRating())
+                ratingList.add(getGoodRating())
+            }
+            3->{
+                ratingList.add(getBadRating())
+                ratingList.add(getOkayRating())
+                ratingList.add(getGreatRating())
+            }
+            5->{
+                ratingList.add(getTerribleRating())
+                ratingList.add(getBadRating())
+                ratingList.add(getOkayRating())
+                ratingList.add(getGoodRating())
+                ratingList.add(getGreatRating())
+            }
+        }
+
         ratingList.forEach { addView(it) }
     }
+
+    private fun getTerribleRating():RatingEmoji{
+        val ratingEmoji = RatingEmoji(context)
+        ratingEmoji.setRatingEmoji(Rating.TERRIBLE, R.drawable.emoji_terrible)
+        ratingEmoji.setRatingSelectListener(this)
+        return ratingEmoji
+    }
+
+    private fun getBadRating():RatingEmoji{
+        val  ratingEmoji = RatingEmoji(context)
+        ratingEmoji.setRatingEmoji(Rating.BAD, R.drawable.emoji_bad)
+        ratingEmoji.setRatingSelectListener(this)
+        return ratingEmoji
+    }
+
+    private fun getOkayRating():RatingEmoji{
+        val  ratingEmoji = RatingEmoji(context)
+        ratingEmoji.setRatingEmoji(Rating.OKAY, R.drawable.emoji_ok)
+        ratingEmoji.setRatingSelectListener(this)
+        return ratingEmoji
+    }
+
+    private fun getGoodRating():RatingEmoji{
+        val  ratingEmoji = RatingEmoji(context)
+        ratingEmoji.setRatingEmoji(Rating.GOOD, R.drawable.emoji_good)
+        ratingEmoji.setRatingSelectListener(this)
+        return ratingEmoji
+    }
+
+    private fun getGreatRating():RatingEmoji{
+        val  ratingEmoji = RatingEmoji(context)
+        ratingEmoji.setRatingEmoji(Rating.GREAT, R.drawable.emoji_great)
+        ratingEmoji.setRatingSelectListener(this)
+        return ratingEmoji
+    }
+
+
 
     override fun ratingClicked(rating: Rating) {
         if (oldRating != Rating.NONE) {
@@ -96,4 +161,6 @@ class SmileyRatingBar : LinearLayout, RatingClickListener {
         oldRating = rating
         ratingSelectListener?.ratingSelected(rating.getRating() + 1)
     }
+
+
 }

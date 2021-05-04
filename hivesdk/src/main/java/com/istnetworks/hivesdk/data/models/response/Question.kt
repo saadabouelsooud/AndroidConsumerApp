@@ -32,7 +32,11 @@ data class Question(
     val choices: List<Choices>? = null,
     @SerializedName("StarOption")
     @Expose
-    val StarOption: StarOption? = null
+    val StarOption: StarOption? = null,
+    @SerializedName("Scale")
+    @Expose
+    val scale:Int? = null
+
 ) : Parcelable
 
 fun Question.toQuestionResponse(textResponse: String?, numberResponse: Int?,
