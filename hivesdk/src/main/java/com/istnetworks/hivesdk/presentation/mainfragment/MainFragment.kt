@@ -53,6 +53,15 @@ class MainFragment : Fragment() {
         viewModel.updateProgressSliderLD.observe(viewLifecycleOwner, {
             binding.hveSliderProgress.value = it
         })
+        viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
+            if(it==true)
+            showToast(getString(R.string.answer_is_not_required))
+
+        })
+        viewModel.showIsRequiredErrMsgLD.observe(viewLifecycleOwner, {
+            if(it==true)
+            showToast(getString(R.string.question_is_required))
+        })
     }
 
     private fun setupProgressSlider() {
@@ -104,8 +113,6 @@ class MainFragment : Fragment() {
     private fun onNextArrowClicked() {
         if (viewModel.validateAnswer(binding.hveViewPager.currentItem)) {
             navigateToNextQuestion()
-        } else {
-            showToast(getString(R.string.question_is_required))
         }
     }
 

@@ -1,10 +1,6 @@
 package com.istnetworks.hivesdk.presentation.viewmodel
 
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,16 +11,18 @@ import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
 import com.istnetworks.hivesdk.data.models.Status
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
-import com.istnetworks.hivesdk.data.models.response.styles.SubmitButton
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
+import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.show
+import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
+import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import kotlinx.coroutines.launch
 
-
+private const val PHONE_NUMBER_PATTERN = "[0-9][0-9]{10,16}"
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
 
     val getSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
@@ -32,6 +30,8 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val saveSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
+    val showIsRequiredErrMsgLD = MutableLiveData<Boolean?>()
+    val showNotValidErrMsgLD = MutableLiveData<Boolean?>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
 
@@ -92,22 +92,6 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     fun getSurveyTheme()=survey?.surveyOptions?.surveyTheme
     fun getSurveyBackgroundColor()=Color.parseColor("#${getSurveyTheme()?.surveyBackgroundColor}")
 
-    private fun createSubmitBtnDrawable(submitBtnStyle: SubmitButton?): ShapeDrawable {
-        val drawable = ShapeDrawable()
-        drawable.shape = RectShape()
-        drawable.paint.color = Color.parseColor("#${submitBtnStyle?.backgroundColor}")
-        drawable.paint.strokeWidth = 10f
-        drawable.paint.style = Paint.Style.STROKE
-        return drawable
-    }
-
-    private fun getFontStyle(submitBtnStyle: SubmitButton?) =
-        when {
-            submitBtnStyle?.fontBold == true -> Typeface.BOLD
-            submitBtnStyle?.fontItalic == true -> Typeface.ITALIC
-            else -> Typeface.NORMAL
-        }
-
     private fun generateSaveSurveyRequest() =
         survey?.toSaveSurveyBody(questionResponsesList)
 
@@ -122,9 +106,49 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun validateAnswer(questionPosition: Int): Boolean {
         val currentQuestion = survey?.questions?.get(questionPosition)
-        val currentQuestionId = survey?.questions?.get(questionPosition)?.surveyQuestionID
-        return questionResponsesList.find { it.questionID == currentQuestionId } != null
-                || currentQuestion?.isRequired == false
+        return if (noResponseForCurrentQuestion(currentQuestion) && currentQuestion?.isRequired == false)
+            true
+        else
+            currentQuestionResponseIsValid(currentQuestion)
+    }
+
+    private fun currentQuestionResponseIsValid(currentQuestion: Question?): Boolean {
+        val questionResponse =
+            questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
+
+        if (questionResponse == null) {
+            showIsRequiredErrMsgLD.value = true
+            return false
+        }
+
+        return when (currentQuestion?.questionType) {
+            QuestionType.EmailInput.value -> {
+                val validEmail = questionResponse.textResponse.isValidEmail()
+                showNotValidErrMsgLD.value = !validEmail
+                validEmail
+            }
+            QuestionType.URLInput.value -> {
+                val validUrl = questionResponse.textResponse?.isValidUrl()
+                showNotValidErrMsgLD.value = validUrl == false
+                validUrl == true
+            }
+            QuestionType.PhoneNumberInput.value -> {
+                val validPhone =
+                    questionResponse.textResponse?.matches(PHONE_NUMBER_PATTERN.toRegex())
+                showNotValidErrMsgLD.value = validPhone == false
+                validPhone == true
+            }
+            else -> true
+        }
+
+
+    }
+
+    private fun noResponseForCurrentQuestion(currentQuestion: Question?): Boolean {
+        val questionResponse =
+            questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
+
+        return questionResponse == null
     }
 
     fun getTheNextQuestionPosition(currentQuestion: Int): Int {
@@ -133,13 +157,14 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun getThePreviousPosition(currentItem: Int): Int {
-        return currentItem-1
+        return currentItem - 1
     }
-    fun setSubmitButtonBasedOnPosition(btn:MaterialButton,questionPosition:Int?){
+
+    fun setSubmitButtonBasedOnPosition(btn: MaterialButton, questionPosition: Int?) {
         btn.submitButtonStyle(getSurveyTheme()?.submitButton)
-        if(survey?.questions?.lastIndex==questionPosition){
+        if (survey?.questions?.lastIndex == questionPosition) {
             btn.show()
-        }else{
+        } else {
             btn.hide()
         }
         btn.onClick {
