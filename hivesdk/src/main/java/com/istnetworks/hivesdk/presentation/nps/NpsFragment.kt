@@ -47,13 +47,19 @@ class NpsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNpsBinding.inflate(inflater)
-        binding.hveBtnSubmit.disable()
+
         setNpsList()
         observeSurvey()
         observeViewModel()
         binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
         onClickActions()
+        initSubmitBtn()
         return binding.root
+    }
+
+
+    private fun initSubmitBtn() {
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
     }
 
     override fun onResume() {

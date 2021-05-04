@@ -53,11 +53,15 @@ class SingleChoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSingleChoiceBinding.inflate(inflater)
-        binding.hveBtnSubmit.disable()
+
         observeViewModel()
         onClickActions()
         observeSurvey()
+        initSubmitBtn()
         return binding.root
+    }
+    private fun initSubmitBtn() {
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
     }
 
     private fun observeViewModel() {
@@ -109,14 +113,6 @@ class SingleChoiceFragment : Fragment() {
 
     private fun onClickActions() {
 
-        binding.hveBtnSubmit.setOnClickListener {
-            if (isRequired) {
-
-            }else{
-                onSurveyReadyToSave()
-            }
-
-        }
 
         binding.rgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
             val checkedId = radioGroup.checkedRadioButtonId

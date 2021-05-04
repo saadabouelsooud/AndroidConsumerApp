@@ -34,12 +34,16 @@ class EmojiFragment : Fragment() {
         binding = FragmentEmojiBinding.inflate(inflater)
         observeSurvey()
         setOnClickListeners()
+        initSubmitBtn()
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+    }
+    private fun initSubmitBtn() {
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
     }
 
     private fun setOnClickListeners() {

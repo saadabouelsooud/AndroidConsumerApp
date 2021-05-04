@@ -65,25 +65,22 @@ class SingleImageChoiceFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSingleImageChoiceBinding.inflate(inflater)
-        binding.hveBtnSubmit.disable()
+
         observeViewModel()
         onClickActions()
         observeSurvey()
+        initSubmitBtn()
         return binding.root
+    }
+    private fun initSubmitBtn() {
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
     }
 
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-//        viewModel.isLoading.observe(viewLifecycleOwner, {
-//            if(it){
-//                binding.animateProgressBar.visibility=View.VISIBLE
-//            }else {
-//                binding.animateProgressBar.visibility=View.GONE
-//            }
-//
-//        })
+
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -151,14 +148,6 @@ class SingleImageChoiceFragment : Fragment() {
 
     private fun onClickActions() {
 
-        binding.hveBtnSubmit.setOnClickListener {
-            if (isRequired) {
-
-            } else {
-                onSurveyReadyToSave()
-            }
-
-        }
 
         binding.hveRgSingleChoiceWrapper.setOnCheckedChangeListener { radioGroup, i ->
             val checkedId = radioGroup.checkedCheckableImageButtonId
@@ -177,15 +166,6 @@ class SingleImageChoiceFragment : Fragment() {
     }
 
     private fun onSurveyReadyToSave() {
-//        viewModel.updateSelectedQuestions(
-//            selectedQuestion?.toQuestionResponse(
-//                "",
-//                0,
-//                listOf(
-//                    SelectedChoices(sele?.choiceID, selectedChoice?.choiceGUID)
-//                )
-//            )
-//        )
         viewModel.saveSurvey()
     }
 
