@@ -16,7 +16,8 @@ class SmileyRatingBar : LinearLayout, RatingClickListener {
      var ratingScale:Int = 5
     set(value) {
         field = value
-        postInvalidate()
+        setUpSmileys()
+        requestLayout()
     }
     /**
      * Rating Enum
@@ -73,26 +74,6 @@ class SmileyRatingBar : LinearLayout, RatingClickListener {
     private fun setUpSmileys() {
         removeAllViews()
         ratingList.clear()
-//        var ratingEmoji = RatingEmoji(context)
-//        ratingEmoji.setRatingEmoji(Rating.TERRIBLE, R.drawable.emoji_terrible)
-//        ratingEmoji.setRatingSelectListener(this)
-//        ratingList.add(ratingEmoji)
-//        ratingEmoji = RatingEmoji(context)
-//        ratingEmoji.setRatingEmoji(Rating.BAD, R.drawable.emoji_bad)
-//        ratingEmoji.setRatingSelectListener(this)
-//        ratingList.add(ratingEmoji)
-//        ratingEmoji = RatingEmoji(context)
-//        ratingEmoji.setRatingEmoji(Rating.OKAY, R.drawable.emoji_ok)
-//        ratingEmoji.setRatingSelectListener(this)
-//        ratingList.add(ratingEmoji)
-//        ratingEmoji = RatingEmoji(context)
-//        ratingEmoji.setRatingEmoji(Rating.GOOD, R.drawable.emoji_good)
-//        ratingEmoji.setRatingSelectListener(this)
-//        ratingList.add(ratingEmoji)
-//        ratingEmoji = RatingEmoji(context)
-//        ratingEmoji.setRatingEmoji(Rating.GREAT, R.drawable.emoji_great)
-//        ratingEmoji.setRatingSelectListener(this)
-//        ratingList.add(ratingEmoji)
 
         when(ratingScale){
             2 -> {
@@ -155,9 +136,10 @@ class SmileyRatingBar : LinearLayout, RatingClickListener {
 
     override fun ratingClicked(rating: Rating) {
         if (oldRating != Rating.NONE) {
-            ratingList[oldRating.getRating()].unSelectRatingEmoji()
+            ratingList.find { it.rating == oldRating }!!.unSelectRatingEmoji()
         }
-        ratingList[rating.getRating()].selectRatingEmoji()
+        ratingList.find { it.rating == rating }!!.selectRatingEmoji()
+
         oldRating = rating
         ratingSelectListener?.ratingSelected(rating.getRating() + 1)
     }

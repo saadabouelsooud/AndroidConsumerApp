@@ -14,9 +14,11 @@ import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.StarOption
 import com.istnetworks.hivesdk.data.models.response.Question
+import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.StarOptionEnum
 import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentRatingBinding
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
@@ -33,6 +35,7 @@ class RatingFragment : Fragment() {
     }
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
+    private lateinit var selectedRating :HiveRatingBar
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +44,6 @@ class RatingFragment : Fragment() {
         selectedQuestion = viewModel.findQuestion(position)
         stylingViews()
         initSubmitBtn()
-
         selectedQuestion?.StarOption?.shape?.let { bindQuestions(it, selectedQuestion?.StarOption) }
         return binding.root
     }
@@ -50,24 +52,28 @@ class RatingFragment : Fragment() {
         type: Int,
         starOption: StarOption?
     ) {
-        binding.ratingBar.setStarColor(
-                ColorStateList.valueOf(
-                    Color.parseColor("#"+starOption?.fillColor)))
+
         when (type) {
             StarOptionEnum.HEART.value -> {
-                binding.ratingBar.setStarDrawable(R.drawable.ic_heart)
+                selectedRating = binding.hveHeartRatingBar
             }
             StarOptionEnum.SMILEY.value -> {
-                binding.ratingBar.setStarDrawable(R.drawable.ic_rating_star_border)
+                selectedRating = binding.hveSmileRatingBar
             }
             StarOptionEnum.THUMB.value -> {
-                binding.ratingBar.setStarDrawable(R.drawable.baseline_thumb_up_24)
+                selectedRating = binding.hveThumbRatingBar
             }
             StarOptionEnum.STAR.value -> {
-                binding.ratingBar.setStarDrawable(R.drawable.ic_rating_star_solid)
+                selectedRating = binding.hveStarRatingBar
             }
         }
 
+        selectedRating.show()
+        selectedRating.setStarColor(
+            ColorStateList.valueOf(
+                Color.parseColor("#"+starOption?.fillColor)))
+
+        listenToRating()
     }
 
     private fun stylingViews() {
@@ -76,6 +82,15 @@ class RatingFragment : Fragment() {
         binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
             position?.plus(1),selectedQuestion?.title)
 
+    }
+
+    private fun listenToRating(){
+        selectedRating.setOnRatingChangeListener { ratingBar, rating, fromUser ->
+            viewModel.updateQuestionResponsesList(selectedQuestion?.toQuestionResponse(
+                "",
+                rating.toInt()
+            ))
+        }
     }
 
     private fun initSubmitBtn() {

@@ -8,6 +8,9 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.CompoundButton;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
@@ -67,8 +70,8 @@ public class RadioGridGroup extends GridLayout {
                 mProtectFromCheckedChange = false;
                 setCheckedId(button.getId());
             }
+            ((LinearLayout.LayoutParams) button.getLayoutParams()).setMargins(8,8,8,8);
         }
-
 
         super.addView(child, index, params);
     }

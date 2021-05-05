@@ -12,6 +12,7 @@ import android.widget.RatingBar;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
 
 import com.istnetworks.hivesdk.R;
 
@@ -334,13 +335,17 @@ public class HiveRatingBar extends RatingBar implements RatingBar.OnRatingBarCha
 
     public void setStarColor(ColorStateList mStarColor) {
         this.mStarColor = mStarColor;
+        mDrawable = new StarDrawable(getContext(), mStarDrawable, mBgDrawable, mKeepOriginColor);
+        mDrawable.setStarCount(getNumStars());
+        setProgressDrawable(mDrawable);
         invalidate();
         requestLayout();
     }
 
     public void setStarDrawable(@DrawableRes int mStarDrawable) {
         this.mStarDrawable = mStarDrawable;
-
+        Drawable draw = ContextCompat.getDrawable(getContext(),mStarDrawable);
+        setProgressDrawable(draw);
         invalidate();
         requestLayout();
     }

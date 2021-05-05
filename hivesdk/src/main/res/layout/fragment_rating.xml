@@ -21,14 +21,60 @@
         tools:text="Question Title" />
 
     <com.istnetworks.hivesdk.presentation.rating.HiveRatingBar
-        android:id="@+id/rating_bar"
+        android:id="@+id/hve_star_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        android:stepSize="1"
+        android:numStars="5"
+        android:rating="1"
+        app:layout_constraintEnd_toEndOf="@id/tv_question_title"
+        app:layout_constraintStart_toStartOf="@id/tv_question_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_title"/>
+
+    <com.istnetworks.hivesdk.presentation.rating.HiveRatingBar
+        android:id="@+id/hve_thumb_rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:numStars="5"
         android:rating="1"
-        android:isIndicator="true"
+        android:visibility="gone"
+        android:stepSize="1"
+        app:starDrawable="@drawable/baseline_thumb_up_24"
+        app:layout_constraintEnd_toEndOf="@id/tv_question_title"
+        app:layout_constraintStart_toStartOf="@id/tv_question_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_title"/>
+
+    <com.istnetworks.hivesdk.presentation.rating.HiveRatingBar
+        android:id="@+id/hve_heart_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:numStars="5"
+        android:rating="1"
+        android:visibility="gone"
+        android:stepSize="1"
+        app:starDrawable="@drawable/ic_heart"
+        app:layout_constraintEnd_toEndOf="@id/tv_question_title"
+        app:layout_constraintStart_toStartOf="@id/tv_question_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_title"/>
+
+    <com.istnetworks.hivesdk.presentation.rating.HiveRatingBar
+        android:id="@+id/hve_smile_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:numStars="5"
+        android:rating="1"
+        android:stepSize="1"
+        android:visibility="gone"
+        app:starDrawable="@drawable/baseline_emoji_emotions_24"
         app:layout_constraintEnd_toEndOf="@id/tv_question_title"
         app:layout_constraintStart_toStartOf="@id/tv_question_title"
         app:layout_constraintTop_toBottomOf="@id/tv_question_title"/>

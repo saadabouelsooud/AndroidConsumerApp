@@ -16,7 +16,8 @@ internal class RatingEmoji : ConstraintLayout {
     private var tvText: TextView? = null
     private var ivEmoji: ImageView? = null
     private var unSelectedEmoji: Int? = null
-    private var rating: SmileyRatingBar.Rating = SmileyRatingBar.Rating.NONE
+    var rating: SmileyRatingBar.Rating = SmileyRatingBar.Rating.NONE
+    get() = field
     private var ratingClickListener: RatingClickListener? = null
 
     private val unselectedImageSize: Int by lazy {
