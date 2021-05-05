@@ -11,6 +11,7 @@ import android.widget.TextView
 
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.R
@@ -224,6 +225,8 @@ fun MaterialButton.submitButtonStyle(submitButton: SubmitButton?) {
     if (submitButton.fontUnderline!!) {
         paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
+    val drawable = ContextCompat.getDrawable(context,R.drawable.hve_ic_send)
+    setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null)
 }
 
 fun ImageView.surveyLogoStyle(logoStyle:SurveyLogoStyle){

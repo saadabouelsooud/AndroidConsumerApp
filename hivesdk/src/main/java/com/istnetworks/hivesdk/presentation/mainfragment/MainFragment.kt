@@ -88,6 +88,7 @@ class MainFragment : Fragment() {
                         // Now we've got access to the fragment Root View
                         // we will use it to calculate the height and
                         // apply it to the ViewPager2
+                        it.requestLayout()
                         updatePagerHeightForChild(it, binding.hveViewPager)
                     }
                 }

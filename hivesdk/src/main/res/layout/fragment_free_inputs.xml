@@ -84,7 +84,7 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:gravity="center"
                 android:hint="+20"
-                android:inputType="text"
+                android:inputType="number"
                 android:maxLength="5"
                 android:textColor="@color/navyBlue"
                 android:textSize="14sp" />

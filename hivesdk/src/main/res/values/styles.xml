@@ -2,7 +2,7 @@
 <resources>
 
     <style name="RatingBarSmall" parent="android:Widget.DeviceDefault.Light.RatingBar.Indicator">
-        <item name="android:progressDrawable">@drawable/ic_heart</item>
+        <item name="android:progressDrawable">@drawable/hve_ic_heart</item>
         <item name="android:minHeight">10dp</item>
         <item name="android:maxHeight">30dp</item>
     </style>

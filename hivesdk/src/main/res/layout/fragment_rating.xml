@@ -59,7 +59,7 @@
         android:rating="1"
         android:visibility="gone"
         android:stepSize="1"
-        app:starDrawable="@drawable/ic_heart"
+        app:starDrawable="@drawable/hve_ic_heart"
         app:layout_constraintEnd_toEndOf="@id/tv_question_title"
         app:layout_constraintStart_toStartOf="@id/tv_question_title"
         app:layout_constraintTop_toBottomOf="@id/tv_question_title"/>
