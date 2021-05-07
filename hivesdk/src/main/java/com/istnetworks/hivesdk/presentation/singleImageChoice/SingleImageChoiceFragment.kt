@@ -94,7 +94,7 @@ class SingleImageChoiceFragment : Fragment() {
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.hveTvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         binding.hveTvQuestionTitle.text = context?.getString(R.string.question_format,
-            questionPosition?.plus(1),selectedQuestion?.title)
+            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.

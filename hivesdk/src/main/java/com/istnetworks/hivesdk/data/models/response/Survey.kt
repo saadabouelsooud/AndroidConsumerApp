@@ -34,7 +34,7 @@ data class Survey(
     val questionType: Int? = 0,
     @SerializedName("Questions")
     @Expose
-    val questions: List<Question>? = null,
+    val questions: MutableList<Question>? = null,
 
     @SerializedName("SkipLogics")
     @Expose

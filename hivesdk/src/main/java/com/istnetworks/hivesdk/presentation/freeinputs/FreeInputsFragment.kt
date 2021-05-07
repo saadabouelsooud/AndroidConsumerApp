@@ -192,7 +192,7 @@ class FreeInputsFragment : Fragment() {
         val theme = viewModel.getSurveyTheme()
         binding.tvQuestionTitle.questionTitleStyle(theme?.questionTitleStyle)
         binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            position?.plus(1),selectedQuestion?.title)
+            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
 
     }
 

@@ -105,7 +105,7 @@ class MainFragment : Fragment() {
         binding.hveIvPrevious.onClick {
             val newPosition =
                 viewModel.getThePreviousPosition(binding.hveViewPager.currentItem)
-            binding.hveViewPager.currentItem = newPosition
+            binding.hveViewPager.setCurrentItem(newPosition,false)
         }
 
         binding.hveIvClose.onClick {
@@ -122,7 +122,8 @@ class MainFragment : Fragment() {
     private fun navigateToNextQuestion() {
         val newPosition =
             viewModel.getTheNextQuestionPosition(binding.hveViewPager.currentItem)
-        binding.hveViewPager.currentItem = newPosition
+
+        binding.hveViewPager.setCurrentItem(newPosition,false)
     }
 
     private fun bindViews() {

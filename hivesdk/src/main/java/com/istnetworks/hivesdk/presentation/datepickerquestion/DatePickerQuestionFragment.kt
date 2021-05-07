@@ -65,7 +65,7 @@ class DatePickerQuestionFragment : Fragment() {
     private fun bindQuestion() {
         binding.tvQuestionTitle.text = context?.getString(
             R.string.question_format,
-            position?.plus(1), selectedQuestion?.title
+            viewModel.previousQuestions.size?.plus(1), selectedQuestion?.title
         )
     }
 

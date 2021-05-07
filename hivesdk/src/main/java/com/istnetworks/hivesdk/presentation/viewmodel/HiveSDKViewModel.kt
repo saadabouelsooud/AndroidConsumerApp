@@ -18,6 +18,8 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import kotlinx.coroutines.launch
+import java.lang.NullPointerException
+import java.util.*
 
 private const val PHONE_NUMBER_PATTERN = "[0-9][0-9]{10,16}"
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
@@ -31,7 +33,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val showNotValidErrMsgLD = MutableLiveData<Boolean?>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
-
+    var previousQuestions = Stack<Int>()
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
@@ -41,6 +43,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return survey?.skipLogic?.any { it.questionGUID.equals(qId) } ?: false
     }
 
+    /**
+     * @param choiceGUID : used to get the corresponding skip question for this choice
+     *
+     * this method to get the required question's position
+     */
     private fun getQuestionPositionByChoiceGUID(choiceGUID:String):Int{
         val questionTo = survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
         return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!!.equals(questionTo) }!!
@@ -167,17 +174,24 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun getTheNextQuestionPosition(currentQuestion: Int): Int {
-        return when(hasSkipLogic(findQuestion(currentQuestion)!!.surveyQuestionGUID!!))
+        previousQuestions.push(currentQuestion)
+        try {
+
+            return when(hasSkipLogic(findQuestion(currentQuestion)!!.surveyQuestionGUID!!))
+            {
+                true -> getQuestionPositionByChoiceGUID(
+                    getQuestionResponseByPosition(currentQuestion)!!.choiceGUID!!)
+                false -> currentQuestion +1
+            }
+        }catch (e :NullPointerException)
         {
-            true -> getQuestionPositionByChoiceGUID(
-                getQuestionResponseByPosition(currentQuestion)!!.choiceGUID!!)
-            false -> currentQuestion +1
+            return currentQuestion+1
         }
+
     }
 
-
     fun getThePreviousPosition(currentItem: Int): Int {
-        return currentItem - 1
+        return if(previousQuestions.size>0){ previousQuestions.pop()}else{ return 0}
     }
 
     fun setSubmitButtonBasedOnPosition(btn: MaterialButton, questionPosition: Int?) {

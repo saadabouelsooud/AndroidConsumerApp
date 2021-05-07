@@ -76,6 +76,6 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
 
 
     override fun createFragment(position: Int): Fragment {
-        return mFragmentList.get(position)
+        return mFragmentList[position]
     }
 }

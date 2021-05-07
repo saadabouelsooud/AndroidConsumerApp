@@ -67,7 +67,7 @@ class EmojiFragment : Fragment() {
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
         binding.tvQuestionTitle.text = context?.getString(
             R.string.question_format,
-            questionPosition?.plus(1),selectedQuestion?.title)
+            viewModel.previousQuestions.size.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired ?:false
         binding.smileyRating.ratingScale = selectedQuestion?.scale ?:5
     }

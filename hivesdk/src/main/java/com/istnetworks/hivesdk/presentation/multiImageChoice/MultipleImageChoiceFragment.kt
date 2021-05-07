@@ -96,7 +96,7 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
         selectedQuestion = questionPosition?.let { viewModel.findQuestion(it) }
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
         binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            questionPosition?.plus(1),selectedQuestion?.title)
+            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
