@@ -20,6 +20,7 @@ import com.istnetworks.hivesdk.data.utils.StarOptionEnum
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentRatingBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -48,6 +49,10 @@ class RatingFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+    }
     private fun bindQuestions(
         type: Int,
         starOption: StarOption?

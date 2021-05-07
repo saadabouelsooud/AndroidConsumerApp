@@ -6,9 +6,8 @@ import com.google.gson.annotations.SerializedName
 import com.istnetworks.hivesdk.data.models.QuestionResponses
 import com.istnetworks.hivesdk.data.models.SaveWebSurveyBody
 import com.istnetworks.hivesdk.data.models.SurveyOptions
-import com.istnetworks.hivesdk.data.models.WebSkipLogic
+import com.istnetworks.hivesdk.data.models.SkipLogic
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 @Parcelize
 data class Survey(
@@ -37,14 +36,15 @@ data class Survey(
     @Expose
     val questions: List<Question>? = null,
 
-    @SerializedName("SkipLogic")
+    @SerializedName("SkipLogics")
     @Expose
-    val skipLogic: List<WebSkipLogic>? = null,
+    val skipLogic: List<SkipLogic>? = null,
 
     @SerializedName("SurveyOptions")
     @Expose
-    val surveyOptions: SurveyOptions? = null
-) : Parcelable
+    val surveyOptions: SurveyOptions? = null,
+
+    ) : Parcelable
 
 fun Survey.toSaveSurveyBody(questionResponses: List<QuestionResponses>): SaveWebSurveyBody {
     return SaveWebSurveyBody(invitationGuid, surveyGuid, surveyID, questionResponses)

@@ -118,7 +118,7 @@ data class Choices(
     val imageURL: String? = ""
 ) : Serializable
 
-data class WebSkipLogic(
+data class SkipLogic(
     @SerializedName("ID")
     @Expose
     val id: Int? = 0,
@@ -169,7 +169,8 @@ data class QuestionResponses(
     val numberResponse: Int? = 0,
     @SerializedName("SelectedChoices")
     @Expose
-    val selectedChoices: List<SelectedChoices>? = null
+    val selectedChoices: List<SelectedChoices>? = null,
+    val choiceGUID : String? = null
 ) : Serializable
 
 data class SelectedChoices(

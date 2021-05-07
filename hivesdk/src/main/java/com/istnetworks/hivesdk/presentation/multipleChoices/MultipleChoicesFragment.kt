@@ -63,6 +63,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)

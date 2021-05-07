@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-private const val TAG = "MultipleImageChoiceFragment"
+private const val TAG = "MultipleImageChoice"
 class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeListener{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
@@ -68,6 +68,7 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)

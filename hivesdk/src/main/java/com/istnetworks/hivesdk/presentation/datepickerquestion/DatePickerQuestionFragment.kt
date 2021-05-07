@@ -17,6 +17,7 @@ import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.databinding.FragmentDatePickerQuestionBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -48,6 +49,12 @@ class DatePickerQuestionFragment : Fragment() {
         onClickActions()
         handleDatePickerField()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
 
     private fun stylingViews() {

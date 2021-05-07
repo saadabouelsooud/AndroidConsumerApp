@@ -65,6 +65,7 @@ class NpsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {

@@ -57,6 +57,7 @@ class SingleImageChoiceFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
 
     override fun onCreateView(

@@ -15,6 +15,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.HveFragmentSliderQuestionBinding
+import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -64,7 +65,7 @@ class SliderQuestionFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
 
     private fun stylingViews() {

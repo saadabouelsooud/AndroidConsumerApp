@@ -82,7 +82,7 @@ class MainFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 binding.hveIvPrevious.isEnabled = position > 0
 
-                val fragment = childFragmentManager.findFragmentByTag("f" + position)
+                val fragment = childFragmentManager.findFragmentByTag("f$position")
                 if (fragment != null) {
                     fragment.view?.let {
                         // Now we've got access to the fragment Root View

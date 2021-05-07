@@ -118,7 +118,7 @@ class SpinnerQuestionFragment : Fragment() {
                     viewModel.updateQuestionResponsesList(
                         selectedQuestion?.toQuestionResponse(
                             binding.hveSpAnswers.selectedItem.toString(),
-                            position - 1
+                            position - 1,choiceGUID = selectedQuestion?.choices?.get(position-1)?.choiceGUID
                         )
                     )
             }

@@ -40,8 +40,8 @@ data class Question(
 ) : Parcelable
 
 fun Question.toQuestionResponse(textResponse: String?, numberResponse: Int?,
-                                choices: List<SelectedChoices>? = listOf()): QuestionResponses {
+                                choices: List<SelectedChoices>? = listOf(),choiceGUID:String? =null): QuestionResponses {
     return QuestionResponses(
-        surveyQuestionID, surveyQuestionGUID, textResponse, numberResponse, choices
+        surveyQuestionID, surveyQuestionGUID, textResponse, numberResponse, choices,choiceGUID
     )
 }

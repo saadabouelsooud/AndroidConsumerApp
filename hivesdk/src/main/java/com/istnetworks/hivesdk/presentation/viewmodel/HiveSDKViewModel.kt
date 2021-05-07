@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.button.MaterialButton
-import com.istnetworks.hivesdk.data.models.QuestionResponses
-import com.istnetworks.hivesdk.data.models.RelevantWebSurveyBody
-import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
-import com.istnetworks.hivesdk.data.models.Status
+import com.istnetworks.hivesdk.data.models.*
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
@@ -38,6 +35,15 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
+    }
+
+    private fun hasSkipLogic(qId:String): Boolean{
+        return survey?.skipLogic?.any { it.questionGUID.equals(qId) } ?: false
+    }
+
+    private fun getQuestionPositionByChoiceGUID(choiceGUID:String):Int{
+        val questionTo = survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!!.equals(questionTo) }!!
     }
 
     fun getSurvey(username: String, password: String) = viewModelScope.launch {
@@ -147,6 +153,12 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     }
 
+    private fun getQuestionResponseByPosition(current: Int): QuestionResponses? {
+        val currentQuestion = survey?.questions?.get(current)
+
+        return questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
+    }
+
     private fun noResponseForCurrentQuestion(currentQuestion: Question?): Boolean {
         val questionResponse =
             questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
@@ -155,9 +167,14 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun getTheNextQuestionPosition(currentQuestion: Int): Int {
-        //TODO Skip Logic
-        return currentQuestion + 1
+        return when(hasSkipLogic(findQuestion(currentQuestion)!!.surveyQuestionGUID!!))
+        {
+            true -> getQuestionPositionByChoiceGUID(
+                getQuestionResponseByPosition(currentQuestion)!!.choiceGUID!!)
+            false -> currentQuestion +1
+        }
     }
+
 
     fun getThePreviousPosition(currentItem: Int): Int {
         return currentItem - 1

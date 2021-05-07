@@ -80,6 +80,7 @@ class FreeInputsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
 
     private fun bindQuestions(questionType: Int) {
