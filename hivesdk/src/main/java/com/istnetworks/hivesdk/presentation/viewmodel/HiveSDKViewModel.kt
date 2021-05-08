@@ -34,6 +34,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
+    private var number = 1
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
@@ -42,6 +43,8 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private fun hasSkipLogic(qId:String): Boolean{
         return survey?.skipLogic?.any { it.questionGUID.equals(qId) } ?: false
     }
+
+    fun getQuestionNumber() = number
 
     /**
      * @param choiceGUID : used to get the corresponding skip question for this choice
@@ -187,10 +190,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         {
             return currentQuestion+1
         }
-
+        number++
     }
 
     fun getThePreviousPosition(currentItem: Int): Int {
+        number--
         return if(previousQuestions.size>0){ previousQuestions.pop()}else{ return 0}
     }
 

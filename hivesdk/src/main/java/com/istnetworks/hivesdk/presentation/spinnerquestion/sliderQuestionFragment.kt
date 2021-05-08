@@ -70,8 +70,9 @@ class SpinnerQuestionFragment : Fragment() {
 
     private fun bindQuestion() {
         setSpinner()
+
         binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            viewModel.previousQuestions.size.plus(1),selectedQuestion?.title)
+            viewModel.getQuestionNumber(),selectedQuestion?.title)
     }
 
     private fun initSubmitBtn() {

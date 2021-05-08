@@ -11,6 +11,7 @@ import androidx.annotation.NonNull
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.shouldShow
+import com.istnetworks.hivesdk.presentation.fullScreen.VerticalMainFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
@@ -63,7 +64,7 @@ class SurveyActivity : AppCompatActivity() {
     }
 
     private fun showCardDialog() {
-        val f = MainFragment()
+        val f = VerticalMainFragment()
         val beginTransaction = supportFragmentManager.beginTransaction()
         beginTransaction.add(android.R.id.content,f, "").commit()
     }

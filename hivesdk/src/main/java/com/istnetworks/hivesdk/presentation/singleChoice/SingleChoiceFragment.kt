@@ -1,6 +1,7 @@
 package com.istnetworks.hivesdk.presentation.singleChoice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,7 @@ class SingleChoiceFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+//        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
 
     override fun onCreateView(
@@ -89,8 +90,9 @@ class SingleChoiceFragment : Fragment() {
 
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
+        Log.d(TAG, "observeSurvey: ${viewModel.getQuestionNumber()}")
         binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            viewModel.previousQuestions.size.plus(1),selectedQuestion?.title)
+            viewModel.getQuestionNumber(),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,

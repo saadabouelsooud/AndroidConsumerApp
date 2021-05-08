@@ -24,6 +24,7 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
+import java.lang.Exception
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "MultipleChoicesFragment"
@@ -63,7 +64,12 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        try {
+
+            (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        }catch (e:Exception){
+
+        }
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
