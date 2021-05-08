@@ -104,7 +104,7 @@ class MainFragment : Fragment() {
         }
         binding.hveIvPrevious.onClick {
             val newPosition =
-                viewModel.getThePreviousPosition(binding.hveViewPager.currentItem)
+                viewModel.getThePreviousPosition()
             binding.hveViewPager.setCurrentItem(newPosition,false)
         }
 

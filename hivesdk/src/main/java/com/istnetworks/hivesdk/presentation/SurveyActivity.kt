@@ -64,7 +64,7 @@ class SurveyActivity : AppCompatActivity() {
     }
 
     private fun showCardDialog() {
-        val f = VerticalMainFragment()
+        val f = MainFragment()
         val beginTransaction = supportFragmentManager.beginTransaction()
         beginTransaction.add(android.R.id.content,f, "").commit()
     }

@@ -68,6 +68,7 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
+        bindQuestionTitle()
         (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
     private fun initSubmitBtn() {
@@ -78,14 +79,6 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-//        viewModel.isLoading.observe(viewLifecycleOwner, {
-//            if(it){
-//                binding.animateProgressBar.visibility=View.VISIBLE
-//            }else {
-//                binding.animateProgressBar.visibility=View.GONE
-//            }
-//
-//        })
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -95,13 +88,20 @@ class MultipleImageChoiceFragment : Fragment(), CompoundButton.OnCheckedChangeLi
     private fun observeSurvey() {
         selectedQuestion = questionPosition?.let { viewModel.findQuestion(it) }
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
-        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
+
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,viewModel.getSurveyTheme()?.questionChoicesStyle!!)
 
     }
+
+    private fun bindQuestionTitle() {
+        binding.tvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            viewModel.getQuestionNumber(), selectedQuestion?.title
+        )
+    }
+
     private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle) {
         val inflater = LayoutInflater.from(context)
         for (choice in choiceList!!) {

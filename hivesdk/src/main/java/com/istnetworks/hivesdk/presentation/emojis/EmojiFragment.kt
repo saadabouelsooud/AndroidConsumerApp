@@ -40,6 +40,7 @@ class EmojiFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestion()
         binding.root.requestLayout()
         (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
@@ -65,11 +66,15 @@ class EmojiFragment : Fragment() {
     private fun observeSurvey() {
         selectedQuestion = viewModel.findQuestion(questionPosition)
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
-        binding.tvQuestionTitle.text = context?.getString(
-            R.string.question_format,
-            viewModel.previousQuestions.size.plus(1),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired ?:false
         binding.smileyRating.ratingScale = selectedQuestion?.scale ?:5
+    }
+
+    private fun bindQuestion() {
+        binding.tvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            viewModel.getQuestionNumber(), selectedQuestion?.title
+        )
     }
 
     companion object{

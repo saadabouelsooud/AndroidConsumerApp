@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.button.MaterialButton
-import com.istnetworks.hivesdk.data.models.*
+import com.istnetworks.hivesdk.data.models.QuestionResponses
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyBody
+import com.istnetworks.hivesdk.data.models.RelevantWebSurveyResponse
+import com.istnetworks.hivesdk.data.models.Status
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
@@ -18,7 +21,6 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import kotlinx.coroutines.launch
-import java.lang.NullPointerException
 import java.util.*
 
 private const val PHONE_NUMBER_PATTERN = "[0-9][0-9]{10,16}"
@@ -34,26 +36,24 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
-    private var number = 1
+
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
     }
 
-    private fun hasSkipLogic(qId:String): Boolean{
+    private fun hasSkipLogic(qId: String): Boolean {
         return survey?.skipLogic?.any { it.questionGUID.equals(qId) } ?: false
     }
 
-    fun getQuestionNumber() = number
+    fun getQuestionNumber(): Int {
+        return previousQuestions.size+1
+    }
 
-    /**
-     * @param choiceGUID : used to get the corresponding skip question for this choice
-     *
-     * this method to get the required question's position
-     */
-    private fun getQuestionPositionByChoiceGUID(choiceGUID:String):Int{
-        val questionTo = survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
-        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!!.equals(questionTo) }!!
+    private fun getQuestionPositionByChoiceGUID(choiceGUID: String): Int {
+        val questionTo =
+            survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }!!
     }
 
     fun getSurvey(username: String, password: String) = viewModelScope.launch {
@@ -67,8 +67,10 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
         val surveyResult =
             hiveSDKRepository.getRelevantWebSurveyResource(username, password, surveyBody)
-        when(surveyResult.status){
-            Status.SUCCESS -> getSurveyResponseLD.value = surveyResult.data
+        when (surveyResult.status) {
+            Status.SUCCESS -> {
+                getSurveyResponseLD.value = surveyResult.data
+            }
             Status.ERROR -> showErrorMsg.value = surveyResult.message
             Status.LOADING -> TODO()
         }
@@ -128,10 +130,10 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return if (noResponseForCurrentQuestion(currentQuestion) && currentQuestion?.isRequired == false)
             true
         else
-            currentQuestionResponseIsValid(currentQuestion)
+            isCurrentQuestionResponseValid(currentQuestion)
     }
 
-    private fun currentQuestionResponseIsValid(currentQuestion: Question?): Boolean {
+    private fun isCurrentQuestionResponseValid(currentQuestion: Question?): Boolean {
         val questionResponse =
             questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
 
@@ -176,26 +178,28 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return questionResponse == null
     }
 
-    fun getTheNextQuestionPosition(currentQuestion: Int): Int {
-        previousQuestions.push(currentQuestion)
+    fun getTheNextQuestionPosition(currentQuestionPosition: Int): Int {
+        previousQuestions.push(currentQuestionPosition)
         try {
 
-            return when(hasSkipLogic(findQuestion(currentQuestion)!!.surveyQuestionGUID!!))
-            {
+            return when (hasSkipLogic(findQuestion(currentQuestionPosition)!!.surveyQuestionGUID!!)) {
                 true -> getQuestionPositionByChoiceGUID(
-                    getQuestionResponseByPosition(currentQuestion)!!.choiceGUID!!)
-                false -> currentQuestion +1
+                    getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID!!
+                )
+                false -> currentQuestionPosition + 1
             }
-        }catch (e :NullPointerException)
-        {
-            return currentQuestion+1
+        } catch (e: NullPointerException) {
+            return currentQuestionPosition + 1
         }
-        number++
     }
 
-    fun getThePreviousPosition(currentItem: Int): Int {
-        number--
-        return if(previousQuestions.size>0){ previousQuestions.pop()}else{ return 0}
+    fun getThePreviousPosition(): Int {
+
+        return if (previousQuestions.size > 0) {
+            previousQuestions.pop()
+        } else {
+            return 0
+        }
     }
 
     fun setSubmitButtonBasedOnPosition(btn: MaterialButton, questionPosition: Int?) {

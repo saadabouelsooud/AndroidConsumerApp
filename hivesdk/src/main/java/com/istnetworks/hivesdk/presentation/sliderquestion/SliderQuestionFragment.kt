@@ -13,11 +13,9 @@ import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.HveFragmentSliderQuestionBinding
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
@@ -41,7 +39,6 @@ class SliderQuestionFragment : Fragment() {
         selectedQuestion = viewModel.findQuestion(position)
         stylingViews()
         initSubmitBtn()
-        bindQuestion()
         onClickActions()
         setSliderListener()
         return binding.root
@@ -65,6 +62,8 @@ class SliderQuestionFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestionTitle()
+
         (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
 
@@ -73,10 +72,10 @@ class SliderQuestionFragment : Fragment() {
         binding.tvQuestionTitle.questionTitleStyle(theme?.questionTitleStyle)
     }
 
-    private fun bindQuestion() {
+    private fun bindQuestionTitle() {
         binding.tvQuestionTitle.text = context?.getString(
             R.string.question_format,
-            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
+            viewModel.getQuestionNumber(),selectedQuestion?.title)
     }
 
     private fun initSubmitBtn() {

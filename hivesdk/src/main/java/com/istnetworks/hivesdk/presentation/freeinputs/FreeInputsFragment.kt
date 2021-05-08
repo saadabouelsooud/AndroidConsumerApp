@@ -79,6 +79,7 @@ class FreeInputsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestionTitle()
         binding.root.requestLayout()
         (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
@@ -191,10 +192,17 @@ class FreeInputsFragment : Fragment() {
     private fun stylingViews() {
         val theme = viewModel.getSurveyTheme()
         binding.tvQuestionTitle.questionTitleStyle(theme?.questionTitleStyle)
-        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
+
 
     }
+
+    private fun bindQuestionTitle() {
+        binding.tvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            viewModel.getQuestionNumber(), selectedQuestion?.title
+        )
+    }
+
 
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)

@@ -56,6 +56,7 @@ class SingleImageChoiceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestionTitle()
         binding.root.requestLayout()
         (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
@@ -93,13 +94,19 @@ class SingleImageChoiceFragment : Fragment() {
 
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.hveTvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        binding.hveTvQuestionTitle.text = context?.getString(R.string.question_format,
-            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
+
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,surveyResponse?.survey?.surveyOptions?.
         surveyTheme?.questionChoicesStyle!!)
 
+    }
+
+    private fun bindQuestionTitle() {
+        binding.hveTvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            viewModel.getQuestionNumber(), selectedQuestion?.title
+        )
     }
 
     private fun createChoices(choiceList: List<Choices>?, style: QuestionChoicesStyle){

@@ -17,9 +17,7 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSingleChoiceBinding
-import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -47,6 +45,7 @@ class SingleChoiceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestionTitle()
         binding.root.requestLayout()
 //        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
@@ -90,14 +89,18 @@ class SingleChoiceFragment : Fragment() {
 
         selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
-        Log.d(TAG, "observeSurvey: ${viewModel.getQuestionNumber()}")
-        binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
-            viewModel.getQuestionNumber(),selectedQuestion?.title)
         isRequired = selectedQuestion?.isRequired!!
 
         createChoices(selectedQuestion?.choices,
             surveyResponse.survey?.surveyOptions?.surveyTheme?.questionChoicesStyle!!)
 
+    }
+
+    private fun bindQuestionTitle() {
+        binding.tvQuestionTitle.text = context?.getString(
+            R.string.question_format,
+            viewModel.getQuestionNumber(), selectedQuestion?.title
+        )
     }
 
     private fun createChoices(choiceList: List<Choices>?,style:QuestionChoicesStyle){

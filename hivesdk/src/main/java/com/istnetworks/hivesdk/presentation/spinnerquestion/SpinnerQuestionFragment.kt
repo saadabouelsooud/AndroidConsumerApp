@@ -44,8 +44,8 @@ class SpinnerQuestionFragment : Fragment() {
         selectedQuestion = viewModel.findQuestion(position)
         stylingViews()
         initSubmitBtn()
-        bindQuestion()
         onClickActions()
+        setSpinner()
         listenToSpinnerSelection()
         Log.d("TAG", "onCreateView: ")
         return binding.root
@@ -59,6 +59,8 @@ class SpinnerQuestionFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestion()
+
         Log.d("TAG", "onResume: ")
         binding.root.requestLayout()
     }
@@ -69,7 +71,6 @@ class SpinnerQuestionFragment : Fragment() {
     }
 
     private fun bindQuestion() {
-        setSpinner()
 
         binding.tvQuestionTitle.text = context?.getString(R.string.question_format,
             viewModel.getQuestionNumber(),selectedQuestion?.title)

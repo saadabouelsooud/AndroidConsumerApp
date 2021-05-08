@@ -64,6 +64,7 @@ class NpsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        bindQuestionTitle()
         binding.root.requestLayout()
         (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
     }
@@ -95,10 +96,15 @@ class NpsFragment : Fragment() {
     private fun observeSurvey() {
         selectedQuestion = viewModel.findQuestion(questionPosition)
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
+
+        isRequired = selectedQuestion?.isRequired ?:false
+    }
+
+    private fun bindQuestionTitle() {
         binding.tvQuestionTitle.text = context?.getString(
             R.string.question_format,
-            viewModel.previousQuestions.size?.plus(1),selectedQuestion?.title)
-        isRequired = selectedQuestion?.isRequired ?:false
+            viewModel.getQuestionNumber(), selectedQuestion?.title
+        )
     }
 
 

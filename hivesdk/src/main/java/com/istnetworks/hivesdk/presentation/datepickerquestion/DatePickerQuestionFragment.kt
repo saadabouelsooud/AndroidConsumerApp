@@ -45,7 +45,6 @@ class DatePickerQuestionFragment : Fragment() {
         selectedQuestion = viewModel.findQuestion(position)
         stylingViews()
         initSubmitBtn()
-        bindQuestion()
         onClickActions()
         handleDatePickerField()
         return binding.root
@@ -54,7 +53,7 @@ class DatePickerQuestionFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.root.requestLayout()
-//        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        bindQuestion()
     }
 
     private fun stylingViews() {
@@ -65,7 +64,7 @@ class DatePickerQuestionFragment : Fragment() {
     private fun bindQuestion() {
         binding.tvQuestionTitle.text = context?.getString(
             R.string.question_format,
-            viewModel.previousQuestions.size?.plus(1), selectedQuestion?.title
+            viewModel.getQuestionNumber(), selectedQuestion?.title
         )
     }
 
