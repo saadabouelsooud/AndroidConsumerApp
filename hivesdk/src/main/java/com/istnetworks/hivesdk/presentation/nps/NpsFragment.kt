@@ -5,32 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.extensions.disable
-import com.istnetworks.hivesdk.data.utils.extensions.enable
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
+import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
+private const val SELECTED_WIDTH = 30
+private const val UN_SELECTED_WIDTH = 18
+private const val SELECTED_HEIGHT = SELECTED_WIDTH
+private const val UN_SELECTED_HEIGHT = UN_SELECTED_WIDTH
 
-class NpsFragment : Fragment() {
+class NpsFragment : BaseQuestionFragment() {
     private var questionPosition: Int? = null
     private lateinit var binding: FragmentNpsBinding
-    private val viewModel: HiveSDKViewModel by activityViewModels {
-        HiveSDKViewModelFactory(
-            HiveSDKRepositoryImpl()
-        )
-    }
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
 
@@ -49,7 +45,7 @@ class NpsFragment : Fragment() {
         binding = FragmentNpsBinding.inflate(inflater)
 
         setNpsList()
-        observeSurvey()
+        initQuestion()
         observeViewModel()
         binding.hveBtnSubmit.submitButtonStyle(viewModel.getSurveyTheme()?.submitButton)
         onClickActions()
@@ -93,11 +89,9 @@ class NpsFragment : Fragment() {
     }
 
 
-    private fun observeSurvey() {
+    private fun initQuestion() {
         selectedQuestion = viewModel.findQuestion(questionPosition)
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
-
-        isRequired = selectedQuestion?.isRequired ?:false
     }
 
     private fun bindQuestionTitle() {
@@ -110,21 +104,122 @@ class NpsFragment : Fragment() {
 
     private fun setNpsList() {
         val nps: ArrayList<NpsModel> = ArrayList()
-        nps.add(NpsModel(npsBackgroundColor = "#e43e3d", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "0"))
-        nps.add(NpsModel(npsBackgroundColor = "#e43e3d", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "1"))
-        nps.add(NpsModel(npsBackgroundColor = "#ea484d", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "2"))
-        nps.add(NpsModel(npsBackgroundColor = "#ec654e", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "3"))
-        nps.add(NpsModel(npsBackgroundColor = "#f3a84c", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "4"))
-        nps.add(NpsModel(npsBackgroundColor = "#f8c43e", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "5"))
-        nps.add(NpsModel(npsBackgroundColor = "#e1c63b", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "6"))
-        nps.add(NpsModel(npsBackgroundColor = "#e1c63b", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "7"))
-        nps.add(NpsModel(npsBackgroundColor = "#9fce35", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "8"))
-        nps.add(NpsModel(npsBackgroundColor = "#7fcd31", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "9"))
-        nps.add(NpsModel(npsBackgroundColor = "#5aaf2b", npsSelectedHeight = 22, npsSelectedWidth = 22, npsUnselectedHeight = 18, npsUnselectedWidth = 18, npsText = "10"))
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#e43e3d",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "0"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#e43e3d",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "1"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#ea484d",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "2"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#ec654e",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "3"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#f3a84c",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "4"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#f8c43e",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "5"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#e1c63b",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "6"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#e1c63b",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "7"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#9fce35",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "8"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#7fcd31",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "9"
+            )
+        )
+        nps.add(
+            NpsModel(
+                npsBackgroundColor = "#5aaf2b",
+                npsSelectedHeight = SELECTED_HEIGHT,
+                npsSelectedWidth = SELECTED_WIDTH,
+                npsUnselectedHeight = UN_SELECTED_HEIGHT,
+                npsUnselectedWidth = UN_SELECTED_WIDTH,
+                npsText = "10"
+            )
+        )
 
-        binding.npsRecyclerView.layoutManager = GridLayoutManager(context, 11)
+        val flexAdapter = FlexboxLayoutManager(context, FlexDirection.ROW, FlexWrap.NOWRAP)
+        flexAdapter.justifyContent = JustifyContent.SPACE_BETWEEN
+        binding.npsRecyclerView.layoutManager = flexAdapter
         val adapter = NpsAdapter(nps) {
-           onSurveyReadyToSave(it)
+            onSurveyReadyToSave(it)
         }
         binding.npsRecyclerView.adapter = adapter
     }

@@ -17,6 +17,7 @@ import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.databinding.FragmentDatePickerQuestionBinding
+import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
@@ -28,22 +29,18 @@ import java.util.*
 
 const val ARG_POSITION = "pos"
 
-class DatePickerQuestionFragment : Fragment() {
+class DatePickerQuestionFragment : BaseQuestionFragment() {
     private lateinit var binding: FragmentDatePickerQuestionBinding
-    private val viewModel: HiveSDKViewModel by activityViewModels {
-        HiveSDKViewModelFactory(
-            HiveSDKRepositoryImpl()
-        )
-    }
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDatePickerQuestionBinding.inflate(inflater)
         selectedQuestion = viewModel.findQuestion(position)
-        stylingViews()
+        stylingQuestionTitle(binding.tvQuestionTitle)
         initSubmitBtn()
         onClickActions()
         handleDatePickerField()
@@ -56,10 +53,7 @@ class DatePickerQuestionFragment : Fragment() {
         bindQuestion()
     }
 
-    private fun stylingViews() {
-        val theme = viewModel.getSurveyTheme()
-        binding.tvQuestionTitle.questionTitleStyle(theme?.questionTitleStyle)
-    }
+
 
     private fun bindQuestion() {
         binding.tvQuestionTitle.text = context?.getString(
