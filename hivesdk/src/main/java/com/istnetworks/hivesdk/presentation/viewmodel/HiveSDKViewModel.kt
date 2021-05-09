@@ -50,7 +50,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return previousQuestions.size+1
     }
 
-    private fun getQuestionPositionByChoiceGUID(choiceGUID: String): Int {
+    private fun getQuestionPositionByChoiceGUID(choiceGUID: String,question : Question): Int {
         val questionTo =
             survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
         return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }!!
@@ -180,12 +180,13 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun getTheNextQuestionPosition(currentQuestionPosition: Int): Int {
         previousQuestions.push(currentQuestionPosition)
+        val currentQuestion = findQuestion(currentQuestionPosition)
         try {
 
-            return when (hasSkipLogic(findQuestion(currentQuestionPosition)!!.surveyQuestionGUID!!)) {
+            return when (hasSkipLogic(currentQuestion!!.surveyQuestionGUID!!)) {
                 true -> getQuestionPositionByChoiceGUID(
                     getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID!!
-                )
+                ,currentQuestion)
                 false -> currentQuestionPosition + 1
             }
         } catch (e: NullPointerException) {
