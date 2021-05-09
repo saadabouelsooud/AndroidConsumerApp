@@ -155,7 +155,7 @@ class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnChe
         }
         viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
-                "", 0,
+                "", null,
                 selectedChoices
             )
         )

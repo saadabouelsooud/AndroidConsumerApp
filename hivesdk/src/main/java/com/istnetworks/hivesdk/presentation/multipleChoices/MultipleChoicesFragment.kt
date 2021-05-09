@@ -131,7 +131,7 @@ class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnChecke
         }
         viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
-                "", 0,
+                "", null,
                 selectedChoices
             )
         )
