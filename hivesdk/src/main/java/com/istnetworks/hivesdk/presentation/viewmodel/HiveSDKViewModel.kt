@@ -50,10 +50,53 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return previousQuestions.size+1
     }
 
-    private fun getQuestionPositionByChoiceGUID(choiceGUID: String,question : Question): Int {
+    private fun getQuestionPositionByChoiceGUID(choiceGUID: String?,question : Question): Int {
         val questionTo =
-            survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+            when (question.questionType) {
+                in QuestionType.TextInput.value..QuestionType.URLInput.value,
+                QuestionType.DateQuestion.value,
+                QuestionType.MultipleChoiceQuestion.value,
+                QuestionType.ImageMCQ.value->{
+                    freeInputAndDateSkip(question)?:
+                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                }
+                QuestionType.SlideQuestion.value ,
+                QuestionType.StarQuestion.value,
+                QuestionType.Emoji.value->{
+                    sliderAndRatingQuestionSkip(question)?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                }
+                else -> {
+                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                }
+            }
+
         return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }!!
+    }
+
+    private fun freeInputAndDateSkip(question: Question):String?{
+        if (hasQuestionResponse(question.surveyQuestionID!!)) {
+            return survey?.skipLogic?.findLast {
+                it.questionGUID.equals(question.surveyQuestionGUID)
+            }!!.skipToQuestionGUID
+        }
+        return null
+    }
+
+    private fun sliderAndRatingQuestionSkip(question: Question):String?{
+        if (hasQuestionResponse(question.surveyQuestionID!!)) {
+            val response = questionResponsesList.find{ it.questionID == question.surveyQuestionID }
+            val skip = survey?.skipLogic?.find{
+                it.questionGUID.equals(question.surveyQuestionGUID) &&
+                        response!!.numberResponse in it.minValue!!..it.maxValue!!
+            }!!.skipToQuestionGUID
+            if(skip.equals("00000000-0000-0000-0000-000000000000")) return null
+            return skip
+        }
+        return null
+    }
+
+    private fun hasQuestionResponse(questionId:Int):Boolean{
+        return questionResponsesList.any{ it.questionID == questionId }
     }
 
     fun getSurvey(username: String, password: String) = viewModelScope.launch {
@@ -185,7 +228,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
             return when (hasSkipLogic(currentQuestion!!.surveyQuestionGUID!!)) {
                 true -> getQuestionPositionByChoiceGUID(
-                    getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID!!
+                    getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID
                 ,currentQuestion)
                 false -> currentQuestionPosition + 1
             }
