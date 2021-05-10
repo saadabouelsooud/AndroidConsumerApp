@@ -124,7 +124,7 @@ class SingleChoiceFragment : BaseQuestionFragment(){
             viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse("",0,
                 listOf(SelectedChoices(selectedChoice?.choiceID,selectedChoice?.choiceGUID)
-                )
+                ),choiceGUID = selectedChoice?.choiceGUID
                 )
             )
         }

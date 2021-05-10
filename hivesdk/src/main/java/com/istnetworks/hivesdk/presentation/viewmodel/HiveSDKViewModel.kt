@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 private const val PHONE_NUMBER_PATTERN = "[0-9][0-9]{10,16}"
+
 class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewModel() {
 
     val getSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
@@ -37,33 +38,53 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
 
+    /**
+     *  TODO: dependency inversion
+     */
+    private lateinit var skipHandler: SkipLogicHandler
+
     fun findQuestion(position: Int?): Question? {
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
     }
 
-    private fun hasSkipLogic(qId: String): Boolean {
-        return survey?.skipLogic?.any { it.questionGUID.equals(qId) } ?: false
-    }
-
     fun getQuestionNumber(): Int {
-        return previousQuestions.size+1
+        return previousQuestions.size + 1
     }
 
-    private fun getQuestionPositionByChoiceGUID(choiceGUID: String?,question : Question): Int {
+    private fun getQuestionPositionByChoiceGUID( currentQuestionPosition: Int): Int {
+        val choiceGUID = getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID
+        val question = findQuestion(currentQuestionPosition)!!
         val questionTo =
             when (question.questionType) {
                 in QuestionType.TextInput.value..QuestionType.URLInput.value,
                 QuestionType.DateQuestion.value,
                 QuestionType.MultipleChoiceQuestion.value,
-                QuestionType.ImageMCQ.value->{
-                    freeInputAndDateSkip(question)?:
-                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                QuestionType.ImageMCQ.value -> {
+                    skipHandler.freeInputAndDateSkip(question)
+                        ?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
                 }
-                QuestionType.SlideQuestion.value ,
+                QuestionType.SlideQuestion.value,
                 QuestionType.StarQuestion.value,
-                QuestionType.Emoji.value->{
-                    sliderAndRatingQuestionSkip(question)?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                QuestionType.Emoji.value,
+                QuestionType.NPS.value-> {
+                    if (hasQuestionResponse(question.surveyQuestionID!!)) {
+                        val response =
+                            questionResponsesList.find { it.questionID == question.surveyQuestionID }
+                        val choiceId = skipHandler.sliderAndRatingQuestionSkip(question,response!!.numberResponse!!)
+                        //Show submit button
+                        if (choiceId.equals("00000000-0000-0000-0000-000000000000")){
+
+                        }
+                        else{
+
+                        }
+                        choiceId
+                    }
+                    else
+                    {
+                        survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                    }
                 }
                 else -> {
                     survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
@@ -73,30 +94,14 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }!!
     }
 
-    private fun freeInputAndDateSkip(question: Question):String?{
-        if (hasQuestionResponse(question.surveyQuestionID!!)) {
-            return survey?.skipLogic?.findLast {
-                it.questionGUID.equals(question.surveyQuestionGUID)
-            }!!.skipToQuestionGUID
-        }
-        return null
+    private fun getQuestionResponseByPosition(current: Int): QuestionResponses? {
+        val currentQuestion = survey?.questions?.get(current)
+
+        return questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
     }
 
-    private fun sliderAndRatingQuestionSkip(question: Question):String?{
-        if (hasQuestionResponse(question.surveyQuestionID!!)) {
-            val response = questionResponsesList.find{ it.questionID == question.surveyQuestionID }
-            val skip = survey?.skipLogic?.find{
-                it.questionGUID.equals(question.surveyQuestionGUID) &&
-                        response!!.numberResponse in it.minValue!!..it.maxValue!!
-            }!!.skipToQuestionGUID
-            if(skip.equals("00000000-0000-0000-0000-000000000000")) return null
-            return skip
-        }
-        return null
-    }
-
-    private fun hasQuestionResponse(questionId:Int):Boolean{
-        return questionResponsesList.any{ it.questionID == questionId }
+    private fun hasQuestionResponse(questionId: Int): Boolean {
+        return questionResponsesList.any { it.questionID == questionId }
     }
 
     fun getSurvey(username: String, password: String) = viewModelScope.launch {
@@ -118,7 +123,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             Status.LOADING -> TODO()
         }
         survey = surveyResult.data?.survey
-
+        skipHandler = SkipLogicHandler(survey?.skipLogic, survey?.questions)
     }
 
     fun updateQuestionResponsesList(question: QuestionResponses?) {
@@ -150,11 +155,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
     }
 
-    fun getSurveyTheme()=survey?.surveyOptions?.surveyTheme
+    fun getSurveyTheme() = survey?.surveyOptions?.surveyTheme
 
     fun getSurveyOptions() = survey?.surveyOptions
 
-    fun getSurveyBackgroundColor()=Color.parseColor("#${getSurveyTheme()?.surveyBackgroundColor}")
+    fun getSurveyBackgroundColor() = Color.parseColor("#${getSurveyTheme()?.surveyBackgroundColor}")
 
     private fun generateSaveSurveyRequest() =
         survey?.toSaveSurveyBody(questionResponsesList)
@@ -208,12 +213,6 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     }
 
-    private fun getQuestionResponseByPosition(current: Int): QuestionResponses? {
-        val currentQuestion = survey?.questions?.get(current)
-
-        return questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
-    }
-
     private fun noResponseForCurrentQuestion(currentQuestion: Question?): Boolean {
         val questionResponse =
             questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
@@ -224,16 +223,14 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     fun getTheNextQuestionPosition(currentQuestionPosition: Int): Int {
         previousQuestions.push(currentQuestionPosition)
         val currentQuestion = findQuestion(currentQuestionPosition)
-        try {
+        return try {
 
-            return when (hasSkipLogic(currentQuestion!!.surveyQuestionGUID!!)) {
-                true -> getQuestionPositionByChoiceGUID(
-                    getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID
-                ,currentQuestion)
+            when (skipHandler.hasSkipLogic(currentQuestion!!.surveyQuestionGUID!!)) {
+                true -> getQuestionPositionByChoiceGUID(currentQuestionPosition)
                 false -> currentQuestionPosition + 1
             }
         } catch (e: NullPointerException) {
-            return currentQuestionPosition + 1
+            currentQuestionPosition + 1
         }
     }
 
