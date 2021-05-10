@@ -19,6 +19,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentMultipleChoicesBinding
+import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
@@ -28,17 +29,12 @@ import java.lang.Exception
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "MultipleChoicesFragment"
-class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListener{
+class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnCheckedChangeListener{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
     private lateinit var binding : FragmentMultipleChoicesBinding
     private var selectedChoices :ArrayList<SelectedChoices> = arrayListOf()
-    private val viewModel: HiveSDKViewModel by activityViewModels {
-        HiveSDKViewModelFactory(
-            HiveSDKRepositoryImpl()
-        )
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -135,7 +131,7 @@ class MultipleChoicesFragment : Fragment() , CompoundButton.OnCheckedChangeListe
         }
         viewModel.updateQuestionResponsesList(
             selectedQuestion?.toQuestionResponse(
-                "", 0,
+                "", null,
                 selectedChoices
             )
         )

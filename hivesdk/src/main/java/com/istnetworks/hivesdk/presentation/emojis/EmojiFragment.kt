@@ -11,28 +11,24 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
+import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-class EmojiFragment : Fragment() {
+class EmojiFragment : BaseQuestionFragment(){
+
     private val questionPosition by lazy { arguments?.getInt(ARG_QUESTION_POSITION) }
-    private val viewModel: HiveSDKViewModel by activityViewModels {
-        HiveSDKViewModelFactory(
-            HiveSDKRepositoryImpl()
-        )
-    }
     private lateinit var binding: FragmentEmojiBinding
-    private var isRequired: Boolean = false
     private var selectedQuestion: Question? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEmojiBinding.inflate(inflater)
-        observeSurvey()
+        initEmojisView()
         setOnClickListeners()
         initSubmitBtn()
         return binding.root
@@ -63,10 +59,9 @@ class EmojiFragment : Fragment() {
 
     }
 
-    private fun observeSurvey() {
+    private fun initEmojisView() {
         selectedQuestion = viewModel.findQuestion(questionPosition)
         binding.tvQuestionTitle.questionTitleStyle(viewModel.getSurveyTheme()?.questionTitleStyle)
-        isRequired = selectedQuestion?.isRequired ?:false
         binding.smileyRating.ratingScale = selectedQuestion?.scale ?:5
     }
 
@@ -78,12 +73,6 @@ class EmojiFragment : Fragment() {
     }
 
     companion object{
-        /**
-         *
-         * @param questionPosition Parameter 1.
-         * @return A new instance of fragment SingleChoiceFragment.
-         */
-
         @JvmStatic
         fun getInstance(questionPosition :Int)=
             EmojiFragment().apply {

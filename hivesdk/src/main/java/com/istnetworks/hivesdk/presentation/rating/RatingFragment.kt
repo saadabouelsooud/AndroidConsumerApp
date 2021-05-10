@@ -20,20 +20,16 @@ import com.istnetworks.hivesdk.data.utils.StarOptionEnum
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentRatingBinding
+import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
-class RatingFragment : Fragment() {
+class RatingFragment : BaseQuestionFragment() {
 
     private lateinit var binding: FragmentRatingBinding
-    private val viewModel: HiveSDKViewModel by activityViewModels {
-        HiveSDKViewModelFactory(
-            HiveSDKRepositoryImpl()
-        )
-    }
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
     private lateinit var selectedRating :HiveRatingBar

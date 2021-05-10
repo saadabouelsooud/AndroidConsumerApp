@@ -22,6 +22,7 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.databinding.FragmentSingleImageChoiceBinding
+import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
@@ -36,16 +37,12 @@ import kotlinx.coroutines.withContext
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "SingleImageChoice"
 
-class SingleImageChoiceFragment : Fragment() {
+class SingleImageChoiceFragment : BaseQuestionFragment() {
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
     private lateinit var binding: FragmentSingleImageChoiceBinding
-    private val viewModel: HiveSDKViewModel by activityViewModels {
-        HiveSDKViewModelFactory(
-            HiveSDKRepositoryImpl()
-        )
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
