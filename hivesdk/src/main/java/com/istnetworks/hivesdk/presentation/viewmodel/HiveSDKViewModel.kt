@@ -87,6 +87,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             if (hasNoAnswer(question))
                 return@let
             questionResponsesList.add(q)
+            showIsRequiredErrMsgLD.value = false
         }
         updateProgressSliderLD.value = questionResponsesList.size.toFloat()
     }
@@ -127,7 +128,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun validateAnswer(questionPosition: Int): Boolean {
         val currentQuestion = survey?.questions?.get(questionPosition)
-        return if (noResponseForCurrentQuestion(currentQuestion) && currentQuestion?.isRequired == false)
+        return if (noResponseForCurrentQuestion(currentQuestion) && currentQuestion?.isRequired == true)
             true
         else
             isCurrentQuestionResponseValid(currentQuestion)

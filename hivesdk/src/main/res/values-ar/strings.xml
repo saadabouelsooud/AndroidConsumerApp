@@ -30,6 +30,6 @@
     <string name="enter_url_answer">ادخل عنوان الانترنت</string>
 
     <string name="question_format">س %1d : %2s</string>
-    <string name="answer_is_not_required">Answer not valid</string>
+    <string name="please_answer_this_question">Answer not valid</string>
 
 </resources>

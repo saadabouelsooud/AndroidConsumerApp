@@ -13,15 +13,18 @@ import androidx.core.os.bundleOf
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 
 
 const val ARG_POSITION = "pos"
 
-class SpinnerQuestionFragment: BaseQuestionFragment(){
+class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface {
     private lateinit var binding: FragmentSpinnerQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
@@ -36,8 +39,11 @@ class SpinnerQuestionFragment: BaseQuestionFragment(){
         onClickActions()
         setSpinner()
         listenToSpinnerSelection()
-        Log.d("TAG", "onCreateView: ")
+        observeViewModel()
         return binding.root
+    }
+
+    private fun observeViewModel() {
     }
 
     override fun onStart() {
@@ -50,8 +56,8 @@ class SpinnerQuestionFragment: BaseQuestionFragment(){
         super.onResume()
         bindQuestion()
 
-        Log.d("TAG", "onResume: ")
-        binding.root.requestLayout()
+        updatePagerHeight(binding.root)
+
     }
 
     private fun stylingViews() {
@@ -129,6 +135,19 @@ class SpinnerQuestionFragment: BaseQuestionFragment(){
             }
 
         }
+    }
+
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
+
     }
 
 

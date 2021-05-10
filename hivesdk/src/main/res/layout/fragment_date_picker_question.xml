@@ -30,6 +30,23 @@
             tools:text="Question Title" />
 
 
+        <TextView
+            android:id="@+id/tv_error_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:visibility="gone"
+
+            android:text="@string/please_answer_this_question"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_question_title"
+            />
+
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/hve_tiet_date"
             android:layout_width="match_parent"
@@ -47,7 +64,7 @@
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="@id/tv_question_title"
             app:layout_constraintStart_toStartOf="@id/tv_question_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_error_message" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

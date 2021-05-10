@@ -17,8 +17,11 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSingleChoiceBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -26,7 +29,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "SingleChoiceFragment"
-class SingleChoiceFragment : BaseQuestionFragment(){
+class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
@@ -43,8 +46,8 @@ class SingleChoiceFragment : BaseQuestionFragment(){
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-        binding.root.requestLayout()
-//        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        updatePagerHeight(binding.root)
+
     }
 
     override fun onCreateView(
@@ -67,14 +70,6 @@ class SingleChoiceFragment : BaseQuestionFragment(){
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
-//        viewModel.isLoading.observe(viewLifecycleOwner, {
-//            if(it){
-//                binding.animateProgressBar.visibility=View.VISIBLE
-//            }else {
-//                binding.animateProgressBar.visibility=View.GONE
-//            }
-//
-//        })
         viewModel.saveSurveyResponseLD.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it?.message, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
@@ -132,18 +127,6 @@ class SingleChoiceFragment : BaseQuestionFragment(){
 
     }
 
-    private fun onSurveyReadyToSave() {
-//        viewModel.updateSelectedQuestions(
-//            selectedQuestion?.toQuestionResponse(
-//                "",
-//                npsValue
-//            )
-//        )
-//        viewModel.saveSurvey()
-    }
-
-
-
     companion object {
         /**
          *
@@ -157,5 +140,16 @@ class SingleChoiceFragment : BaseQuestionFragment(){
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }
             }
+    }
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
     }
 }

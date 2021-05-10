@@ -9,25 +9,21 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.istnetworks.hivesdk.R
-import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentMultipleImageChoiceBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,11 +31,13 @@ import kotlinx.coroutines.withContext
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "MultipleImageChoice"
-class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnCheckedChangeListener{
+
+class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnCheckedChangeListener,
+    IsRequiredInterface {
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
-    private var selectedChoices :ArrayList<SelectedChoices> = arrayListOf()
+    private var selectedChoices: ArrayList<SelectedChoices> = arrayListOf()
     private lateinit var binding: FragmentMultipleImageChoiceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +62,8 @@ class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnChe
 
     override fun onResume() {
         super.onResume()
-        binding.root.requestLayout()
         bindQuestionTitle()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        updatePagerHeight(binding.root)
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -161,16 +158,6 @@ class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnChe
         )
     }
 
-    private fun onSurveyReadyToSave() {
-//        viewModel.updateSelectedQuestions(
-//            selectedQuestion?.toQuestionResponse(
-//                "",
-//                npsValue
-//            )
-//        )
-//        viewModel.saveSurvey()
-    }
-
 
     companion object {
         /**
@@ -186,5 +173,16 @@ class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnChe
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }
             }
+    }
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
     }
 }

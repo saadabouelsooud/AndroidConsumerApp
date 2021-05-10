@@ -24,6 +24,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_error_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:visibility="gone"
+
+            android:text="@string/please_answer_this_question"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_question_title"
+            />
         <com.istnetworks.hivesdk.presentation.emojis.SmileyRatingBar
             android:id="@+id/smiley_rating"
             android:layout_width="0dp"
@@ -33,7 +48,7 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_error_message" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

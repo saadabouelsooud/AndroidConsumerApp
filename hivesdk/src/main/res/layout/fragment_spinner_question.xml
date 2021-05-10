@@ -9,11 +9,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/hve_cl_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <TextView
@@ -29,30 +30,44 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Question Title" />
 
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintEnd_toEndOf="@id/tv_question_title"
-                app:layout_constraintStart_toStartOf="@id/tv_question_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_question_title">
+        <TextView
+            android:id="@+id/tv_error_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/please_answer_this_question"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_question_title" />
 
-                <Spinner
-                    android:id="@+id/hve_sp_answers"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_spinner_rounded_border"
-                    android:spinnerMode="dropdown" />
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_question_title"
+            app:layout_constraintStart_toStartOf="@id/tv_question_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_error_message">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/ic_arrow_drop_down_24"
-                    />
-            </FrameLayout>
+            <Spinner
+                android:id="@+id/hve_sp_answers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_spinner_rounded_border"
+                android:spinnerMode="dropdown" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_arrow_drop_down_24" />
+        </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

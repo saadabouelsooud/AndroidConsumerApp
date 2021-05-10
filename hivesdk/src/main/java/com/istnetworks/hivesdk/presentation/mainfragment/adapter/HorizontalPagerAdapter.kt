@@ -25,47 +25,50 @@ class HorizontalPagerAdapter(f: Fragment) : FragmentStateAdapter(f) {
     private val mFragmentList : MutableList<Fragment> = mutableListOf()
     fun setData(questions: List<Question?>) {
         mFragmentList.clear()
-        mFragmentList.addAll(questions.mapIndexed { position, it ->
+        mFragmentList.addAll(questions.mapIndexed { questionPosition, it ->
             getFragmentFromType(
                 it?.questionType,
-                position
+                questionPosition
             )
         })
     }
+   fun getFragmentByPosition(fragmentPosition: Int): Fragment {
+        return mFragmentList.get(fragmentPosition)
+    }
 
-    private fun getFragmentFromType(it: Int?, position: Int): Fragment {
+    private fun getFragmentFromType(it: Int?, questionPosition: Int): Fragment {
         return when (it) {
-            QuestionType.MultipleChoiceQuestion.value -> MultipleChoicesFragment.newInstance(position)
-            QuestionType.ListQuestion.value -> SpinnerQuestionFragment.getInstance(position)
-            QuestionType.DateQuestion.value -> DatePickerQuestionFragment.getInstance(position)
-            QuestionType.SlideQuestion.value -> SliderQuestionFragment.getInstance(position)
-            QuestionType.StarQuestion.value -> RatingFragment.getInstance(position)
-            QuestionType.NPS.value -> NpsFragment.getInstance(position)
-            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(position)
-            QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(position)
-            QuestionType.Emoji.value -> EmojiFragment.getInstance(position)
-            QuestionType.ImageMCQ.value -> MultipleImageChoiceFragment.getInstance(position)
-            QuestionType.ImageSingleChoice.value -> SingleImageChoiceFragment.getInstance(position)
-            QuestionType.CSAT.value -> SingleChoiceFragment.newInstance(position)
-            null ->SpinnerQuestionFragment.getInstance(position)
-            else -> SpinnerQuestionFragment.getInstance(position)
+            QuestionType.MultipleChoiceQuestion.value -> MultipleChoicesFragment.newInstance(questionPosition)
+            QuestionType.ListQuestion.value -> SpinnerQuestionFragment.getInstance(questionPosition)
+            QuestionType.DateQuestion.value -> DatePickerQuestionFragment.getInstance(questionPosition)
+            QuestionType.SlideQuestion.value -> SliderQuestionFragment.getInstance(questionPosition)
+            QuestionType.StarQuestion.value -> RatingFragment.getInstance(questionPosition)
+            QuestionType.NPS.value -> NpsFragment.getInstance(questionPosition)
+            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.TextInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.NumberInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.EmailInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.PhoneNumberInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.PostalCodeInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.URLInput.value -> FreeInputsFragment.getInstance(questionPosition)
+            QuestionType.SingleChoice.value -> SingleChoiceFragment.newInstance(questionPosition)
+            QuestionType.Emoji.value -> EmojiFragment.getInstance(questionPosition)
+            QuestionType.ImageMCQ.value -> MultipleImageChoiceFragment.getInstance(questionPosition)
+            QuestionType.ImageSingleChoice.value -> SingleImageChoiceFragment.getInstance(questionPosition)
+            QuestionType.CSAT.value -> SingleChoiceFragment.newInstance(questionPosition)
+            null ->SpinnerQuestionFragment.getInstance(questionPosition)
+            else -> SpinnerQuestionFragment.getInstance(questionPosition)
         }
     }
 
