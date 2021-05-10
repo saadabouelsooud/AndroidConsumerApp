@@ -128,7 +128,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun validateAnswer(questionPosition: Int): Boolean {
         val currentQuestion = survey?.questions?.get(questionPosition)
-        return if (noResponseForCurrentQuestion(currentQuestion) && currentQuestion?.isRequired == true)
+        return if (noResponseForCurrentQuestion(currentQuestion) && currentQuestion?.isRequired == false)
             true
         else
             isCurrentQuestionResponseValid(currentQuestion)
