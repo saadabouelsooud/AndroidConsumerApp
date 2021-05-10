@@ -45,12 +45,13 @@ class VerticalMainFragment : Fragment() {
     }
 
     private fun createFragments() {
-        for (position in 0..3){
+        for (position in 0 until viewModel.survey?.questions!!.size){
             val question = viewModel.findQuestion(position)
             val frameLayout = FrameLayout(requireContext())
+            frameLayout.id = position
             childFragmentManager.commit {
                 setReorderingAllowed(true)
-                add(binding.container.id,getFragmentFromType(question!!.questionType,position))
+                add(frameLayout.id,getFragmentFromType(question!!.questionType,position))
             }
             binding.hveMain.addView(frameLayout)
 
