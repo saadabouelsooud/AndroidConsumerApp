@@ -15,6 +15,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
@@ -27,6 +28,7 @@ class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     lateinit var onPageChangeCallback: ViewPager2.OnPageChangeCallback
+    lateinit var horizontalPagerAdapter: HorizontalPagerAdapter
 
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
@@ -55,12 +57,17 @@ class MainFragment : Fragment() {
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
             if(it==true)
-            showToast(getString(R.string.answer_is_not_required))
+                showToast(getString(R.string.please_answer_this_question))
 
         })
         viewModel.showIsRequiredErrMsgLD.observe(viewLifecycleOwner, {
-            if(it==true)
-            showToast(getString(R.string.question_is_required))
+            val f =
+                horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
+            if (it == true) {
+                (f as IsRequiredInterface).showIsRequiredError()
+            } else {
+                (f as IsRequiredInterface).hideIsRequiredError()
+            }
         })
     }
 
@@ -143,13 +150,13 @@ class MainFragment : Fragment() {
 
     private fun initializeViewPager() {
         binding.hveViewPager.isUserInputEnabled = false
-        val adapter = HorizontalPagerAdapter(this)
-        adapter.setData(viewModel.survey?.questions ?: listOf())
+        horizontalPagerAdapter = HorizontalPagerAdapter(this)
+        horizontalPagerAdapter.setData(viewModel.survey?.questions ?: listOf())
         binding.hveViewPager.apply {
             offscreenPageLimit = 1
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
-        binding.hveViewPager.adapter = adapter
+        binding.hveViewPager.adapter = horizontalPagerAdapter
     }
 
     private fun initializeRecyclerView(){

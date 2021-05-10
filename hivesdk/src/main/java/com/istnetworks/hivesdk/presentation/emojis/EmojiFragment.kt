@@ -10,15 +10,18 @@ import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-class EmojiFragment : BaseQuestionFragment(){
+class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface{
 
     private val questionPosition by lazy { arguments?.getInt(ARG_QUESTION_POSITION) }
     private lateinit var binding: FragmentEmojiBinding
@@ -31,14 +34,18 @@ class EmojiFragment : BaseQuestionFragment(){
         initEmojisView()
         setOnClickListeners()
         initSubmitBtn()
+        observeViewModel()
         return binding.root
+    }
+
+    private fun observeViewModel() {
+
     }
 
     override fun onResume() {
         super.onResume()
         bindQuestion()
-        binding.root.requestLayout()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        updatePagerHeight(binding.root)
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -80,5 +87,16 @@ class EmojiFragment : BaseQuestionFragment(){
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }
             }
+    }
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+    }
+
+
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
     }
 }

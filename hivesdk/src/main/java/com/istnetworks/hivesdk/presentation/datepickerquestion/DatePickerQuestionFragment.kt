@@ -15,9 +15,12 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentDatePickerQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
@@ -29,7 +32,7 @@ import java.util.*
 
 const val ARG_POSITION = "pos"
 
-class DatePickerQuestionFragment : BaseQuestionFragment() {
+class DatePickerQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
     private lateinit var binding: FragmentDatePickerQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
@@ -44,7 +47,12 @@ class DatePickerQuestionFragment : BaseQuestionFragment() {
         initSubmitBtn()
         onClickActions()
         handleDatePickerField()
+        observeViewModel()
         return binding.root
+    }
+
+    private fun observeViewModel() {
+
     }
 
     override fun onResume() {
@@ -115,5 +123,15 @@ class DatePickerQuestionFragment : BaseQuestionFragment() {
 
     }
 
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
 
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
+    }
 }

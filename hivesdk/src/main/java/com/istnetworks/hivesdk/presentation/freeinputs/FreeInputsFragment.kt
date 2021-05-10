@@ -20,8 +20,11 @@ import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentFreeInputsBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
@@ -32,7 +35,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 
-class FreeInputsFragment : BaseQuestionFragment() {
+class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
 
        private  val CODE_AREA_PATTERN = "^[^01][0-9]{2}\$"
        private  val PHONE_NUMBER_PATTERN= "[0-9][0-9]{8,14}"
@@ -51,7 +54,12 @@ class FreeInputsFragment : BaseQuestionFragment() {
         selectedQuestion?.questionType?.let { bindQuestions(it) }
         selectedQuestion?.questionType?.let { onClickActions(it) }
         listenToInputTextChanges()
+        observeViewModel()
         return binding.root
+    }
+
+    private fun observeViewModel() {
+
     }
 
     private fun listenToInputTextChanges() {
@@ -76,8 +84,7 @@ class FreeInputsFragment : BaseQuestionFragment() {
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-        binding.root.requestLayout()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        updatePagerHeight(binding.root)
     }
 
     private fun bindQuestions(questionType: Int) {
@@ -208,12 +215,17 @@ class FreeInputsFragment : BaseQuestionFragment() {
 
     }
 
-    /////// handle next and prev button ///////
-    // if(moveToNextQuestion(questionType) ==true)
-    /// getFreeInputText(questionType) , move to next question
-    /// else show error , and do nothing
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
 
+    }
 
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
+    }
     @Keep
     companion object {
         @JvmStatic

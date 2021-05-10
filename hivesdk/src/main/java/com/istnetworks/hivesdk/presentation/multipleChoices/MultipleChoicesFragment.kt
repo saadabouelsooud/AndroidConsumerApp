@@ -7,29 +7,25 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
-import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.Choices
 import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentMultipleChoicesBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 import java.lang.Exception
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "MultipleChoicesFragment"
-class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnCheckedChangeListener{
+class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnCheckedChangeListener,IsRequiredInterface{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
@@ -60,13 +56,8 @@ class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnChecke
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-        binding.root.requestLayout()
-        try {
+        updatePagerHeight(binding.root)
 
-            (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
-        }catch (e:Exception){
-
-        }
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -162,5 +153,17 @@ class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnChecke
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }
             }
+    }
+
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
     }
 }

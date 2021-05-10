@@ -21,8 +21,11 @@ import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.disable
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSingleImageChoiceBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
@@ -37,7 +40,7 @@ import kotlinx.coroutines.withContext
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "SingleImageChoice"
 
-class SingleImageChoiceFragment : BaseQuestionFragment() {
+class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
@@ -54,8 +57,8 @@ class SingleImageChoiceFragment : BaseQuestionFragment() {
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-        binding.root.requestLayout()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        updatePagerHeight(binding.root)
+
     }
 
     override fun onCreateView(
@@ -187,5 +190,16 @@ class SingleImageChoiceFragment : BaseQuestionFragment() {
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }
             }
+    }
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
     }
 }

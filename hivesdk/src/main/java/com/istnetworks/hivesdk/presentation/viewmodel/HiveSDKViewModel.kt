@@ -135,6 +135,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             if (hasNoAnswer(question))
                 return@let
             questionResponsesList.add(q)
+            showIsRequiredErrMsgLD.value = false
         }
         updateProgressSliderLD.value = questionResponsesList.size.toFloat()
     }

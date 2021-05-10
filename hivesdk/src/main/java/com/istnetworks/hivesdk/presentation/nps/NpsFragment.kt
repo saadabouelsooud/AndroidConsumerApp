@@ -12,8 +12,11 @@ import com.google.android.flexbox.JustifyContent
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
+import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
@@ -24,7 +27,7 @@ private const val UN_SELECTED_WIDTH = 18
 private const val SELECTED_HEIGHT = SELECTED_WIDTH
 private const val UN_SELECTED_HEIGHT = UN_SELECTED_WIDTH
 
-class NpsFragment : BaseQuestionFragment() {
+class NpsFragment : BaseQuestionFragment(),IsRequiredInterface {
     private var questionPosition: Int? = null
     private lateinit var binding: FragmentNpsBinding
     private var selectedQuestion: Question? = null
@@ -61,8 +64,8 @@ class NpsFragment : BaseQuestionFragment() {
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-        binding.root.requestLayout()
-        (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+        updatePagerHeight(binding.root)
+
     }
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
@@ -238,5 +241,16 @@ class NpsFragment : BaseQuestionFragment() {
                     putInt(ARG_QUESTION_POSITION, questionPosition)
                 }
             }
+    }
+    override fun showIsRequiredError() {
+        binding.tvErrorMessage.show()
+        updatePagerHeight(binding.root)
+
+    }
+
+    override fun hideIsRequiredError() {
+        binding.tvErrorMessage.hide()
+        updatePagerHeight(binding.root)
+
     }
 }
