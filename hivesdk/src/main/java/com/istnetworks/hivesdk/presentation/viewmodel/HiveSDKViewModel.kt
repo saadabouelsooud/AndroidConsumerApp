@@ -126,18 +126,34 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         skipHandler = SkipLogicHandler(survey?.skipLogic, survey?.questions)
     }
 
-    fun updateQuestionResponsesList(question: QuestionResponses?) {
-        question?.let { q ->
+    fun updateQuestionResponsesList(questionResponse: QuestionResponses?) {
+        questionResponse?.let { q ->
             val duplicatedQuestion = questionResponsesList.find { it.questionID == q.questionID }
             if (duplicatedQuestion != null)
                 questionResponsesList.remove(duplicatedQuestion)
 
-            if (hasNoAnswer(question))
+            if (hasNoAnswer(questionResponse))
                 return@let
             questionResponsesList.add(q)
             showIsRequiredErrMsgLD.value = false
         }
-        updateProgressSliderLD.value = questionResponsesList.size.toFloat()
+
+        updateProgressBar(questionResponse?.questionID)
+    }
+
+    private fun updateProgressBar(questionID: Int?) {
+        questionID?.let {
+            val totalQuestions = survey?.questions
+            val currentQuestionPosition =
+                totalQuestions?.indexOf(totalQuestions.find { it.surveyQuestionID == questionID })
+            currentQuestionPosition?.let {
+                val nextPosition = getQuestionPositionByChoiceGUID(currentQuestionPosition)
+                val skippedQuestionsNumber = nextPosition - currentQuestionPosition
+                updateProgressSliderLD.value =
+                    questionResponsesList.size.toFloat() + skippedQuestionsNumber
+            }
+        }
+
     }
 
     private fun hasNoAnswer(question: QuestionResponses) =
