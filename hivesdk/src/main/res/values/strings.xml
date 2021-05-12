@@ -22,6 +22,7 @@
     <string name="url">URL</string>
     <string name="email">Email</string>
     <string name="question_is_required">Question Is Required</string>
+    <string name="answer_not_valid">Answer Is not Valid</string>
 
     <string name="enter_text_answer">Enter text answer</string>
     <string name="enter_number_answer">Enter number answer</string>

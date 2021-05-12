@@ -79,7 +79,7 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
     private fun observeSurvey() {
         val surveyResponse = CacheInMemory.getSurveyResponse()
 
-        selectedQuestion = questionPosition?.let { viewModel.getQuestions(it) }
+        selectedQuestion = questionPosition?.let { viewModel.findQuestion(it) }
         binding.tvQuestionTitle.questionTitleStyle(surveyResponse.survey?.surveyOptions?.surveyTheme?.questionTitleStyle)
         isRequired = selectedQuestion?.isRequired!!
 

@@ -1,18 +1,13 @@
 package com.istnetworks.hivesdk.presentation.surveyExtension
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
-
 import android.util.Patterns
-import android.widget.CheckBox
-import android.widget.RadioButton
-import android.widget.TextView
-
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-
 import com.google.android.material.button.MaterialButton
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.styles.*
@@ -248,6 +243,12 @@ fun getFontTypeface(bold: Boolean, italic: Boolean, fontFamily: String): Typefac
 }
 ////  validation
 
-fun CharSequence?.isValidEmail() = !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+fun CharSequence?.isValidEmail() =
+    !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
+
+fun ViewGroup.cardsBackground(context: Context, surveyBackgroundColor: Int) {
+    applyColorToDrawable(context,R.drawable.bg_question_rounded,surveyBackgroundColor)
+    setBackgroundResource(R.drawable.bg_question_rounded)
+}
