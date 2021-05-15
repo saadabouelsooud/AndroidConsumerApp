@@ -70,7 +70,9 @@ public class RadioGridGroup extends GridLayout {
                 mProtectFromCheckedChange = false;
                 setCheckedId(button.getId());
             }
-            ((LinearLayout.LayoutParams) button.getLayoutParams()).setMargins(8,8,8,8);
+            button.setPadding(32,32,32,32);
+            ((LinearLayout.LayoutParams) button.getLayoutParams())
+                    .setMargins(32,32,32,8);
         }
 
         super.addView(child, index, params);

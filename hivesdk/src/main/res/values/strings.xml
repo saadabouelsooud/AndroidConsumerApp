@@ -30,7 +30,7 @@
     <string name="enter_postal_code_answer">Enter postal code answer</string>
     <string name="enter_url_answer">Enter URL answer</string>
 
-    <string name="question_format">Q %1d : %2s</string>
+    <string name="question_format">Q%1d. %2s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="please_answer_this_question">* Please Answer this Question</string>
 

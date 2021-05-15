@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_question_title"
             />
 
-        <com.google.android.material.slider.RangeSlider
+        <com.google.android.material.slider.Slider
             android:id="@+id/hve_slider_answers"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -54,6 +54,7 @@
             app:tickColor="@android:color/transparent"
             app:thumbColor="@android:color/white"
             app:thumbStrokeColor="@color/gray"
+            app:haloColor="@android:color/transparent"
             app:thumbElevation="2dp"
             app:thumbStrokeWidth="2dp"
             app:trackColorInactive="@android:color/darker_gray"

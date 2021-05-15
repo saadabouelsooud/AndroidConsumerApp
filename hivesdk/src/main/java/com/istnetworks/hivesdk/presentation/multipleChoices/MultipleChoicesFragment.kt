@@ -18,6 +18,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentMultipleChoicesBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.multiChoiceStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
@@ -25,7 +26,8 @@ import java.lang.Exception
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "MultipleChoicesFragment"
-class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnCheckedChangeListener,IsRequiredInterface{
+class MultipleChoicesFragment : BaseQuestionFragment() ,
+    CompoundButton.OnCheckedChangeListener,IsRequiredInterface,SubmitButtonControl{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
@@ -57,7 +59,7 @@ class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnChecke
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-
+        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -126,6 +128,7 @@ class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnChecke
                 selectedChoices
             )
         )
+        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
 
     private fun onSurveyReadyToSave() {
@@ -165,5 +168,15 @@ class MultipleChoicesFragment : BaseQuestionFragment() , CompoundButton.OnChecke
         binding.tvErrorMessage.hide()
         updatePagerHeight(binding.root)
 
+    }
+
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
     }
 }

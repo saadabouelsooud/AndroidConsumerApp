@@ -1,6 +1,7 @@
 package com.istnetworks.hivesdk.presentation.viewmodel
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,8 +38,10 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
+    var showSubmitButton = MutableLiveData<Boolean> ()
+    var enableNextButton = MutableLiveData<Boolean>()
 
-    /**
+    /**=
      *  TODO: dependency inversion
      */
     private lateinit var skipHandler: SkipLogicHandler
@@ -52,8 +55,16 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return previousQuestions.size + 1
     }
 
-    private fun getQuestionPositionByChoiceGUID( currentQuestionPosition: Int): Int {
-        val choiceGUID = getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID
+    /**
+     * @param currentQuestionPosition takes the current question position to get it's details
+     * this method gets the skip to question based on the question type and it's response
+     * gets  the question response choiceID
+     * then gets question detail using position
+     * based on question type either get skip to from SkipLogicHandler
+     * @return SkipTo question position in Questions list
+     */
+    private fun getQuestionPositionByChoice(currentQuestionPosition: Int): Int {
+        val choiceGUID :String? = getQuestionResponseByPosition(currentQuestionPosition)?.choiceGUID
         val question = findQuestion(currentQuestionPosition)!!
         val questionTo =
             when (question.questionType) {
@@ -62,36 +73,72 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
                 QuestionType.MultipleChoiceQuestion.value,
                 QuestionType.ImageMCQ.value -> {
                     skipHandler.freeInputAndDateSkip(question)
-                        ?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                        ?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
                 }
                 QuestionType.SlideQuestion.value,
                 QuestionType.StarQuestion.value,
                 QuestionType.Emoji.value,
-                QuestionType.NPS.value-> {
+                QuestionType.NPS.value,
+                QuestionType.CSAT.value-> {
                     if (hasQuestionResponse(question.surveyQuestionID!!)) {
                         val response =
                             questionResponsesList.find { it.questionID == question.surveyQuestionID }
-                        val choiceId = skipHandler.sliderAndRatingQuestionSkip(question,response!!.numberResponse!!)
-                        //Show submit button
-                        if (choiceId.equals("00000000-0000-0000-0000-000000000000")){
+                        skipHandler.singleChoiceQuestionsSkip(
+                            question,
+                            response?.numberResponse
+                        )
+                    } else {
+                        survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
 
-                        }
-                        else{
-
-                        }
-                        choiceId
-                    }
-                    else
-                    {
-                        survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
                     }
                 }
                 else -> {
-                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }!!.skipToQuestionGUID
+                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
                 }
             }
+        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }?: -1
+    }
 
-        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }!!
+    /**
+     * @param questionPosition : takes the current question position to get it's details
+     * set screen configurations by
+     * 1- if question has answer
+     * 2- if has skip logic
+     * 3- if the skip logic is skip To end
+     * 4- Question type is single choice question
+     *
+     * this method is being called from
+     * 1- onResume method
+     * 2- Update Answer method
+     *
+     * @return using public mutableLiveData variable observe the result on MainFragment
+     * and notify the current screen
+     */
+    fun getDestinationsSubmitted(questionPosition:Int){
+        val question = survey?.questions?.get(questionPosition)
+        val hasAnswer = hasQuestionResponse(question!!.surveyQuestionID!!)
+        val hasSkipLogic = skipHandler.hasSkipLogic(question.surveyQuestionGUID!!)
+        val skipTo = getQuestionPositionByChoice(questionPosition)
+
+            if(hasSkipLogic && hasAnswer && !question.isRequired!!
+            && (question.questionType == QuestionType.SingleChoice.value
+                    ||question.questionType == QuestionType.StarQuestion.value
+                    ||question.questionType == QuestionType.SlideQuestion.value
+                    ||question.questionType == QuestionType.NPS.value
+                    ||question.questionType == QuestionType.Emoji.value)){
+            showSubmitButton.value = false
+            enableNextButton.value = true
+        }
+        else if (hasSkipLogic && !question.isRequired!! && !hasAnswer)
+        {
+            showSubmitButton.value = true
+            enableNextButton.value = false
+        }
+        if(skipTo ==-1)
+        {
+            showSubmitButton.value = true
+            enableNextButton.value = false
+        }
     }
 
     private fun getQuestionResponseByPosition(current: Int): QuestionResponses? {
@@ -138,6 +185,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             showIsRequiredErrMsgLD.value = false
         }
         updateProgressSliderLD.value = questionResponsesList.size.toFloat()
+//        getDestinationsSubmitted(question!!.questionGUID!!)
     }
 
     private fun hasNoAnswer(question: QuestionResponses) =
@@ -227,11 +275,23 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return try {
 
             when (skipHandler.hasSkipLogic(currentQuestion!!.surveyQuestionGUID!!)) {
-                true -> getQuestionPositionByChoiceGUID(currentQuestionPosition)
+                true -> {
+                    val skipToQuestion = getQuestionPositionByChoice(currentQuestionPosition)
+
+                    if(skipToQuestion ==-1)
+                    {
+                        currentQuestionPosition +1
+                    }
+                    else
+                    {
+                        skipToQuestion
+                    }
+                }
                 false -> currentQuestionPosition + 1
             }
         } catch (e: NullPointerException) {
             currentQuestionPosition + 1
+            Log.e("crash", "getTheNextQuestionPosition: ", e)
         }
     }
 
@@ -246,7 +306,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun setSubmitButtonBasedOnPosition(btn: MaterialButton, questionPosition: Int?) {
         btn.submitButtonStyle(getSurveyTheme()?.submitButton)
-        if (survey?.questions?.lastIndex == questionPosition) {
+        if (survey?.questions?.lastIndex == questionPosition ) {
             btn.show()
         } else {
             btn.hide()

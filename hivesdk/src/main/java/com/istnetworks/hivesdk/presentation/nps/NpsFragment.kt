@@ -17,6 +17,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
@@ -27,7 +28,7 @@ private const val UN_SELECTED_WIDTH = 18
 private const val SELECTED_HEIGHT = SELECTED_WIDTH
 private const val UN_SELECTED_HEIGHT = UN_SELECTED_WIDTH
 
-class NpsFragment : BaseQuestionFragment(),IsRequiredInterface {
+class NpsFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonControl {
     private var questionPosition: Int? = null
     private lateinit var binding: FragmentNpsBinding
     private var selectedQuestion: Question? = null
@@ -65,7 +66,7 @@ class NpsFragment : BaseQuestionFragment(),IsRequiredInterface {
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-
+        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
@@ -89,6 +90,8 @@ class NpsFragment : BaseQuestionFragment(),IsRequiredInterface {
                 npsValue
             )
         )
+
+        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
 
 
@@ -252,5 +255,15 @@ class NpsFragment : BaseQuestionFragment(),IsRequiredInterface {
         binding.tvErrorMessage.hide()
         updatePagerHeight(binding.root)
 
+    }
+
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
     }
 }

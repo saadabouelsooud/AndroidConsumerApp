@@ -128,7 +128,7 @@ class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnChe
             }
 
             cbChoice.multiChoiceStyle(style)
-            cbChoice.setPadding(32, 16, 16, 16)
+            cbChoice.setPadding(32, 32, 32, 16)
             cbChoice.setOnCheckedChangeListener(this)
             binding.hveLiMultipleChoiceWrapper.addView(cbChoice)
             this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }

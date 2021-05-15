@@ -22,6 +22,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSingleChoiceBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -29,7 +30,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "SingleChoiceFragment"
-class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
+class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonControl{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false
@@ -47,7 +48,7 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-
+        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
 
     override fun onCreateView(
@@ -57,9 +58,9 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
         binding = FragmentSingleChoiceBinding.inflate(inflater)
 
         observeViewModel()
+        initSubmitBtn()
         onClickActions()
         observeSurvey()
-        initSubmitBtn()
         return binding.root
     }
     private fun initSubmitBtn() {
@@ -122,6 +123,7 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
                 ),choiceGUID = selectedChoice?.choiceGUID
                 )
             )
+            questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
         }
 
 
@@ -151,5 +153,15 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface{
         binding.tvErrorMessage.hide()
         updatePagerHeight(binding.root)
 
+    }
+
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
     }
 }

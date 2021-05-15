@@ -15,6 +15,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
@@ -51,6 +52,7 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+
     private fun observeViewModel() {
         viewModel.updateProgressSliderLD.observe(viewLifecycleOwner, {
             binding.hveSliderProgress.value = it
@@ -67,6 +69,22 @@ class MainFragment : Fragment() {
                 (f as IsRequiredInterface).showIsRequiredError()
             } else {
                 (f as IsRequiredInterface).hideIsRequiredError()
+            }
+        })
+
+//        viewModel.enableNextButton.observe(viewLifecycleOwner,{
+//            binding.hveIvNext.isEnabled = it
+//        })
+
+        viewModel.showSubmitButton.observe(viewLifecycleOwner,{
+            val f =
+                horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
+            if(it == true){
+                (f as SubmitButtonControl).showSubmitButton()
+            }
+            else
+            {
+                (f as SubmitButtonControl).hideSubmitButton()
             }
         })
     }

@@ -230,7 +230,7 @@ fun MaterialButton.submitButtonStyle(submitButton: SubmitButton?) {
 }
 
 fun ImageView.surveyLogoStyle(logoStyle:SurveyLogoStyle){
-    Picasso.get().load(logoStyle.uRL).into(this)
+    Picasso.get().load(logoStyle.uRL).placeholder(R.drawable.loading_animation).into(this)
     alpha = logoStyle.opacity?.toFloat()?: 1f
 
 }

@@ -6,23 +6,21 @@ import com.istnetworks.hivesdk.data.models.response.Question
 class SkipLogicHandler (val skipLogic: List<SkipLogic>?,questionList: MutableList<Question>?){
 
 
-     fun hasSkipLogic(qId: String): Boolean {
+     fun hasSkipLogic(qId: String?): Boolean {
         return skipLogic?.any { it.questionGUID.equals(qId) } ?: false
     }
 
-
-
-    fun freeInputAndDateSkip(question: Question): String? {
+    fun freeInputAndDateSkip(question: Question?): String? {
         return skipLogic?.findLast {
-            it.questionGUID.equals(question.surveyQuestionGUID)
-        }!!.skipToQuestionGUID
+            it.questionGUID.equals(question?.surveyQuestionGUID)
+        }?.skipToQuestionGUID
 
     }
 
-    fun sliderAndRatingQuestionSkip(question: Question, numberResponse: Int): String {
+    fun singleChoiceQuestionsSkip(question: Question?, numberResponse: Int?): String {
         return try {
             skipLogic?.find {
-                it.questionGUID.equals(question.surveyQuestionGUID) &&
+                it.questionGUID.equals(question?.surveyQuestionGUID) &&
                         numberResponse in it.minValue!!..it.maxValue!!
             }!!.skipToQuestionGUID  !!
         } catch (e:Exception)
