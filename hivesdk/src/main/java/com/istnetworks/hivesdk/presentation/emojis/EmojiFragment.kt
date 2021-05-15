@@ -15,13 +15,14 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface{
+class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonControl{
 
     private val questionPosition by lazy { arguments?.getInt(ARG_QUESTION_POSITION) }
     private lateinit var binding: FragmentEmojiBinding
@@ -46,6 +47,7 @@ class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface{
         super.onResume()
         bindQuestion()
         updatePagerHeight(binding.root)
+        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -60,6 +62,7 @@ class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface{
                         numberResponse = rating
                     )
                 )
+                questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
             }
 
         })
@@ -99,4 +102,15 @@ class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface{
         binding.tvErrorMessage.hide()
         updatePagerHeight(binding.root)
     }
+
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
+    }
+
 }

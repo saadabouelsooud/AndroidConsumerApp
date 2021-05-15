@@ -129,7 +129,12 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             showSubmitButton.value = false
             enableNextButton.value = true
         }
-        else if (hasSkipLogic && !question.isRequired!! && !hasAnswer)
+        else if (hasSkipLogic && !question.isRequired!! && !hasAnswer
+                &&(question.questionType == QuestionType.SingleChoice.value
+                        ||question.questionType == QuestionType.StarQuestion.value
+                        ||question.questionType == QuestionType.SlideQuestion.value
+                        ||question.questionType == QuestionType.NPS.value
+                        ||question.questionType == QuestionType.Emoji.value))
         {
             showSubmitButton.value = true
             enableNextButton.value = false

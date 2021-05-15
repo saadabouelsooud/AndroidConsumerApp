@@ -18,6 +18,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.HveFragmentSliderQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -26,7 +27,7 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 
 const val ARG_POSITION = "pos"
 
-class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
+class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface ,SubmitButtonControl{
     private lateinit var binding: HveFragmentSliderQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
@@ -55,6 +56,7 @@ class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
                     textResponse = "${value.toInt()}"
                 )
             )
+            position?.let { viewModel.getDestinationsSubmitted(it) }
         }
     }
 
@@ -66,7 +68,7 @@ class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-
+        position?.let { viewModel.getDestinationsSubmitted(it) }
         updatePagerHeight(binding.root)
 
     }
@@ -116,5 +118,13 @@ class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
 
     }
 
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
 
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
+    }
 }

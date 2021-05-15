@@ -18,13 +18,14 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 
 
 const val ARG_POSITION = "pos"
 
-class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface {
+class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface,SubmitButtonControl {
     private lateinit var binding: FragmentSpinnerQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
@@ -57,7 +58,7 @@ class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface {
         bindQuestion()
 
         updatePagerHeight(binding.root)
-
+        position?.let { viewModel.getDestinationsSubmitted(it) }
     }
 
     private fun stylingViews() {
@@ -127,7 +128,7 @@ class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface {
                         )
                     )
                 }
-
+                position?.let { viewModel.getDestinationsSubmitted(it) }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -150,5 +151,13 @@ class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface {
 
     }
 
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
 
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
+    }
 }

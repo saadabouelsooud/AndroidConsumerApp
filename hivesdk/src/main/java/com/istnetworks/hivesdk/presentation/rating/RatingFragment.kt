@@ -23,13 +23,14 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentRatingBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
 import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
-class RatingFragment : BaseQuestionFragment(),IsRequiredInterface {
+class RatingFragment : BaseQuestionFragment(),IsRequiredInterface, SubmitButtonControl {
 
     private lateinit var binding: FragmentRatingBinding
     private var selectedQuestion: Question? = null
@@ -55,6 +56,7 @@ class RatingFragment : BaseQuestionFragment(),IsRequiredInterface {
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
+        position?.let { viewModel.getDestinationsSubmitted(it) }
 
     }
     private fun bindQuestions(
@@ -105,6 +107,7 @@ class RatingFragment : BaseQuestionFragment(),IsRequiredInterface {
                 "",
                 rating.toInt()
             ))
+            position?.let { viewModel.getDestinationsSubmitted(it) }
         }
     }
 
@@ -129,5 +132,15 @@ class RatingFragment : BaseQuestionFragment(),IsRequiredInterface {
         binding.tvErrorMessage.hide()
         updatePagerHeight(binding.root)
 
+    }
+
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
     }
 }
