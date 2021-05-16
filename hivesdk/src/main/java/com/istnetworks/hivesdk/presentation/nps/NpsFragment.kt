@@ -17,8 +17,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentNpsBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
-import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
-import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
 
@@ -28,7 +27,7 @@ private const val UN_SELECTED_WIDTH = 18
 private const val SELECTED_HEIGHT = SELECTED_WIDTH
 private const val UN_SELECTED_HEIGHT = UN_SELECTED_WIDTH
 
-class NpsFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonControl {
+class NpsFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInterface {
     private var questionPosition: Int? = null
     private lateinit var binding: FragmentNpsBinding
     private var selectedQuestion: Question? = null

@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.chip.Chip
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.local.CacheInMemory
 import com.istnetworks.hivesdk.data.models.Choices
@@ -19,19 +16,15 @@ import com.istnetworks.hivesdk.data.models.SelectedChoices
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.styles.QuestionChoicesStyle
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
-import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSingleImageChoiceBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
-import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.singleChoiceStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +34,7 @@ import kotlinx.coroutines.withContext
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
 private const val TAG = "SingleImageChoice"
 
-class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface,SubmitButtonControl{
+class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface,SubmitButtonInterface{
     private var questionPosition: Int? = null
     private var selectedQuestion: Question? = null
     private var isRequired: Boolean = false

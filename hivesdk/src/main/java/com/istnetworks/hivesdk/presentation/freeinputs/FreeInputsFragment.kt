@@ -21,6 +21,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentFreeInputsBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.interfaces.ValidationErrorInterface
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
@@ -28,7 +29,7 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 
 
-class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, ValidationErrorInterface {
+class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, ValidationErrorInterface,SubmitButtonInterface {
 
     private val CODE_AREA_PATTERN = "^[^01][0-9]{2}\$"
     private val PHONE_NUMBER_PATTERN = "[0-9][0-9]{8,14}"
@@ -272,5 +273,14 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
             updatePagerHeight(binding.root)
         }
 
+    }
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
     }
 }

@@ -21,6 +21,7 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentDatePickerQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
@@ -32,7 +33,8 @@ import java.util.*
 
 const val ARG_POSITION = "pos"
 
-class DatePickerQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
+class DatePickerQuestionFragment : BaseQuestionFragment(),IsRequiredInterface,
+    SubmitButtonInterface {
     private lateinit var binding: FragmentDatePickerQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
@@ -133,5 +135,15 @@ class DatePickerQuestionFragment : BaseQuestionFragment(),IsRequiredInterface {
         binding.tvErrorMessage.hide()
         updatePagerHeight(binding.root)
 
+    }
+
+    override fun showSubmitButton() {
+        binding.hveBtnSubmit.show()
+        updatePagerHeight(binding.root)
+    }
+
+    override fun hideSubmitButton() {
+        binding.hveBtnSubmit.hide()
+        updatePagerHeight(binding.root)
     }
 }

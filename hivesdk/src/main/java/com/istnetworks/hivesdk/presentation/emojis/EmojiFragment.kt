@@ -4,25 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentEmojiBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
-import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
-import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 private const val ARG_QUESTION_POSITION = "ARG_QUESTION_POSITION"
-class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonControl{
+class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInterface{
 
     private val questionPosition by lazy { arguments?.getInt(ARG_QUESTION_POSITION) }
     private lateinit var binding: FragmentEmojiBinding

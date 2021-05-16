@@ -7,30 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.StarOption
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.StarOptionEnum
-import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentRatingBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
-import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
-import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
-class RatingFragment : BaseQuestionFragment(),IsRequiredInterface, SubmitButtonControl {
+class RatingFragment : BaseQuestionFragment(),IsRequiredInterface, SubmitButtonInterface {
 
     private lateinit var binding: FragmentRatingBinding
     private var selectedQuestion: Question? = null

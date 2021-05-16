@@ -39,8 +39,8 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
-    var showSubmitButton = MutableLiveData<Boolean> ()
-    var enableNextButton = MutableLiveData<Boolean>()
+    var showSubmitButtonLD = MutableLiveData<Boolean> ()
+    var enableNextButtonLD = MutableLiveData<Boolean>()
 
     /**=
      *  TODO: dependency inversion
@@ -106,42 +106,6 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return survey?.surveyOptions?.displayMode == HiveSDKType.FULLSCREEN.value
     }
 
-    private fun getQuestionPositionByChoiceGUID(currentQuestionPosition: Int): Int {
-        val choiceGUID = getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID
-        val question = findQuestion(currentQuestionPosition)!!
-        val questionTo =
-            when (question.questionType) {
-                in QuestionType.TextInput.value..QuestionType.URLInput.value,
-                QuestionType.DateQuestion.value,
-                QuestionType.MultipleChoiceQuestion.value,
-                QuestionType.ImageMCQ.value -> {
-                    skipHandler.freeInputAndDateSkip(question)
-                        ?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
-                }
-                QuestionType.SlideQuestion.value,
-                QuestionType.StarQuestion.value,
-                QuestionType.Emoji.value,
-                QuestionType.NPS.value,
-                QuestionType.CSAT.value-> {
-                    if (hasQuestionResponse(question.surveyQuestionID!!)) {
-                        val response =
-                            questionResponsesList.find { it.questionID == question.surveyQuestionID }
-                        skipHandler.singleChoiceQuestionsSkip(
-                            question,
-                            response?.numberResponse
-                        )
-                    } else {
-                        survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
-
-                    }
-                }
-                else -> {
-                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
-                }
-            }
-        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }?: -1
-    }
-
     /**
      * @param questionPosition : takes the current question position to get it's details
      * set screen configurations by
@@ -163,31 +127,31 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         val hasSkipLogic = skipHandler.hasSkipLogic(question.surveyQuestionGUID!!)
         val skipTo = getQuestionPositionByChoice(questionPosition)
 
-            if(hasSkipLogic && hasAnswer && !question.isRequired!!
-            && (question.questionType == QuestionType.SingleChoice.value
-                    ||question.questionType == QuestionType.StarQuestion.value
-                    ||question.questionType == QuestionType.SlideQuestion.value
-                    ||question.questionType == QuestionType.NPS.value
-                    ||question.questionType == QuestionType.Emoji.value)){
-            showSubmitButton.value = false
-            enableNextButton.value = true
+            if(hasSkipLogic && hasAnswer && question.isRequired==false
+            && isSingleChoiceModeQuestion(question)
+            ){
+            showSubmitButtonLD.value = false
+            enableNextButtonLD.value = true
         }
-        else if (hasSkipLogic && !question.isRequired!! && !hasAnswer
-                &&(question.questionType == QuestionType.SingleChoice.value
-                        ||question.questionType == QuestionType.StarQuestion.value
-                        ||question.questionType == QuestionType.SlideQuestion.value
-                        ||question.questionType == QuestionType.NPS.value
-                        ||question.questionType == QuestionType.Emoji.value))
+        else if (hasSkipLogic && question.isRequired==false && !hasAnswer
+                && isSingleChoiceModeQuestion(question))
         {
-            showSubmitButton.value = true
-            enableNextButton.value = false
+            showSubmitButtonLD.value = true
+            enableNextButtonLD.value = false
         }
         if(skipTo ==-1)
         {
-            showSubmitButton.value = true
-            enableNextButton.value = false
+            showSubmitButtonLD.value = true
+            enableNextButtonLD.value = false
         }
     }
+
+    private fun isSingleChoiceModeQuestion(question: Question) =
+        (question.questionType == QuestionType.SingleChoice.value
+                || question.questionType == QuestionType.StarQuestion.value
+                || question.questionType == QuestionType.SlideQuestion.value
+                || question.questionType == QuestionType.NPS.value
+                || question.questionType == QuestionType.Emoji.value)
 
     private fun getQuestionResponseByPosition(current: Int): QuestionResponses? {
         val currentQuestion = survey?.questions?.get(current)
@@ -317,7 +281,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         val currentQuestion = findQuestion(currentQuestionPosition)
         return try {
 
-            when (skipHandler.hasSkipLogic(currentQuestion!!.surveyQuestionGUID!!)) {
+            when (skipHandler.hasSkipLogic(currentQuestion?.surveyQuestionGUID)) {
                 true -> {
                     val skipToQuestion = getQuestionPositionByChoice(currentQuestionPosition)
 
@@ -334,6 +298,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             }
         } catch (e: NullPointerException) {
             currentQuestionPosition + 1
+            e.printStackTrace()
             Log.e("crash", "getTheNextQuestionPosition: ", e)
         }
     }

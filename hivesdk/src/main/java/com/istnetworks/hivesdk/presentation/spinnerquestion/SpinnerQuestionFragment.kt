@@ -18,14 +18,14 @@ import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentSpinnerQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
-import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 
 
 const val ARG_POSITION = "pos"
 
-class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface,SubmitButtonControl {
+class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface,SubmitButtonInterface {
     private lateinit var binding: FragmentSpinnerQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }

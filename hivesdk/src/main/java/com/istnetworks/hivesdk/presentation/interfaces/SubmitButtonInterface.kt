@@ -1,6 +1,6 @@
 package com.istnetworks.hivesdk.presentation.interfaces
 
-interface SubmitButtonControl {
+interface SubmitButtonInterface {
     fun showSubmitButton()
     fun hideSubmitButton()
 }

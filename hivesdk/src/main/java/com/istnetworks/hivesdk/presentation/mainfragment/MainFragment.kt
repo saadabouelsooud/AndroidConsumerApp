@@ -12,11 +12,10 @@ import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
-import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
 import com.istnetworks.hivesdk.presentation.interfaces.ValidationErrorInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
-import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
 import com.istnetworks.hivesdk.presentation.surveyExtension.cardsBackground
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
@@ -76,20 +75,20 @@ class MainFragment : Fragment() {
             }
         })
 
-//        viewModel.enableNextButton.observe(viewLifecycleOwner,{
-//            binding.hveIvNext.isEnabled = it
-//        })
+        viewModel.enableNextButtonLD.observe(viewLifecycleOwner, {
+            binding.hveIvNext.isEnabled = it
+            binding.hveIvNext.alpha = if (it) 1f else .6f
+        })
 
-        viewModel.showSubmitButton.observe(viewLifecycleOwner,{
+        viewModel.showSubmitButtonLD.observe(viewLifecycleOwner, {
             val f =
                 horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
-            if(it == true){
-                (f as SubmitButtonControl).showSubmitButton()
-            }
-            else
-            {
-                (f as SubmitButtonControl).hideSubmitButton()
-            }
+            if (f is SubmitButtonInterface)
+                if (it == true)
+                    (f as SubmitButtonInterface).showSubmitButton()
+                else
+                    (f as SubmitButtonInterface).hideSubmitButton()
+
         })
     }
 
@@ -182,12 +181,6 @@ class MainFragment : Fragment() {
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
         binding.hveViewPager.adapter = horizontalPagerAdapter
-    }
-
-    private fun initializeRecyclerView(){
-        val pagerAdapter = PagerAdapter(childFragmentManager)
-        pagerAdapter.setData(viewModel.survey?.questions?: listOf())
-        binding.lvQuestions.adapter= pagerAdapter
     }
 
     override fun onDestroyView() {
