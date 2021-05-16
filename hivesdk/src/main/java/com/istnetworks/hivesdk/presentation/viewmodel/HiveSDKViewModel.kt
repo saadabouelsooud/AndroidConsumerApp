@@ -14,6 +14,7 @@ import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.Survey
 import com.istnetworks.hivesdk.data.models.response.toSaveSurveyBody
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepository
+import com.istnetworks.hivesdk.data.utils.HiveSDKType
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
@@ -65,6 +66,14 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
      */
     private fun getQuestionPositionByChoice(currentQuestionPosition: Int): Int {
         val choiceGUID :String? = getQuestionResponseByPosition(currentQuestionPosition)?.choiceGUID
+    fun surveyBackgroundColor() = Color.parseColor("#" + getSurveyTheme()?.surveyBackgroundColor)
+
+    fun isFullScreen(): Boolean {
+        return survey?.surveyOptions?.displayMode == HiveSDKType.FULLSCREEN.value
+    }
+
+    private fun getQuestionPositionByChoiceGUID(currentQuestionPosition: Int): Int {
+        val choiceGUID = getQuestionResponseByPosition(currentQuestionPosition)!!.choiceGUID
         val question = findQuestion(currentQuestionPosition)!!
         val questionTo =
             when (question.questionType) {
@@ -213,14 +222,9 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun getSurveyOptions() = survey?.surveyOptions
 
-    fun getSurveyBackgroundColor() = Color.parseColor("#${getSurveyTheme()?.surveyBackgroundColor}")
-
     private fun generateSaveSurveyRequest() =
         survey?.toSaveSurveyBody(questionResponsesList)
 
-    fun getQuestions(position: Int): Question {
-        return getSurveyResponseLD.value!!.survey!!.questions!![position]
-    }
 
     fun hasProgressBar(): Boolean? {
         return getSurveyResponseLD.value?.survey?.surveyOptions?.hasProgressBar

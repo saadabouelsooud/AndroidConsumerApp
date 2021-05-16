@@ -1,6 +1,5 @@
 package com.istnetworks.hivesdk.presentation.mainfragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
-import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.onClick
 import com.istnetworks.hivesdk.data.utils.extensions.show
-import com.istnetworks.hivesdk.data.utils.extensions.showToast
 import com.istnetworks.hivesdk.databinding.FragmentMainBinding
 import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonControl
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
+import com.istnetworks.hivesdk.presentation.interfaces.ValidationErrorInterface
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.HorizontalPagerAdapter
 import com.istnetworks.hivesdk.presentation.mainfragment.adapter.PagerAdapter
+import com.istnetworks.hivesdk.presentation.surveyExtension.cardsBackground
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyLogoStyle
 import com.istnetworks.hivesdk.presentation.surveyExtension.surveyTitleStyle
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -58,8 +57,13 @@ class MainFragment : Fragment() {
             binding.hveSliderProgress.value = it
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
-            if(it==true)
-                showToast(getString(R.string.please_answer_this_question))
+            val f =
+                horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
+            if (it == true) {
+                val questionType =
+                    viewModel.findQuestion(binding.hveViewPager.currentItem)?.questionType
+                (f as ValidationErrorInterface).showNotValidError(questionType)
+            }
 
         })
         viewModel.showIsRequiredErrMsgLD.observe(viewLifecycleOwner, {
@@ -155,14 +159,17 @@ class MainFragment : Fragment() {
         binding.hveIvIcon.surveyLogoStyle(viewModel.getSurveyTheme()?.surveyLogoStyle!!)
         binding.tvSurveyTitle.text = viewModel.survey?.title
         binding.tvSurveyTitle.surveyTitleStyle(viewModel.getSurveyTheme()?.surveyTitleStyle)
-        binding.clParent.setBackgroundColor(Color.parseColor("#" + viewModel.getSurveyTheme()?.surveyBackgroundColor))
-
-        binding.hveIvClose.visibility =  if(viewModel.getSurveyOptions()?.enableCloseButton == true){
-            View.VISIBLE
-        }else
-        {
-            View.GONE
-        }
+        binding.hveClHeader.cardsBackground(requireContext(), viewModel.surveyBackgroundColor())
+        binding.hveClQuestionHolder.cardsBackground(
+            requireContext(),
+            viewModel.surveyBackgroundColor()
+        )
+        binding.hveIvClose.visibility =
+            if (viewModel.getSurveyOptions()?.enableCloseButton == true) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
     }
 

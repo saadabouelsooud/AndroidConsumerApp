@@ -12,33 +12,26 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
-import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
-import com.istnetworks.hivesdk.data.utils.extensions.disable
 import com.istnetworks.hivesdk.data.utils.extensions.hide
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.FragmentFreeInputsBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
 import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
-import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
+import com.istnetworks.hivesdk.presentation.interfaces.ValidationErrorInterface
 import com.istnetworks.hivesdk.presentation.spinnerquestion.ARG_POSITION
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidEmail
 import com.istnetworks.hivesdk.presentation.surveyExtension.isValidUrl
 import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
-import com.istnetworks.hivesdk.presentation.surveyExtension.submitButtonStyle
-import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
-import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFactory
 
 
-class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
+class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, ValidationErrorInterface {
 
-       private  val CODE_AREA_PATTERN = "^[^01][0-9]{2}\$"
-       private  val PHONE_NUMBER_PATTERN= "[0-9][0-9]{8,14}"
+    private val CODE_AREA_PATTERN = "^[^01][0-9]{2}\$"
+    private val PHONE_NUMBER_PATTERN = "[0-9][0-9]{8,14}"
 
     private lateinit var binding: FragmentFreeInputsBinding
     private var selectedQuestion: Question? = null
@@ -70,14 +63,16 @@ class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
                     numberResponse = null
                 )
             )
+            hideFreeInputError()
         }
         binding.hveEdtPhone.doAfterTextChanged {
             viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse(
-                    textResponse = it.toString(),
+                    textResponse = binding.edtCountryCode.text.toString() + it.toString(),
                     numberResponse = null
                 )
             )
+            hidePhoneError()
         }
     }
 
@@ -125,7 +120,7 @@ class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
         binding.hveEdtPhone.setTextColor(Color.parseColor("#0075be"))
     }
 
-    private fun moveToNextQuestion(questionType: Int): Boolean {
+    private fun validate(questionType: Int): Boolean {
         when (questionType) {
             QuestionType.EmailInput.value -> {
                 if (!binding.hveEdtFreeInput.text.toString().isValidEmail()) {
@@ -170,6 +165,23 @@ class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
             }
     }
 
+    private fun hideFreeInputError() {
+        binding.tvErrorMessage.hide()
+        binding.hveEdtFreeInput.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.navyBlue
+            )
+        )
+        binding.hveEdtFreeInput.background =
+            activity?.let { it1 ->
+                ContextCompat.getDrawable(
+                    it1,
+                    R.drawable.bg_free_input_rounded_border
+                )
+            }
+    }
+
     private fun setPhoneError() {
         binding.tvErrorMessage.visibility = View.VISIBLE
         binding.hveEdtPhone.setTextColor(Color.parseColor("#e4606c"))
@@ -181,6 +193,24 @@ class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
                 )
             }
         binding.edtCountryCode.setTextColor(Color.parseColor("#e4606c"))
+    }
+
+    private fun hidePhoneError() {
+        binding.tvErrorMessage.hide()
+        binding.hveEdtPhone.setTextColor(ContextCompat.getColor(requireContext(), R.color.navyBlue))
+        binding.llPhone.background =
+            activity?.let { it1 ->
+                ContextCompat.getDrawable(
+                    it1,
+                    R.drawable.bg_free_input_rounded_border
+                )
+            }
+        binding.edtCountryCode.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.navyBlue
+            )
+        )
     }
 
     private fun getFreeInputText(questionType: Int): String {
@@ -226,6 +256,7 @@ class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
         updatePagerHeight(binding.root)
 
     }
+
     @Keep
     companion object {
         @JvmStatic
@@ -233,5 +264,13 @@ class FreeInputsFragment : BaseQuestionFragment(),IsRequiredInterface {
             FreeInputsFragment().apply {
                 arguments = bundleOf(ARG_POSITION to position)
             }
+    }
+
+    override fun showNotValidError(questionType: Int?) {
+        if (questionType != null) {
+            validate(questionType)
+            updatePagerHeight(binding.root)
+        }
+
     }
 }
