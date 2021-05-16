@@ -126,21 +126,16 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         val hasAnswer = hasQuestionResponse(question!!.surveyQuestionID!!)
         val hasSkipLogic = skipHandler.hasSkipLogic(question.surveyQuestionGUID!!)
         val skipTo = getQuestionPositionByChoice(questionPosition)
+        val hasSkipLogicAndNotRequired = hasSkipLogic && question.isRequired == false
 
-            if(hasSkipLogic && hasAnswer && question.isRequired==false
-            && isSingleChoiceModeQuestion(question)
-            ){
+        if (hasSkipLogicAndNotRequired && hasAnswer && isSingleChoiceModeQuestion(question)) {
             showSubmitButtonLD.value = false
             enableNextButtonLD.value = true
-        }
-        else if (hasSkipLogic && question.isRequired==false && !hasAnswer
-                && isSingleChoiceModeQuestion(question))
-        {
+        } else if (hasSkipLogicAndNotRequired && !hasAnswer && isSingleChoiceModeQuestion(question)) {
             showSubmitButtonLD.value = true
             enableNextButtonLD.value = false
         }
-        if(skipTo ==-1)
-        {
+        if (skipTo == -1 && hasSkipLogic) {
             showSubmitButtonLD.value = true
             enableNextButtonLD.value = false
         }
@@ -185,19 +180,33 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         skipHandler = SkipLogicHandler(survey?.skipLogic, survey?.questions)
     }
 
-    fun updateQuestionResponsesList(question: QuestionResponses?) {
-        question?.let { q ->
+    fun updateQuestionResponsesList(questionResponse: QuestionResponses?) {
+        questionResponse?.let { q ->
             val duplicatedQuestion = questionResponsesList.find { it.questionID == q.questionID }
             if (duplicatedQuestion != null)
                 questionResponsesList.remove(duplicatedQuestion)
 
-            if (hasNoAnswer(question))
+            if (hasNoAnswer(questionResponse))
                 return@let
             questionResponsesList.add(q)
             showIsRequiredErrMsgLD.value = false
         }
-        updateProgressSliderLD.value = questionResponsesList.size.toFloat()
-//        getDestinationsSubmitted(question!!.questionGUID!!)
+        updateProgressBar(questionResponse?.questionID)
+    }
+
+    private fun updateProgressBar(questionID: Int?) {
+        questionID?.let {
+            val totalQuestions = survey?.questions
+            val currentQuestionPosition =
+                totalQuestions?.indexOf(totalQuestions.find { it.surveyQuestionID == questionID })
+            currentQuestionPosition?.let {
+                val nextPosition = getTheNextQuestionPosition(currentQuestionPosition)
+                val skippedQuestionsNumber = nextPosition - currentQuestionPosition
+                updateProgressSliderLD.value =
+                    questionResponsesList.size.toFloat() + skippedQuestionsNumber
+            }
+        }
+
     }
 
     private fun hasNoAnswer(question: QuestionResponses) =
@@ -277,25 +286,18 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     }
 
     fun getTheNextQuestionPosition(currentQuestionPosition: Int): Int {
-        previousQuestions.push(currentQuestionPosition)
         val currentQuestion = findQuestion(currentQuestionPosition)
         return try {
-
-            when (skipHandler.hasSkipLogic(currentQuestion?.surveyQuestionGUID)) {
-                true -> {
-                    val skipToQuestion = getQuestionPositionByChoice(currentQuestionPosition)
-
-                    if(skipToQuestion ==-1)
-                    {
-                        currentQuestionPosition +1
-                    }
-                    else
-                    {
-                        skipToQuestion
-                    }
+            if (skipHandler.hasSkipLogic(currentQuestion?.surveyQuestionGUID)) {
+                val skipToQuestion = getQuestionPositionByChoice(currentQuestionPosition)
+                if (skipToQuestion == -1) {
+                    currentQuestionPosition + 1
+                } else {
+                    skipToQuestion
                 }
-                false -> currentQuestionPosition + 1
-            }
+            } else
+                currentQuestionPosition + 1
+
         } catch (e: NullPointerException) {
             currentQuestionPosition + 1
             e.printStackTrace()
@@ -303,7 +305,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
     }
 
-    fun getThePreviousPosition(): Int {
+    fun getAndPopPreviousPosition(): Int {
 
         return if (previousQuestions.size > 0) {
             previousQuestions.pop()
@@ -314,7 +316,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
 
     fun setSubmitButtonBasedOnPosition(btn: MaterialButton, questionPosition: Int?) {
         btn.submitButtonStyle(getSurveyTheme()?.submitButton)
-        if (survey?.questions?.lastIndex == questionPosition ) {
+        if (survey?.questions?.lastIndex == questionPosition) {
             btn.show()
         } else {
             btn.hide()
@@ -322,6 +324,10 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         btn.onClick {
             saveSurvey()
         }
+    }
+
+    fun pushToPreviousQuestionsStack(currentQuestionPosition: Int) {
+        previousQuestions.push(currentQuestionPosition)
     }
 
 }

@@ -132,7 +132,7 @@ class MainFragment : Fragment() {
         }
         binding.hveIvPrevious.onClick {
             val newPosition =
-                viewModel.getThePreviousPosition()
+                viewModel.getAndPopPreviousPosition()
             binding.hveViewPager.setCurrentItem(newPosition,false)
         }
 
@@ -150,7 +150,7 @@ class MainFragment : Fragment() {
     private fun navigateToNextQuestion() {
         val newPosition =
             viewModel.getTheNextQuestionPosition(binding.hveViewPager.currentItem)
-
+            viewModel.pushToPreviousQuestionsStack(binding.hveViewPager.currentItem)
         binding.hveViewPager.setCurrentItem(newPosition,false)
     }
 
