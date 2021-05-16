@@ -223,10 +223,12 @@ class NpsFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonContr
 
         val flexAdapter = FlexboxLayoutManager(context, FlexDirection.ROW, FlexWrap.NOWRAP)
         flexAdapter.justifyContent = JustifyContent.SPACE_BETWEEN
+        binding.npsRecyclerView.setItemViewCacheSize(10);
         binding.npsRecyclerView.layoutManager = flexAdapter
         val adapter = NpsAdapter(nps) {
             onSurveyReadyToSave(it)
         }
+        adapter.setHasStableIds(true)
         binding.npsRecyclerView.adapter = adapter
     }
 

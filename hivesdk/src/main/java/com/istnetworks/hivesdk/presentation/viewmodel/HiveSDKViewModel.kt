@@ -66,6 +66,40 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
      */
     private fun getQuestionPositionByChoice(currentQuestionPosition: Int): Int {
         val choiceGUID :String? = getQuestionResponseByPosition(currentQuestionPosition)?.choiceGUID
+        val question = findQuestion(currentQuestionPosition)!!
+        val questionTo =
+            when (question.questionType) {
+                in QuestionType.TextInput.value..QuestionType.URLInput.value,
+                QuestionType.DateQuestion.value,
+                QuestionType.MultipleChoiceQuestion.value,
+                QuestionType.ImageMCQ.value -> {
+                    skipHandler.freeInputAndDateSkip(question)
+                        ?: survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
+                }
+                QuestionType.SlideQuestion.value,
+                QuestionType.StarQuestion.value,
+                QuestionType.Emoji.value,
+                QuestionType.NPS.value,
+                QuestionType.CSAT.value-> {
+                    if (hasQuestionResponse(question.surveyQuestionID!!)) {
+                        val response =
+                            questionResponsesList.find { it.questionID == question.surveyQuestionID }
+                        skipHandler.singleChoiceQuestionsSkip(
+                            question,
+                            response?.numberResponse
+                        )
+                    } else {
+                        survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
+
+                    }
+                }
+                else -> {
+                    survey?.skipLogic?.findLast { it.qChoiceGUID.equals(choiceGUID) }?.skipToQuestionGUID
+                }
+            }
+        return survey?.questions?.indexOfFirst { it.surveyQuestionGUID!! == questionTo }?: -1
+    }
+
     fun surveyBackgroundColor() = Color.parseColor("#" + getSurveyTheme()?.surveyBackgroundColor)
 
     fun isFullScreen(): Boolean {
