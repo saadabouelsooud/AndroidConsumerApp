@@ -112,12 +112,17 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
      * and notify the current screen
      */
     fun updateSubmitBtnVisibilityBeforeAnswerChosen(questionPosition: Int) {
+        if (isCouldBeLastQuestion(questionPosition))
+            showSubmitButtonLD.value = true
+    }
+
+    fun isCouldBeLastQuestion(questionPosition: Int): Boolean {
 
         val question = survey?.questions?.get(questionPosition)
         val hasAnswer = hasQuestionResponse(question!!.surveyQuestionID!!)
         val hasSkipLogic = skipHandler.hasSkipLogic(question.surveyQuestionGUID!!)
-        if (hasSkipLogic && !hasAnswer && isSingleChoiceModeQuestion(question))
-            showSubmitButtonLD.value = true
+        return hasSkipLogic && !hasAnswer && isSingleChoiceModeQuestion(question)
+
     }
 
     fun updateNextArrowEnablingOnFragmentChange(questionPosition: Int) {
@@ -195,7 +200,6 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
                 return@let
             questionResponsesList.add(q)
             showIsRequiredErrMsgLD.value = false
-
             updateSubmitAndNxtAfterAnswerChosen(q.questionGUID)
         }
         updateProgressBar(questionResponse?.questionID)
@@ -232,9 +236,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
                 totalQuestions?.indexOf(totalQuestions.find { it.surveyQuestionID == questionID })
             currentQuestionPosition?.let {
                 val nextPosition = getTheNextQuestionPosition(currentQuestionPosition)
-                var skippedQuestionsNumber = nextPosition - currentQuestionPosition
-                if (skippedQuestionsNumber < 0)
-                    skippedQuestionsNumber *= -1
+                val skippedQuestionsNumber = nextPosition - currentQuestionPosition
                 updateProgressSliderLD.value =
                     questionResponsesList.size.toFloat() + skippedQuestionsNumber
             }

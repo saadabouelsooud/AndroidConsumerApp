@@ -53,7 +53,8 @@ class MainFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.updateProgressSliderLD.observe(viewLifecycleOwner, {
-            binding.hveSliderProgress.value = it
+            if (it > 0)
+                binding.hveSliderProgress.value = it
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
             val f =
