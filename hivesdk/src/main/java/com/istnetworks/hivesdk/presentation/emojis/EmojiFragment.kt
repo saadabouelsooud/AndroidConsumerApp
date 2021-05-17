@@ -30,6 +30,7 @@ class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInt
         setOnClickListeners()
         initSubmitBtn()
         observeViewModel()
+        questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
         return binding.root
     }
 
@@ -41,7 +42,6 @@ class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInt
         super.onResume()
         bindQuestion()
         updatePagerHeight(binding.root)
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -56,7 +56,7 @@ class EmojiFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInt
                         numberResponse = rating
                     )
                 )
-                questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+                questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
             }
 
         })

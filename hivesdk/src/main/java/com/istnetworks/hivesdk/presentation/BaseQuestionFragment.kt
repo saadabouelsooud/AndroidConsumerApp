@@ -24,7 +24,7 @@ open class BaseQuestionFragment : Fragment() {
     }
 
     fun updatePagerHeight(view: View) {
-        if (viewModel.isFullScreen()) {
+       if (viewModel.isFullScreen()) {
             return
         }
         view.requestLayout()

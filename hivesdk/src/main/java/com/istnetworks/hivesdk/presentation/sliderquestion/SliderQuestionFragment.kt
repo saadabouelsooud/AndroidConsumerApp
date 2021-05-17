@@ -50,7 +50,7 @@ class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface ,Submi
                     textResponse = "${value.toInt()}"
                 )
             )
-            position?.let { viewModel.getDestinationsSubmitted(it) }
+            position?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
         }
     }
 
@@ -62,7 +62,7 @@ class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface ,Submi
     override fun onResume() {
         super.onResume()
         bindQuestionTitle()
-        position?.let { viewModel.getDestinationsSubmitted(it) }
+        position?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
         updatePagerHeight(binding.root)
 
     }

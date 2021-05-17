@@ -42,7 +42,7 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitBu
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+        questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
     }
 
     override fun onCreateView(
@@ -112,12 +112,12 @@ class SingleChoiceFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitBu
             val checkedId = radioGroup.checkedRadioButtonId
             val selectedChoice = selectedQuestion?.choices?.find { it.choiceID == checkedId }
             viewModel.updateQuestionResponsesList(
-                selectedQuestion?.toQuestionResponse("",0,
+                selectedQuestion?.toQuestionResponse("",null,
                 listOf(SelectedChoices(selectedChoice?.choiceID,selectedChoice?.choiceGUID)
                 ),choiceGUID = selectedChoice?.choiceGUID
                 )
             )
-            questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+            questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
         }
 
 

@@ -49,6 +49,8 @@ class MultipleChoicesFragment : BaseQuestionFragment() ,
         observeSurvey()
         onClickActions()
         initSubmitBtn()
+     //  questionPosition?.let { viewModel.updateSubmitBtnAndNxtArrow(it) }
+
         return binding.root
     }
 
@@ -57,7 +59,6 @@ class MultipleChoicesFragment : BaseQuestionFragment() ,
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
     }
     private fun initSubmitBtn() {
         viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,questionPosition)
@@ -126,7 +127,7 @@ class MultipleChoicesFragment : BaseQuestionFragment() ,
                 selectedChoices
             )
         )
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+        questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
     }
 
     private fun onSurveyReadyToSave() {

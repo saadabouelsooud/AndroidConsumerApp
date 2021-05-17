@@ -58,7 +58,7 @@ class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface,Subm
         bindQuestion()
 
         updatePagerHeight(binding.root)
-        position?.let { viewModel.getDestinationsSubmitted(it) }
+        position?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
     }
 
     private fun stylingViews() {
@@ -128,7 +128,7 @@ class SpinnerQuestionFragment : BaseQuestionFragment(), IsRequiredInterface,Subm
                         )
                     )
                 }
-                position?.let { viewModel.getDestinationsSubmitted(it) }
+                position?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

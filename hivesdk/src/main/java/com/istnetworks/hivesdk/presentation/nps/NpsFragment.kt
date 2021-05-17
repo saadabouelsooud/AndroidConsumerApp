@@ -65,7 +65,7 @@ class NpsFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInter
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+        questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
     }
     private fun observeViewModel() {
         viewModel.showErrorMsg.observe(viewLifecycleOwner, {
@@ -90,7 +90,7 @@ class NpsFragment : BaseQuestionFragment(),IsRequiredInterface,SubmitButtonInter
             )
         )
 
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+        questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
     }
 
 

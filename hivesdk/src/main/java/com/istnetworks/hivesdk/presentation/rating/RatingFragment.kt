@@ -48,7 +48,7 @@ class RatingFragment : BaseQuestionFragment(),IsRequiredInterface, SubmitButtonI
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-        position?.let { viewModel.getDestinationsSubmitted(it) }
+        position?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
 
     }
     private fun bindQuestions(
@@ -99,7 +99,7 @@ class RatingFragment : BaseQuestionFragment(),IsRequiredInterface, SubmitButtonI
                 "",
                 rating.toInt()
             ))
-            position?.let { viewModel.getDestinationsSubmitted(it) }
+            position?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
         }
     }
 

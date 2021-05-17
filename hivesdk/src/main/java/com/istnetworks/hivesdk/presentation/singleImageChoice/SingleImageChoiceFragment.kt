@@ -52,7 +52,7 @@ class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface,Su
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
-        questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+        questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
     }
 
     override fun onCreateView(
@@ -163,7 +163,7 @@ class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface,Su
                 )
             )
 
-            questionPosition?.let { viewModel.getDestinationsSubmitted(it) }
+            questionPosition?.let { viewModel.updateSubmitBtnVisibilityBeforeAnswerChosen(it) }
         }
 
 

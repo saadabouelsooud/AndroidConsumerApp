@@ -109,7 +109,7 @@ class MainFragment : Fragment() {
         onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.hveIvPrevious.isEnabled = position > 0
-
+                viewModel.updateNextArrowEnablingOnFragmentChange(position)
                 val fragment = childFragmentManager.findFragmentByTag("f$position")
                 if (fragment != null) {
                     fragment.view?.let {

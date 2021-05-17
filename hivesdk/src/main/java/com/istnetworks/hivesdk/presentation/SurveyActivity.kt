@@ -2,14 +2,16 @@ package com.istnetworks.hivesdk.presentation
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.annotation.Keep
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
+import com.istnetworks.hivesdk.data.utils.HiveSDKType
 import com.istnetworks.hivesdk.data.utils.extensions.shouldShow
 import com.istnetworks.hivesdk.presentation.fullScreen.VerticalMainFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
@@ -54,8 +56,11 @@ class SurveyActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.getSurveyResponseLD.observe(this, {
-            if (it != null)
-                showCardDialog()
+            if (it?.survey?.surveyOptions?.displayMode == HiveSDKType.FULLSCREEN.value)
+                showCardDialog(VerticalMainFragment())
+            else
+                showCardDialog(MainFragment())
+
         })
         viewModel.isLoading.observe(this,{
             findViewById<ProgressBar>(R.id.hve_progress_bar).shouldShow(it)
@@ -63,9 +68,8 @@ class SurveyActivity : AppCompatActivity() {
 
     }
 
-    private fun showCardDialog() {
-        val f = MainFragment()
+    private fun showCardDialog(f: Fragment) {
         val beginTransaction = supportFragmentManager.beginTransaction()
-        beginTransaction.add(android.R.id.content,f, "").commit()
+        beginTransaction.add(android.R.id.content, f, "").commit()
     }
 }
