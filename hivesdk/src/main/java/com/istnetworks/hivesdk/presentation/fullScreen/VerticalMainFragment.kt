@@ -9,7 +9,6 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.hide
@@ -54,7 +53,8 @@ class VerticalMainFragment : Fragment() {
         binding = FragmentVerticalMainBinding.inflate(inflater)
         bindViews()
         generateAllFragmentsList()
-        createInitialFragments()
+        val initialFragments = getInitialFragments()
+        addFragmentsToLayout(initialFragments)
         observeViewModel()
         setupProgressSlider()
         return binding.root
@@ -142,33 +142,31 @@ class VerticalMainFragment : Fragment() {
 
     }
 
-    private fun getInitialFragments() {
-        for (position in 0 until viewModel.survey?.questions!!.size) {
-            val question = viewModel.findQuestion(position)
-            val frameLayout = generateFrameLayout(position)
-            addFragmentToFrame(frameLayout, question, position)
-            binding.hveMain.addView(frameLayout)
-//            if (viewModel.isCouldBeLastQuestion(position))
-//                break
-
-        }
-    }
-  private fun AddFragmentsToLayout(fragments:List<Fragment>) {
-        for (position in 0 until fragments.size) {
-            val question = viewModel.findQuestion(position)
-            val frameLayout = generateFrameLayout(position)
-            addFragmentToFrame(frameLayout, question, position)
-            binding.hveMain.addView(frameLayout)
+    private fun getInitialFragments(): List<Fragment> {
+        val fragments = mutableListOf<Fragment>()
+        for (position in 0 until allFragments.size) {
+            fragments.add(allFragments[position])
             if (viewModel.isCouldBeLastQuestion(position))
                 break
 
         }
+        return fragments
     }
 
-    private fun addFragmentToFrame(f: FrameLayout, q: Question?, position: Int) {
+    private fun addFragmentsToLayout(fragments: List<Fragment>) {
+        for (position in fragments.indices) {
+            val frameLayout = generateFrameLayout(position)
+            addFragmentToFrame(frameLayout, fragments[position])
+            if (binding.hveMain.children.none { it.id == position + 1 })
+                binding.hveMain.addView(frameLayout)
+
+        }
+    }
+
+    private fun addFragmentToFrame(fl: FrameLayout, f: Fragment) {
         childFragmentManager.commit {
             setReorderingAllowed(true)
-            add(f.id, allFragments[position])
+            add(fl.id, f)
         }
     }
 
