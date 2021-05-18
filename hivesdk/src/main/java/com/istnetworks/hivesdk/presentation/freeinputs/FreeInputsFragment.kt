@@ -12,6 +12,8 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Observer
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
@@ -64,7 +66,7 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
                     numberResponse = null
                 )
             )
-            hideFreeInputError()
+            viewModel.validateAnswer(position!!)
         }
         binding.hveEdtPhone.doAfterTextChanged {
             viewModel.updateQuestionResponsesList(
@@ -73,7 +75,7 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
                     numberResponse = null
                 )
             )
-            hidePhoneError()
+            viewModel.validateAnswer(position!!)
         }
     }
 
@@ -274,6 +276,22 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
         }
 
     }
+
+    override fun hideNotValidError(questionType: Int?) {
+        when (questionType) {
+            QuestionType.EmailInput.value ,
+            QuestionType.URLInput.value -> {
+                hideFreeInputError()
+            }
+            QuestionType.PhoneNumberInput.value -> {
+               hidePhoneError()
+            }
+            else -> {
+                hideFreeInputError()
+            }
+        }
+    }
+
     override fun showSubmitButton() {
         binding.hveBtnSubmit.show()
         updatePagerHeight(binding.root)

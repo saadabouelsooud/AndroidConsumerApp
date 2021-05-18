@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
             val f =
                 horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
-            if (it == true) {
+            if (it.second ) {
                 val questionType =
                     viewModel.findQuestion(binding.hveViewPager.currentItem)?.questionType
                 (f as ValidationErrorInterface).showNotValidError(questionType)
@@ -69,7 +69,7 @@ class MainFragment : Fragment() {
         viewModel.showIsRequiredErrMsgLD.observe(viewLifecycleOwner, {
             val f =
                 horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
-            if (it == true) {
+            if (it.second) {
                 (f as IsRequiredInterface).showIsRequiredError()
             } else {
                 (f as IsRequiredInterface).hideIsRequiredError()

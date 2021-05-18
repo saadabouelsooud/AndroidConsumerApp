@@ -4,4 +4,5 @@ import com.istnetworks.hivesdk.data.utils.QuestionType
 
 interface ValidationErrorInterface {
     fun showNotValidError(questionType: Int?)
+    fun hideNotValidError(questionType: Int?)
 }

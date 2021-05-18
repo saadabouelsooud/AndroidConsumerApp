@@ -31,14 +31,13 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val saveSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
-    val showIsRequiredErrMsgLD = MutableLiveData<Boolean?>()
-    val showNotValidErrMsgLD = MutableLiveData<Boolean?>()
+    val showIsRequiredErrMsgLD = MutableLiveData<Pair<String,Boolean>>()
+    val showNotValidErrMsgLD = MutableLiveData<Pair<String,Boolean>>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
     var showSubmitButtonLD = MutableLiveData<Boolean> ()
     var enableNextButtonLD = MutableLiveData<Boolean>()
-
     /**=
      *  TODO: dependency inversion
      */
@@ -48,6 +47,8 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
     }
+    fun findQuestionPosition(questionGUID:String):Int =
+        survey?.questions?.indexOfFirst { it.surveyQuestionGUID == questionGUID }!!
 
     fun getQuestionNumber(): Int {
         return previousQuestions.size + 1
@@ -199,7 +200,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             if (hasNoAnswer(questionResponse))
                 return@let
             questionResponsesList.add(q)
-            showIsRequiredErrMsgLD.value = false
+            showIsRequiredErrMsgLD.value = Pair(questionResponse.questionGUID!!,false)
             updateSubmitAndNxtAfterAnswerChosen(q.questionGUID)
         }
         updateProgressBar(questionResponse?.questionID)
@@ -286,25 +287,27 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             questionResponsesList.find { it.questionID == currentQuestion?.surveyQuestionID }
 
         if (questionResponse == null) {
-            showIsRequiredErrMsgLD.value = true
+            showIsRequiredErrMsgLD.value = Pair(currentQuestion?.surveyQuestionGUID!!,true)
             return false
         }
 
         return when (currentQuestion?.questionType) {
             QuestionType.EmailInput.value -> {
                 val validEmail = questionResponse.textResponse.isValidEmail()
-                showNotValidErrMsgLD.value = !validEmail
+                showNotValidErrMsgLD.value = Pair(currentQuestion.surveyQuestionGUID!!,!validEmail)
                 validEmail
             }
             QuestionType.URLInput.value -> {
                 val validUrl = questionResponse.textResponse?.isValidUrl()
-                showNotValidErrMsgLD.value = validUrl == false
+                showNotValidErrMsgLD.value =
+                    Pair(currentQuestion.surveyQuestionGUID!!,validUrl == false)
                 validUrl == true
             }
             QuestionType.PhoneNumberInput.value -> {
                 val validPhone =
                     questionResponse.textResponse?.matches(PHONE_NUMBER_PATTERN.toRegex())
-                showNotValidErrMsgLD.value = validPhone == false
+                showNotValidErrMsgLD.value =
+                    Pair(currentQuestion.surveyQuestionGUID!!,validPhone == false)
                 validPhone == true
             }
             else -> true
@@ -353,8 +356,28 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         }
 
         btn.onClick {
-            saveSurvey()
+            if(checkIsRequiredAnswered()&& !showNotValidErrMsgLD.value?.second!!) {
+                saveSurvey()
+            }
         }
+    }
+
+    private fun checkIsRequiredAnswered():Boolean{
+        var isAllAnswered = true
+        var isRequiredQuestionsList : List<Question> =
+            survey?.questions!!.filter { it.isRequired==true }
+
+        for(q in isRequiredQuestionsList)
+        {
+            val isAnswered = questionResponsesList.any { it.questionGUID == q.surveyQuestionGUID }
+            if (!isAnswered)
+            {
+                isAllAnswered = false
+                showIsRequiredErrMsgLD.value = Pair(q.surveyQuestionGUID!!,true)
+            }
+        }
+
+        return isAllAnswered
     }
 
     fun pushToPreviousQuestionsStack(currentQuestionPosition: Int) {

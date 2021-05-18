@@ -19,7 +19,9 @@ import com.istnetworks.hivesdk.databinding.FragmentVerticalMainBinding
 import com.istnetworks.hivesdk.presentation.datepickerquestion.DatePickerQuestionFragment
 import com.istnetworks.hivesdk.presentation.emojis.EmojiFragment
 import com.istnetworks.hivesdk.presentation.freeinputs.FreeInputsFragment
+import com.istnetworks.hivesdk.presentation.interfaces.IsRequiredInterface
 import com.istnetworks.hivesdk.presentation.interfaces.SubmitButtonInterface
+import com.istnetworks.hivesdk.presentation.interfaces.ValidationErrorInterface
 import com.istnetworks.hivesdk.presentation.multiImageChoice.MultipleImageChoiceFragment
 import com.istnetworks.hivesdk.presentation.multipleChoices.MultipleChoicesFragment
 import com.istnetworks.hivesdk.presentation.nps.NpsFragment
@@ -86,23 +88,29 @@ class VerticalMainFragment : Fragment() {
                 binding.hveSliderProgress.value = it
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
-//            val f =
-//                horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
-//            if (it == true) {
-//                val questionType =
-//                    viewModel.findQuestion(binding.hveViewPager.currentItem)?.questionType
-//                (f as ValidationErrorInterface).showNotValidError(questionType)
-//            }
+            val fragmentPosition = viewModel.findQuestionPosition(it.first)
+            val f = allFragments[fragmentPosition]
+            val questionType =
+                viewModel.findQuestion(fragmentPosition)?.questionType
+            if (it.second) {
+                (f as ValidationErrorInterface).showNotValidError(questionType)
+            }
+            else
+            {
+                (f as ValidationErrorInterface).hideNotValidError(questionType)
+            }
+
 
         })
         viewModel.showIsRequiredErrMsgLD.observe(viewLifecycleOwner, {
-//            val f =
-//                horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
-//            if (it == true) {
-//                (f as IsRequiredInterface).showIsRequiredError()
-//            } else {
-//                (f as IsRequiredInterface).hideIsRequiredError()
-//            }
+            val fragmentPosition = viewModel.findQuestionPosition(it.first)
+            val f = allFragments[fragmentPosition]
+            if (it.second) {
+                (f as IsRequiredInterface).showIsRequiredError()
+            } else {
+                (f as IsRequiredInterface).hideIsRequiredError()
+            }
+
         })
 
         viewModel.showSubmitButtonLD.observe(viewLifecycleOwner, {
@@ -140,8 +148,8 @@ class VerticalMainFragment : Fragment() {
             val frameLayout = generateFrameLayout(position)
             addFragmentToFrame(frameLayout, question, position)
             binding.hveMain.addView(frameLayout)
-            if (viewModel.isCouldBeLastQuestion(position))
-                break
+//            if (viewModel.isCouldBeLastQuestion(position))
+//                break
 
         }
     }

@@ -126,7 +126,8 @@ class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface,Su
 
                             rbChoice.setCompoundDrawablesWithIntrinsicBounds(null, bitmap, null, null)
 
-                            (requireParentFragment() as MainFragment).updatePagerHeightForChild(binding.root)
+
+                            updatePagerHeight(binding.root)
                         }
                     }catch (e:Exception)
                     {
@@ -141,7 +142,8 @@ class SingleImageChoiceFragment : BaseQuestionFragment() ,IsRequiredInterface,Su
 
             }
             binding.hveRgSingleChoiceWrapper.addView(rbChoice)
-            this.view?.let { (requireParentFragment() as MainFragment).updatePagerHeightForChild(it) }
+            this.view?.let {
+                updatePagerHeight(binding.root)}
 
         }
 
