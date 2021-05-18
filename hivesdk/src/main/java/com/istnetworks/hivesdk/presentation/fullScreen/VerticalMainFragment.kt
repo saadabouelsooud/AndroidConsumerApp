@@ -39,6 +39,8 @@ import com.istnetworks.hivesdk.presentation.viewmodel.factory.HiveSDKViewModelFa
 class VerticalMainFragment : Fragment() {
     private lateinit var binding: FragmentVerticalMainBinding
     private var allFragments = mutableListOf<Fragment>()
+    var displayedFragments: MutableList<Fragment> = mutableListOf()
+
     private val viewModel: HiveSDKViewModel by activityViewModels {
         HiveSDKViewModelFactory(
             HiveSDKRepositoryImpl()
@@ -53,8 +55,8 @@ class VerticalMainFragment : Fragment() {
         binding = FragmentVerticalMainBinding.inflate(inflater)
         bindViews()
         generateAllFragmentsList()
-        val initialFragments = getInitialFragments()
-        addFragmentsToLayout(initialFragments)
+        displayedFragments = getEligibleFragmentsFrom(0)
+        addFragmentsToLayout(displayedFragments)
         observeViewModel()
         setupProgressSlider()
         return binding.root
@@ -87,6 +89,16 @@ class VerticalMainFragment : Fragment() {
             if (it > 0)
                 binding.hveSliderProgress.value = it
         })
+        viewModel.nextPositionLD.observe(viewLifecycleOwner, { nextPosition ->
+            val lastAnsweredQuestionPosition = viewModel.lastAnsweredQuestionPosition
+            removeAfter(lastAnsweredQuestionPosition)
+            if (nextPosition > -1) {
+                val appendedFragments =
+                    getEligibleFragmentsFrom(lastAnsweredQuestionPosition + 1)
+                displayedFragments.addAll(appendedFragments)
+                addFragmentsToLayout(displayedFragments)
+            }
+        })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
             val fragmentPosition = viewModel.findQuestionPosition(it.first)
             val f = allFragments[fragmentPosition]
@@ -94,9 +106,7 @@ class VerticalMainFragment : Fragment() {
                 viewModel.findQuestion(fragmentPosition)?.questionType
             if (it.second) {
                 (f as ValidationErrorInterface).showNotValidError(questionType)
-            }
-            else
-            {
+            } else {
                 (f as ValidationErrorInterface).hideNotValidError(questionType)
             }
 
@@ -114,8 +124,9 @@ class VerticalMainFragment : Fragment() {
         })
 
         viewModel.showSubmitButtonLD.observe(viewLifecycleOwner, {
+            if (viewModel.lastAnsweredQuestionPosition == -1) return@observe
             val f =
-                allFragments[binding.hveMain.children.last().id-1]
+                allFragments[viewModel.lastAnsweredQuestionPosition]
 
             if (f is SubmitButtonInterface)
                 if (it == true)
@@ -124,6 +135,17 @@ class VerticalMainFragment : Fragment() {
                     (f as SubmitButtonInterface).hideSubmitButton()
 
         })
+
+    }
+
+    private fun removeAfter(lastAnsweredQuestionPosition: Int) {
+        if (displayedFragments.lastIndex > lastAnsweredQuestionPosition){
+            val counter = lastAnsweredQuestionPosition + 1
+            while (counter <= displayedFragments.lastIndex) {
+                displayedFragments.removeAt(counter)
+                binding.hveMain.removeViewAt(counter)
+            }
+        }
 
     }
 
@@ -142,9 +164,9 @@ class VerticalMainFragment : Fragment() {
 
     }
 
-    private fun getInitialFragments(): List<Fragment> {
+    private fun getEligibleFragmentsFrom(startFrom: Int): MutableList<Fragment> {
         val fragments = mutableListOf<Fragment>()
-        for (position in 0 until allFragments.size) {
+        for (position in startFrom until allFragments.size) {
             fragments.add(allFragments[position])
             if (viewModel.isCouldBeLastQuestion(position))
                 break
@@ -155,11 +177,11 @@ class VerticalMainFragment : Fragment() {
 
     private fun addFragmentsToLayout(fragments: List<Fragment>) {
         for (position in fragments.indices) {
-            val frameLayout = generateFrameLayout(position)
-            addFragmentToFrame(frameLayout, fragments[position])
-            if (binding.hveMain.children.none { it.id == position + 1 })
+            if (binding.hveMain.children.none { it.id == position + 1 }) {
+                val frameLayout = generateFrameLayout(position)
+                addFragmentToFrame(frameLayout, fragments[position])
                 binding.hveMain.addView(frameLayout)
-
+            }
         }
     }
 

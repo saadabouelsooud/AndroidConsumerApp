@@ -31,13 +31,16 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     val saveSurveyResponseLD = MutableLiveData<RelevantWebSurveyResponse?>()
     val isLoading = MutableLiveData<Boolean>()
     val showErrorMsg = MutableLiveData<String?>()
-    val showIsRequiredErrMsgLD = MutableLiveData<Pair<String,Boolean>>()
-    val showNotValidErrMsgLD = MutableLiveData<Pair<String,Boolean>>()
+    val showIsRequiredErrMsgLD = MutableLiveData<Pair<String, Boolean>>()
+    val showNotValidErrMsgLD = MutableLiveData<Pair<String, Boolean>>()
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
-    var showSubmitButtonLD = MutableLiveData<Boolean> ()
+    var showSubmitButtonLD = MutableLiveData<Boolean>()
     var enableNextButtonLD = MutableLiveData<Boolean>()
+    val nextPositionLD = MutableLiveData<Int>()
+    var lastAnsweredQuestionPosition: Int = -1
+
     /**=
      *  TODO: dependency inversion
      */
@@ -47,8 +50,9 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         if (position == null || position == -1) return null
         return survey?.questions?.get(position)
     }
-    fun findQuestionPosition(questionGUID:String):Int =
-        survey?.questions?.indexOfFirst { it.surveyQuestionGUID == questionGUID }!!
+
+    fun findQuestionPosition(questionGUID: String?): Int =
+        survey?.questions?.indexOfFirst { it.surveyQuestionGUID == questionGUID } ?: -1
 
     fun getQuestionNumber(): Int {
         return previousQuestions.size + 1
@@ -200,10 +204,16 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             if (hasNoAnswer(questionResponse))
                 return@let
             questionResponsesList.add(q)
-            showIsRequiredErrMsgLD.value = Pair(questionResponse.questionGUID!!,false)
+            showIsRequiredErrMsgLD.value = Pair(questionResponse.questionGUID!!, false)
+            updateFullScreenSkipLogic(q)
             updateSubmitAndNxtAfterAnswerChosen(q.questionGUID)
         }
         updateProgressBar(questionResponse?.questionID)
+    }
+
+    private fun updateFullScreenSkipLogic(q: QuestionResponses) {
+        lastAnsweredQuestionPosition = findQuestionPosition(q.questionGUID)
+        nextPositionLD.value = getTheNextQuestionPosition(findQuestionPosition(q.questionGUID))
     }
 
     private fun updateSubmitAndNxtAfterAnswerChosen(qGuid: String?) {
@@ -326,8 +336,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     fun getTheNextQuestionPosition(currentQuestionPosition: Int): Int {
         val currentQuestion = findQuestion(currentQuestionPosition)
         return if (skipHandler.hasSkipLogic(currentQuestion?.surveyQuestionGUID)) {
-            val skipTo = getSkipToQuestionPosition(currentQuestionPosition)
-            if (skipTo == -1) currentQuestionPosition + 1 else skipTo
+            return getSkipToQuestionPosition(currentQuestionPosition)
         } else
             currentQuestionPosition + 1
     }
