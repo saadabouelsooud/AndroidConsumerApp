@@ -134,8 +134,19 @@ class VerticalMainFragment : Fragment() {
 
     }
 
-    private fun createInitialFragments() {
+    private fun getInitialFragments() {
         for (position in 0 until viewModel.survey?.questions!!.size) {
+            val question = viewModel.findQuestion(position)
+            val frameLayout = generateFrameLayout(position)
+            addFragmentToFrame(frameLayout, question, position)
+            binding.hveMain.addView(frameLayout)
+            if (viewModel.isCouldBeLastQuestion(position))
+                break
+
+        }
+    }
+  private fun AddFragmentsToLayout(fragments:List<Fragment>) {
+        for (position in 0 until fragments.size) {
             val question = viewModel.findQuestion(position)
             val frameLayout = generateFrameLayout(position)
             addFragmentToFrame(frameLayout, question, position)
