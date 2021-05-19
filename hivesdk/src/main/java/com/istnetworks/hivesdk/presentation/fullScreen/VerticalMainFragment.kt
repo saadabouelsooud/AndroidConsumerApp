@@ -1,6 +1,7 @@
 package com.istnetworks.hivesdk.presentation.fullScreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.QuestionType
 import com.istnetworks.hivesdk.data.utils.extensions.hide
@@ -97,7 +99,7 @@ class VerticalMainFragment : Fragment() {
                     getEligibleFragmentsFrom(lastAnsweredQuestionPosition + 1)
                 displayedFragments.addAll(appendedFragments)
                 addFragmentsToLayout(displayedFragments)
-                binding.root.requestLayout()
+                binding.hveMain.requestLayout()
             }
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
@@ -140,17 +142,27 @@ class VerticalMainFragment : Fragment() {
     }
 
     private fun removeAfter(lastAnsweredQuestionPosition: Int) {
+        removeFromResponseList(lastAnsweredQuestionPosition+1)
         if (displayedFragments.lastIndex > lastAnsweredQuestionPosition){
             val counter = lastAnsweredQuestionPosition + 1
             while (counter <= displayedFragments.lastIndex) {
-                childFragmentManager.commit {
+                childFragmentManager.commitNow {
                     remove(displayedFragments[counter])
                 }
+                Log.d("TAG", "backStackEntryCount: ${childFragmentManager.backStackEntryCount}")
                 displayedFragments.removeAt(counter)
                 binding.hveMain.removeViewAt(counter)
+
             }
         }
 
+    }
+
+    private fun removeFromResponseList(startFrom: Int) {
+        for (index in startFrom until viewModel.survey?.questions?.size!!){
+            val qGUID = viewModel.findQuestion(index)?.surveyQuestionGUID
+            viewModel.removeResponseByQuestionGuid(qGUID)
+        }
     }
 
     private fun bindViews() {
@@ -183,25 +195,22 @@ class VerticalMainFragment : Fragment() {
         for (position in fragments.indices) {
             if (binding.hveMain.children.none { it.id == position + 1 }) {
                 val frameLayout = generateFrameLayout(position)
-                addFragmentToFrame(frameLayout, fragments[position])
                 binding.hveMain.addView(frameLayout)
+                addFragmentToFrame(frameLayout, fragments[position])
                 binding.hveMain.requestLayout()
             }
         }
     }
 
     private fun addFragmentToFrame(fl: FrameLayout, f: Fragment) {
-        childFragmentManager.commit {
-            setReorderingAllowed(true)
-            if (childFragmentManager.fragments.contains(f))
-            {
-                val fragment =childFragmentManager.fragments.find { it == f }
-                replace(fl.id,fragment!!)
-            }
-            else {
-                add(fl.id, f)
-            }
+        childFragmentManager.commitNow {
+            disallowAddToBackStack();
+            add(fl.id, f)
+            Log.d("TAG", "addFragmentToFrame: ${fl.id}")
+
+
         }
+        Log.d("TAG", "backStackEntryCount: ${childFragmentManager.backStackEntryCount}")
     }
 
     private fun generateFrameLayout(position: Int): FrameLayout {

@@ -11,6 +11,7 @@ import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
 import com.istnetworks.hivesdk.data.utils.extensions.hide
+import com.istnetworks.hivesdk.data.utils.extensions.onTouchDown
 import com.istnetworks.hivesdk.data.utils.extensions.show
 import com.istnetworks.hivesdk.databinding.HveFragmentSliderQuestionBinding
 import com.istnetworks.hivesdk.presentation.BaseQuestionFragment
@@ -21,7 +22,7 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 
 const val ARG_POSITION = "pos"
 
-class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface ,SubmitButtonInterface{
+class SliderQuestionFragment : BaseQuestionFragment(), IsRequiredInterface, SubmitButtonInterface {
     private lateinit var binding: HveFragmentSliderQuestionBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
@@ -43,7 +44,8 @@ class SliderQuestionFragment : BaseQuestionFragment(),IsRequiredInterface ,Submi
     }
 
     private fun setSliderListener() {
-        binding.hveSliderAnswers.addOnChangeListener { _, value, _ ->
+        binding.hveSliderAnswers.addOnChangeListener { _, value, isFromUser ->
+            if (!isFromUser) return@addOnChangeListener
             viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse(
                     numberResponse = value.toInt(),

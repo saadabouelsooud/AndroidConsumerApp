@@ -393,4 +393,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         previousQuestions.push(currentQuestionPosition)
     }
 
+    fun removeResponseByQuestionGuid(qGUID: String?) {
+        qGUID?.let { qGuid ->
+            val resp = questionResponsesList.find { it.questionGUID == qGuid }
+            questionResponsesList.remove(resp)
+        }
+    }
+
 }
