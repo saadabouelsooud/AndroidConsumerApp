@@ -185,6 +185,7 @@ class VerticalMainFragment : Fragment() {
                 val frameLayout = generateFrameLayout(position)
                 addFragmentToFrame(frameLayout, fragments[position])
                 binding.hveMain.addView(frameLayout)
+                binding.hveMain.requestLayout()
             }
         }
     }
@@ -192,7 +193,14 @@ class VerticalMainFragment : Fragment() {
     private fun addFragmentToFrame(fl: FrameLayout, f: Fragment) {
         childFragmentManager.commit {
             setReorderingAllowed(true)
-            add(fl.id, f)
+            if (childFragmentManager.fragments.contains(f))
+            {
+                val fragment =childFragmentManager.fragments.find { it == f }
+                replace(fl.id,fragment!!)
+            }
+            else {
+                add(fl.id, f)
+            }
         }
     }
 
