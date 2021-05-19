@@ -13,6 +13,7 @@ import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.repository.HiveSDKRepositoryImpl
 import com.istnetworks.hivesdk.data.utils.HiveSDKType
 import com.istnetworks.hivesdk.data.utils.extensions.shouldShow
+import com.istnetworks.hivesdk.presentation.BottomSheet.BottomSheetFragment
 import com.istnetworks.hivesdk.presentation.fullScreen.VerticalMainFragment
 import com.istnetworks.hivesdk.presentation.mainfragment.MainFragment
 import com.istnetworks.hivesdk.presentation.viewmodel.HiveSDKViewModel
@@ -56,10 +57,11 @@ class SurveyActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.getSurveyResponseLD.observe(this, {
-            if (it?.survey?.surveyOptions?.displayMode == HiveSDKType.FULLSCREEN.value)
-                showCardDialog(VerticalMainFragment())
-            else
-                showCardDialog(MainFragment())
+            when (it?.survey?.surveyOptions?.displayMode) {
+                HiveSDKType.FULLSCREEN.value -> showCardDialog(VerticalMainFragment())
+                HiveSDKType.BOTTOM_CARD.value -> showCardDialog(BottomSheetFragment())
+                else -> showCardDialog(MainFragment())
+            }
 
         })
         viewModel.isLoading.observe(this,{
