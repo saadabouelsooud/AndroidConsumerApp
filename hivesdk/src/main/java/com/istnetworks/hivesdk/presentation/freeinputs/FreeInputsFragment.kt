@@ -2,8 +2,10 @@ package com.istnetworks.hivesdk.presentation.freeinputs
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +41,7 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
     private lateinit var binding: FragmentFreeInputsBinding
     private var selectedQuestion: Question? = null
     private val position: Int? by lazy { arguments?.getInt(ARG_POSITION, -1) }
+    private lateinit var textWatcher: TextWatcher
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,15 +62,36 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
     }
 
     private fun listenToInputTextChanges() {
-        binding.hveEdtFreeInput.doAfterTextChanged {
-            viewModel.updateQuestionResponsesList(
-                selectedQuestion?.toQuestionResponse(
-                    textResponse = it.toString(),
-                    numberResponse = null
+        textWatcher = object :TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.updateQuestionResponsesList(
+                    selectedQuestion?.toQuestionResponse(
+                        textResponse = p0.toString(),
+                        numberResponse = null
+                    )
                 )
-            )
-            viewModel.validateAnswer(position!!)
+                viewModel.validateAnswer(position!!)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
         }
+//        binding.hveEdtFreeInput.doAfterTextChanged {
+//
+//            viewModel.updateQuestionResponsesList(
+//                selectedQuestion?.toQuestionResponse(
+//                    textResponse = it.toString(),
+//                    numberResponse = null
+//                )
+//            )
+//            viewModel.validateAnswer(position!!)
+//        }
+
         binding.hveEdtPhone.doAfterTextChanged {
             viewModel.updateQuestionResponsesList(
                 selectedQuestion?.toQuestionResponse(
@@ -83,6 +107,12 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
         super.onResume()
         bindQuestionTitle()
         updatePagerHeight(binding.root)
+        binding.hveEdtFreeInput.addTextChangedListener(textWatcher)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.hveEdtFreeInput.removeTextChangedListener(null)
     }
 
     private fun bindQuestions(questionType: Int) {

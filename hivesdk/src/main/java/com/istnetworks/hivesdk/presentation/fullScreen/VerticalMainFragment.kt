@@ -97,6 +97,7 @@ class VerticalMainFragment : Fragment() {
                     getEligibleFragmentsFrom(lastAnsweredQuestionPosition + 1)
                 displayedFragments.addAll(appendedFragments)
                 addFragmentsToLayout(displayedFragments)
+                binding.root.requestLayout()
             }
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {
@@ -142,6 +143,9 @@ class VerticalMainFragment : Fragment() {
         if (displayedFragments.lastIndex > lastAnsweredQuestionPosition){
             val counter = lastAnsweredQuestionPosition + 1
             while (counter <= displayedFragments.lastIndex) {
+                childFragmentManager.commit {
+                    remove(displayedFragments[counter])
+                }
                 displayedFragments.removeAt(counter)
                 binding.hveMain.removeViewAt(counter)
             }
