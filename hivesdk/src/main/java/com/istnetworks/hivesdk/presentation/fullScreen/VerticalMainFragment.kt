@@ -96,7 +96,7 @@ class VerticalMainFragment : Fragment() {
             removeAfter(lastAnsweredQuestionPosition)
             if (nextPosition > -1) {
                 val appendedFragments =
-                    getEligibleFragmentsFrom(lastAnsweredQuestionPosition + 1)
+                    getEligibleFragmentsFrom(nextPosition)
                 displayedFragments.addAll(appendedFragments)
                 addFragmentsToLayout(displayedFragments)
                 binding.hveMain.requestLayout()
@@ -143,6 +143,7 @@ class VerticalMainFragment : Fragment() {
 
     private fun removeAfter(lastAnsweredQuestionPosition: Int) {
         removeFromResponseList(lastAnsweredQuestionPosition+1)
+        replaceWithNewInstance(lastAnsweredQuestionPosition+1)
         if (displayedFragments.lastIndex > lastAnsweredQuestionPosition){
             val counter = lastAnsweredQuestionPosition + 1
             while (counter <= displayedFragments.lastIndex) {
@@ -162,6 +163,14 @@ class VerticalMainFragment : Fragment() {
         for (index in startFrom until viewModel.survey?.questions?.size!!){
             val qGUID = viewModel.findQuestion(index)?.surveyQuestionGUID
             viewModel.removeResponseByQuestionGuid(qGUID)
+        }
+    }
+
+    private fun replaceWithNewInstance(startFrom: Int){
+        for (index in startFrom until viewModel.survey?.questions?.size!!){
+            val question = viewModel.findQuestion(index)
+            allFragments.removeAt(index)
+            allFragments.add(index,getFragmentFromType(question?.questionType,index))
         }
     }
 
