@@ -86,7 +86,7 @@ class BottomSheetFragment : Fragment() {
             val f =
                 horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
             if (f is SubmitButtonInterface)
-                if (it == true)
+                if (it.second)
                     (f as SubmitButtonInterface).showSubmitButton()
                 else
                     (f as SubmitButtonInterface).hideSubmitButton()
@@ -112,16 +112,7 @@ class BottomSheetFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 binding.hveIvPrevious.isEnabled = position > 0
                 viewModel.updateNextArrowEnablingOnFragmentChange(position)
-//                val fragment = childFragmentManager.findFragmentByTag("f$position")
-//                if (fragment != null) {
-//                    fragment.view?.let {
-//                        // Now we've got access to the fragment Root View
-//                        // we will use it to calculate the height and
-//                        // apply it to the ViewPager2
-//                        it.requestLayout()
-//                        updatePagerHeightForChild(it, binding.hveViewPager)
-//                    }
-//                }
+
             }
         }
         binding.hveViewPager.registerOnPageChangeCallback(onPageChangeCallback)

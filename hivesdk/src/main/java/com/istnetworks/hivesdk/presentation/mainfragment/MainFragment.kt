@@ -85,7 +85,7 @@ class MainFragment : Fragment() {
             val f =
                 horizontalPagerAdapter.getFragmentByPosition(binding.hveViewPager.currentItem)
             if (f is SubmitButtonInterface)
-                if (it == true)
+                if (it.second)
                     (f as SubmitButtonInterface).showSubmitButton()
                 else
                     (f as SubmitButtonInterface).hideSubmitButton()

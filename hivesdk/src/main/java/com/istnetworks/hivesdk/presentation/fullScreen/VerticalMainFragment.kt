@@ -127,12 +127,12 @@ class VerticalMainFragment : Fragment() {
         })
 
         viewModel.showSubmitButtonLD.observe(viewLifecycleOwner, {
-            if (viewModel.lastAnsweredQuestionPosition == -1) return@observe
+//            if (viewModel.lastAnsweredQuestionPosition == -1) return@observe
             val f =
-                allFragments[viewModel.lastAnsweredQuestionPosition]
+                allFragments[it.first]
 
             if (f is SubmitButtonInterface)
-                if (it == true)
+                if (it.second)
                     (f as SubmitButtonInterface).showSubmitButton()
                 else
                     (f as SubmitButtonInterface).hideSubmitButton()

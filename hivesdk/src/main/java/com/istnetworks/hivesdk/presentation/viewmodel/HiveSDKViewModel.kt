@@ -36,7 +36,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
     private val questionResponsesList: MutableList<QuestionResponses> = mutableListOf()
     val updateProgressSliderLD = MutableLiveData<Float>()
     var previousQuestions = Stack<Int>()
-    var showSubmitButtonLD = MutableLiveData<Boolean>()
+    var showSubmitButtonLD = MutableLiveData<Pair<Int,Boolean>>()
     var enableNextButtonLD = MutableLiveData<Boolean>()
     val nextPositionLD = MutableLiveData<Int>()
     var lastAnsweredQuestionPosition: Int = -1
@@ -118,7 +118,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
      */
     fun updateSubmitBtnVisibilityBeforeAnswerChosen(questionPosition: Int) {
         if (isCouldBeLastQuestion(questionPosition))
-            showSubmitButtonLD.value = true
+            showSubmitButtonLD.value = Pair(questionPosition,true)
     }
 
     fun isCouldBeLastQuestion(questionPosition: Int): Boolean {
@@ -226,10 +226,10 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             val skipTo = getSkipToQuestionPosition(questionPosition)
             if (skipTo == -1) //skip to end
             {
-                showSubmitButtonLD.value = true
+                showSubmitButtonLD.value = Pair(questionPosition,true)
                 enableNextButtonLD.value = false
             } else if (skipTo != -1) {
-                showSubmitButtonLD.value = false
+                showSubmitButtonLD.value = Pair(questionPosition,false)
                 enableNextButtonLD.value = true
             }
 
