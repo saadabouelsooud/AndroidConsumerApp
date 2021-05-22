@@ -2,10 +2,10 @@ package com.istnetworks.hivesdk.presentation.freeinputs
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.text.InputType
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +14,6 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Observer
 import com.istnetworks.hivesdk.R
 import com.istnetworks.hivesdk.data.models.response.Question
 import com.istnetworks.hivesdk.data.models.response.toQuestionResponse
@@ -36,7 +34,7 @@ import com.istnetworks.hivesdk.presentation.surveyExtension.questionTitleStyle
 class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, ValidationErrorInterface,SubmitButtonInterface {
 
     private val CODE_AREA_PATTERN = "^[^01][0-9]{2}\$"
-    private val PHONE_NUMBER_PATTERN = "[0-9][0-9]{8,14}"
+    private val PHONE_NUMBER_PATTERN = "[0-9][0-9]{9,15}"
 
     private lateinit var binding: FragmentFreeInputsBinding
     private var selectedQuestion: Question? = null
@@ -50,7 +48,6 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
         stylingViews()
         initSubmitBtn()
         selectedQuestion?.questionType?.let { bindQuestions(it) }
-        selectedQuestion?.questionType?.let { onClickActions(it) }
         listenToInputTextChanges()
         observeViewModel()
         return binding.root
@@ -97,14 +94,17 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
             QuestionType.TextInput.value -> {
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_TEXT
                 binding.hveEdtFreeInput.hint = getString(R.string.enter_text_answer)
+                binding.hveEdtFreeInput.filters = arrayOf<InputFilter>(LengthFilter(100))
             }
             QuestionType.NumberInput.value -> {
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_NUMBER
                 binding.hveEdtFreeInput.hint = getString(R.string.enter_number_answer)
+                binding.hveEdtFreeInput.filters = arrayOf<InputFilter>(LengthFilter(30))
             }
             QuestionType.EmailInput.value -> {
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 binding.hveEdtFreeInput.hint = getString(R.string.enter_email_answer)
+                binding.hveEdtFreeInput.filters = arrayOf<InputFilter>(LengthFilter(100))
             }
             QuestionType.PhoneNumberInput.value -> {
                 handlePhoneInput()
@@ -112,10 +112,12 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
             QuestionType.PostalCodeInput.value -> {
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_CLASS_NUMBER
                 binding.hveEdtFreeInput.hint = getString(R.string.enter_postal_code_answer)
+                binding.hveEdtFreeInput.filters = arrayOf<InputFilter>(LengthFilter(5))
             }
             QuestionType.URLInput.value -> {
                 binding.hveEdtFreeInput.inputType = InputType.TYPE_TEXT_VARIATION_URI
                 binding.hveEdtFreeInput.hint = getString(R.string.enter_url_answer)
+                binding.hveEdtFreeInput.filters = arrayOf<InputFilter>(LengthFilter(100))
             }
         }
     }
@@ -124,8 +126,8 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
         binding.hveEdtFreeInput.visibility = View.GONE
         binding.llPhone.visibility = View.VISIBLE
         binding.hveEdtPhone.hint = getString(R.string.enter_telephone_answer)
-        binding.edtCountryCode.setTextColor(Color.parseColor("#0075be"))
-        binding.hveEdtPhone.setTextColor(Color.parseColor("#0075be"))
+        binding.edtCountryCode.setTextColor(ContextCompat.getColor(requireContext(), R.color.navyBlue))
+        binding.hveEdtPhone.setTextColor(ContextCompat.getColor(requireContext(), R.color.navyBlue))
     }
 
     private fun validate(questionType: Int): Boolean {
@@ -145,11 +147,17 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
                 return true
             }
             QuestionType.PhoneNumberInput.value -> {
-                if (!binding.hveEdtPhone.text.toString().matches(PHONE_NUMBER_PATTERN.toRegex()) && !binding.edtCountryCode.text.toString().matches(CODE_AREA_PATTERN.toRegex()) ) {
-                    setPhoneError()
-                    return false
+                if (binding.hveEdtPhone.text.toString()
+                        .matches(PHONE_NUMBER_PATTERN.toRegex()) && binding.edtCountryCode.text.toString()
+                        .matches(
+                            CODE_AREA_PATTERN.toRegex()
+                        )
+                ) {
+                    hidePhoneError()
+                    return true
                 }
-                return true
+                setPhoneError()
+                return false
             }
             else -> {
                 if (TextUtils.isEmpty(binding.hveEdtFreeInput.text)) {
@@ -163,7 +171,7 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
 
     private fun setFreeInputError() {
         binding.tvErrorMessage.visibility = View.VISIBLE
-        binding.hveEdtFreeInput.setTextColor(Color.parseColor("#e4606c"))
+        binding.hveEdtFreeInput.setTextColor(ContextCompat.getColor(requireContext(), R.color.errorColor))
         binding.hveEdtFreeInput.background =
             activity?.let { it1 ->
                 ContextCompat.getDrawable(
@@ -192,7 +200,7 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
 
     private fun setPhoneError() {
         binding.tvErrorMessage.visibility = View.VISIBLE
-        binding.hveEdtPhone.setTextColor(Color.parseColor("#e4606c"))
+        binding.hveEdtPhone.setTextColor(ContextCompat.getColor(requireContext(), R.color.errorColor))
         binding.llPhone.background =
             activity?.let { it1 ->
                 ContextCompat.getDrawable(
@@ -200,7 +208,7 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
                     R.drawable.free_input_error
                 )
             }
-        binding.edtCountryCode.setTextColor(Color.parseColor("#e4606c"))
+        binding.edtCountryCode.setTextColor(ContextCompat.getColor(requireContext(), R.color.errorColor))
     }
 
     private fun hidePhoneError() {
@@ -221,15 +229,6 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
         )
     }
 
-    private fun getFreeInputText(questionType: Int): String {
-        return when (questionType) {
-            QuestionType.PhoneNumberInput.value ->
-                binding.hveEdtPhone.text.toString()
-            else -> binding.hveEdtFreeInput.text.toString()
-
-        }
-    }
-
     private fun stylingViews() {
         val theme = viewModel.getSurveyTheme()
         binding.tvQuestionTitle.questionTitleStyle(theme?.questionTitleStyle)
@@ -246,12 +245,9 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
 
 
     private fun initSubmitBtn() {
-        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit,position)
+        viewModel.setSubmitButtonBasedOnPosition(binding.hveBtnSubmit, position)
     }
 
-    private fun onClickActions(questionType: Int) {
-
-    }
 
     override fun showIsRequiredError() {
         binding.tvErrorMessage.show()
@@ -284,12 +280,8 @@ class FreeInputsFragment : BaseQuestionFragment(), IsRequiredInterface, Validati
 
     override fun hideNotValidError(questionType: Int?) {
         when (questionType) {
-            QuestionType.EmailInput.value ,
-            QuestionType.URLInput.value -> {
-                hideFreeInputError()
-            }
             QuestionType.PhoneNumberInput.value -> {
-               hidePhoneError()
+                hidePhoneError()
             }
             else -> {
                 hideFreeInputError()
