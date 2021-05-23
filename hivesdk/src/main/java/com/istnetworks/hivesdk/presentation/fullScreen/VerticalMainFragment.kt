@@ -142,10 +142,11 @@ class VerticalMainFragment : Fragment() {
     }
 
     private fun removeAfter(lastAnsweredQuestionPosition: Int) {
+        val lastFragmentPosition = getLastModifiedFragmentPosition(lastAnsweredQuestionPosition)
         removeFromResponseList(lastAnsweredQuestionPosition+1)
         replaceWithNewInstance(lastAnsweredQuestionPosition+1)
-        if (displayedFragments.lastIndex > lastAnsweredQuestionPosition){
-            val counter = lastAnsweredQuestionPosition + 1
+        if (displayedFragments.lastIndex > lastFragmentPosition){
+            val counter = lastFragmentPosition+1
             while (counter <= displayedFragments.lastIndex) {
                 childFragmentManager.commitNow {
                     remove(displayedFragments[counter])
@@ -157,6 +158,11 @@ class VerticalMainFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun getLastModifiedFragmentPosition(lastAnsweredQuestionPosition: Int): Int {
+        val f = allFragments[lastAnsweredQuestionPosition]
+        return displayedFragments.indexOf(f)
     }
 
     private fun removeFromResponseList(startFrom: Int) {
@@ -191,10 +197,16 @@ class VerticalMainFragment : Fragment() {
 
     private fun getEligibleFragmentsFrom(startFrom: Int): MutableList<Fragment> {
         val fragments = mutableListOf<Fragment>()
-        for (position in startFrom until allFragments.size) {
+        var position = startFrom
+        while (position in startFrom until allFragments.size) {
             fragments.add(allFragments[position])
             if (viewModel.isCouldBeLastQuestion(position))
                 break
+            val skipTo = viewModel.getSkipToQuestionPosition(position)
+            if (skipTo != -1)
+                position = skipTo
+            else
+                    position++
 
         }
         return fragments

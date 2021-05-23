@@ -111,7 +111,7 @@ class MultipleImageChoiceFragment : BaseQuestionFragment(), CompoundButton.OnChe
 
                         val bitmap =
                             Picasso.get().load(choice.imageURL)
-                                .placeholder(R.drawable.emoji_bad)
+                                .placeholder(R.drawable.loading_animation)
                                 .resize(200, 200)
                                 .get().toDrawable(resources)
                         withContext(Dispatchers.Main) {

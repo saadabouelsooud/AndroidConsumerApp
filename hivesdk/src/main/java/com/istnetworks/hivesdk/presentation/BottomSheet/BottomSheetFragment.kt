@@ -180,22 +180,4 @@ class BottomSheetFragment : Fragment() {
         super.onDestroyView()
         binding.hveViewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
     }
-
-//    fun updatePagerHeightForChild(view: View, pager: ViewPager2 = binding.hveViewPager) {
-//        view.post {
-//            val wMeasureSpec =
-//                View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
-//            val hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-//            view.measure(wMeasureSpec, hMeasureSpec)
-//
-//            if (pager.layoutParams.height != view.measuredHeight) {
-//                pager.layoutParams = (pager.layoutParams)
-//                    .also { lp ->
-//                        // applying Fragment Root View Height to
-//                        // the pager LayoutParams, so they match
-//                        lp.height = view.measuredHeight
-//                    }
-//            }
-//        }
-//    }
 }

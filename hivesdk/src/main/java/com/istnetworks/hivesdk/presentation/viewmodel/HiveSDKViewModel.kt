@@ -58,7 +58,7 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
         return previousQuestions.size + 1
     }
 
-    private fun getSkipToQuestionPosition(currentQuestionPosition: Int): Int {
+    fun getSkipToQuestionPosition(currentQuestionPosition: Int): Int {
         val response: QuestionResponses? = getQuestionResponseByPosition(currentQuestionPosition)
         val question = findQuestion(currentQuestionPosition)
         val questionTo =
@@ -67,9 +67,9 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
                 QuestionType.MultipleChoiceQuestion.value,
                 QuestionType.ImageMCQ.value,
                 QuestionType.DateQuestion.value -> {
-                    if (hasNoAnswer(response))
-                        survey?.questions?.get(currentQuestionPosition + 1)?.surveyQuestionGUID
-                    else
+//                    if (hasNoAnswer(response))
+//                        survey?.questions?.get(currentQuestionPosition + 1)?.surveyQuestionGUID
+//                    else
                         skipHandler.getSkipToByQuestionGuid(question)
                 }
 

@@ -10,7 +10,7 @@
     android:padding="@dimen/size5"
     android:drawablePadding="@dimen/size20"
     android:layout_margin="@dimen/size5"
-    tools:drawableTop="@drawable/emoji_good"
+    tools:drawableTop="@drawable/loading_animation"
     android:gravity="center"
     android:button="@null"
     tools:text="choice" />

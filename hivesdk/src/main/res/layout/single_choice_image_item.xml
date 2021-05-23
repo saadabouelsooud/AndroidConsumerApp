@@ -9,7 +9,7 @@
     android:layout_margin="@dimen/size5"
     tools:text="Test"
     android:button="@null"
-    android:drawableTop="@drawable/emoji_good"
+    android:drawableTop="@drawable/loading_animation"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
