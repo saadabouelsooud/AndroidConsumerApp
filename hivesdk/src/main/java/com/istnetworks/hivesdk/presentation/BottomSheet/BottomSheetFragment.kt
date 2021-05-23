@@ -54,7 +54,7 @@ class BottomSheetFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.updateProgressSliderLD.observe(viewLifecycleOwner, {
-            if (it > 0)
+            if (it > -1)
                 binding.hveSliderProgress.value = it
         })
         viewModel.showNotValidErrMsgLD.observe(viewLifecycleOwner, {

@@ -248,8 +248,11 @@ class HiveSDKViewModel(private val hiveSDKRepository: HiveSDKRepository) : ViewM
             currentQuestionPosition?.let {
                 val nextPosition = getTheNextQuestionPosition(currentQuestionPosition)
                 val skippedQuestionsNumber = nextPosition - currentQuestionPosition
+
                 updateProgressSliderLD.value =
-                    questionResponsesList.size.toFloat() + skippedQuestionsNumber
+                    if (questionResponsesList.isNotEmpty())
+                        questionResponsesList.size.toFloat() + skippedQuestionsNumber
+                    else 0f
             }
         }
 
